@@ -1,0 +1,23 @@
+.hej {
+    color: green;
+}
+
+.about-container {
+    margin-top: 2em;
+}
+
+
+
+
+/** Animations **/
+
+.logo-img {
+  position: relative;
+  animation-duration: 4s;
+  animation-name: spin;
+}
+@keyframes spin {
+  from {left:0px; top:0px; transform:rotate(0deg);}
+  50%  {left:200px; top:0px; transform:rotate(180deg);}
+  to   {left:0px; top:0px; transform:rotate(360deg);}
+}
