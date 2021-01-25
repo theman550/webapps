@@ -1,11 +1,20 @@
-.hej {
-    color: green;
+
+.title {
+    text-align: center;
 }
 
 .about-container {
     margin-top: 2em;
 }
 
+.drink-entry {
+    width: 18rem;
+    height: 100%;
+}
+
+#nameField {
+    margin-right: 0.5rem;
+}
 
 
 
@@ -16,6 +25,7 @@
   animation-duration: 4s;
   animation-name: spin;
 }
+
 @keyframes spin {
   from {left:0px; top:0px; transform:rotate(0deg);}
   50%  {left:200px; top:0px; transform:rotate(180deg);}

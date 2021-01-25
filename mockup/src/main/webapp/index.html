@@ -40,23 +40,20 @@
         </nav>
         
         
-        <h1>Hello Drinkers!</h1>
+        <h1 class="title">Hello Drinkers!</h1>
         <div class="container">
-            <div class="row">
-                <div class="col" align="center">
-                    <input class="searchbar" type="text" placeholder="Search"/>
-                </div>
+            <div class="d-flex flex-column align-items-center" align="center">
+                <input class="mb-3" type="text" placeholder="Search"/>
+                    <div class="d-flex align-items-center justify-content-space-between">
+                        <input id="nameField" placeholder="Name" type="text" />         
+                        <button onClick="addEntry()" class="btn btn-primary">Add</button>
+                    </div>
             </div>
-            <div class="row">
-                <div class="col" align="center">
-                    <input id="nameField" placeholder="Name" type="text" />         
-                    <button onClick="addEntry()" class="btn btn-primary">Add</button>
-                </div>
-            </div>
+
             
-            <div class="row row-cols-1 row-cols-md-2 g-4" id="drinkList">
-                <div class="col is-3">
-                  <div class="card">
+            <div class="row" id="drinkList">
+                <div class="col-auto mt-3">
+                  <div class="card drink-entry">
                     <img src="https://storhushall.skanemejerier.se/content/uploads/2019/05/Summer_Sunrise.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title">Card title</h5>
@@ -64,8 +61,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col is-3">
-                  <div class="card">
+                <div class="col-auto mt-3">
+                  <div class="card drink-entry">
                     <img src="https://storhushall.skanemejerier.se/content/uploads/2019/05/Summer_Sunrise.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title">Card title</h5>
@@ -73,8 +70,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col is-3">
-                  <div class="card">
+                <div class="col-auto mt-3">
+                  <div class="card drink-entry">
                     <img src="https://storhushall.skanemejerier.se/content/uploads/2019/05/Summer_Sunrise.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title">Card title</h5>
@@ -82,8 +79,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col is-3">
-                  <div class="card">
+                <div class="col-auto mt-3">
+                  <div class="card drink-entry">
                     <img src="https://storhushall.skanemejerier.se/content/uploads/2019/05/Summer_Sunrise.jpg" class="card-img-top" alt="...">
                     <div class="card-body">
                       <h5 class="card-title">Card title</h5>
