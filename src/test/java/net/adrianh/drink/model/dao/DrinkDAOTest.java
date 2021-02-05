@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static java.lang.System.out;
+import net.adrianh.drink.model.entity.User;
+import net.adrianh.drink.model.entity.Vote;
 
 @RunWith(Arquillian.class)
 public class DrinkDAOTest {
@@ -30,20 +32,25 @@ public class DrinkDAOTest {
     
     @EJB
     private DrinkDAO drinkDAO;
-   
-    
     @EJB
     private IngredientDAO ingredientDAO;
+    @EJB
+    private UserDAO userDAO;
+    @EJB
+    private VoteDAO voteDAO;
     
     @Before
     public void init() {
-        Drink drink1 = new Drink(null,"drink", "a good description",null);
-        Drink drink2 = new Drink(null,"drink 2", "a good description",null);
+        User adrian = new User("adrian", null, null);
+        userDAO.create(adrian);
+        Drink drink1 = new Drink(null,"drink", "a good description",null, null, adrian);
+        Drink drink2 = new Drink(null,"drink 2", "a good description",null, null, null);
+        Vote vote_adrian = new Vote(adrian, drink1, 1);
+        voteDAO.create(vote_adrian);
         drinkDAO.create(drink1);
         drinkDAO.create(drink2);
-        drinkDAO.create(new Drink(null,"Margarita", "a good description",null));
-        drinkDAO.create(new Drink(null,"Margarita", "a good description",null));
-	
+        drinkDAO.create(new Drink(null,"Margarita", "a good description",null, null, adrian));
+        drinkDAO.create(new Drink(null,"Margarita", "a good description",null, null, null));
         ingredientDAO.create(new Ingredient(null,"Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,drink1));
         ingredientDAO.create(new Ingredient(null,"Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,drink1));
         Ingredient ingredient = new Ingredient(null,"Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,drink2);
@@ -72,12 +79,12 @@ public class DrinkDAOTest {
 	Assert.assertTrue(margaritas.get(0).getName().equals("Margarita"));
     }
     
-/*
-    @After
+
+    /*@After
     public void clean(){
 	List <Drink> drinkar = drinkDAO.findAll();
 	for(Drink d: drinkar)
 	    drinkDAO.remove(d);
-    }
-    */
+    }*/
+    
 }

@@ -28,16 +28,15 @@ public class Ingredient implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // TODO: Fix composite keys
-    
     private String name; 
-    
     @Enumerated(EnumType.ORDINAL)
     private Unit unit;
-    
     private double amount;
     
+    //alcohol percentage
     private double abv;
     
+    //ingredient belongs to drink as element of list
     @ManyToOne(optional = false, cascade=CascadeType.REMOVE)
     @JoinColumn(name="drink_id")
     private Drink drink;
