@@ -1,51 +1,37 @@
 package net.adrianh.drink.model.dao;
 
-import java.util.ArrayList;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.AbstractQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
+import net.adrianh.drink.model.entity.QDrink;
 
 @Stateless
 public class DrinkDAO extends AbstractDAO<Drink> {
     @Getter @PersistenceContext(unitName = "drinkdb")
     private EntityManager entityManager;
-    
+
     public DrinkDAO() {
         super(Drink.class);
     }
     
-    public List<Drink> findDrinksMatchingName(String s) {
-        
-        /*
-        List<Drink> drinkList = super.findAll();
-        List<Drink> returnList = new ArrayList<>();
-        
-        for (Drink drink : drinkList) { 
-            if (drink.getName().equals(s)) {
-                returnList.add(drink);
-            }
-        }
-        return returnList;
-        */
-        
-        
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        AbstractQuery<Drink> q = cb.createQuery(Drink.class);
-        Root<Drink> c = q.from(Drink.class);
-        q.distinct(true);
-        q.where(cb.like(c.get("name"),s));
-        CriteriaQuery<Drink> select = ((CriteriaQuery<Drink>) q).select(c);
-        TypedQuery<Drink> tq = entityManager.createQuery(select);
-        List<Drink> resultat = tq.getResultList();
-        return resultat;
-        
+    public List<Drink> findDrinksMatchingName(String s){
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QDrink drink = QDrink.drink;
+	List<Drink> drinks = queryFactory.selectFrom(drink)
+	    .where(drink.name.eq(s))
+	    .fetch();
+	return drinks;
+    }
+    public List<Drink> findDrinkByID(Long id){
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QDrink drink = QDrink.drink;
+	List<Drink> drinks = queryFactory.selectFrom(drink)
+	    .where(drink.id.eq(id))
+	    .fetch();
+	return drinks;
     }
 }

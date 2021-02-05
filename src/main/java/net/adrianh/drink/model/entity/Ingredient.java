@@ -1,6 +1,7 @@
 package net.adrianh.drink.model.entity;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -37,8 +38,7 @@ public class Ingredient implements Serializable {
     
     private double abv;
     
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade=CascadeType.REMOVE)
     @JoinColumn(name="drink_id")
     private Drink drink;
-    
 }

@@ -16,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import static java.lang.System.out;
 
 @RunWith(Arquillian.class)
 public class DrinkDAOTest {
@@ -29,45 +30,54 @@ public class DrinkDAOTest {
     
     @EJB
     private DrinkDAO drinkDAO;
+   
     
     @EJB
     private IngredientDAO ingredientDAO;
     
     @Before
     public void init() {
-        
         Drink drink1 = new Drink(null,"drink", "a good description",null);
         Drink drink2 = new Drink(null,"drink 2", "a good description",null);
         drinkDAO.create(drink1);
         drinkDAO.create(drink2);
         drinkDAO.create(new Drink(null,"Margarita", "a good description",null));
         drinkDAO.create(new Drink(null,"Margarita", "a good description",null));
+	
         ingredientDAO.create(new Ingredient(null,"Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,drink1));
         ingredientDAO.create(new Ingredient(null,"Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,drink1));
-        Ingredient ingredient = new Ingredient(null,"Coke 2", Ingredient.Unit.CENTILITRE,12.0,0.0,drink2);
+        Ingredient ingredient = new Ingredient(null,"Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,drink2);
         ingredientDAO.create(ingredient);
         drink2.setIngredients(Arrays.asList(ingredient));
         drinkDAO.update(drink2);
-        
-    }
-    
-    
-    @Test
-    public void checkThatDrinkContainsIngredients() {
-        System.out.println("hej hej");
-        System.out.println(drinkDAO.findDrinksMatchingName("drink 2").get(0).toString());
-        System.out.println(drinkDAO.findDrinksMatchingName("drink 2").get(0).getIngredients().size());
-        Assert.assertTrue(drinkDAO.findDrinksMatchingName("drink 2").get(0).getIngredients().get(0).getName().equals("Coke 2"));
-    }
-    
-    @Test
-    public void checkThatAddWorked(){
-        Assert.assertTrue(drinkDAO.findAll().size() == 4); 
     }
 
+    @Test
+    // True om det finns någon drink alls
+    public void checkThatAddWorks(){
+        Assert.assertTrue(drinkDAO.findAll().size() > 0); 
+    }
     
     @Test
-    public void checkThatFindDrinksMatchingNameMatchesCorrectly() {
-        Assert.assertTrue(drinkDAO.findDrinksMatchingName("Margarita").size() == 2);
+    //True om det finns mer än en drink med Coke 
+    public void checkThatFindDrinksByIngredientWorks(){ 
+	List<Drink> drinkar = ingredientDAO.findDrinksFromIngredient("Coke");
+	Assert.assertTrue(drinkar.size() > 1);
     }
+
+    @Test
+    //True om det finns minst en drink som heter Margarita
+    public void checkThatGetDrinkByNameWorks(){
+	List<Drink> margaritas = drinkDAO.findDrinksMatchingName("Margarita");
+	Assert.assertTrue(margaritas.get(0).getName().equals("Margarita"));
+    }
+    
+/*
+    @After
+    public void clean(){
+	List <Drink> drinkar = drinkDAO.findAll();
+	for(Drink d: drinkar)
+	    drinkDAO.remove(d);
+    }
+    */
 }
