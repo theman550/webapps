@@ -9,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.Ingredient;
-import net.adrianh.drink.model.entity.QDrink;
 import net.adrianh.drink.model.entity.QIngredient;
 
 @Stateless

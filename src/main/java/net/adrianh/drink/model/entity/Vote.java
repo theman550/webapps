@@ -1,37 +1,52 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package net.adrianh.drink.model.entity;
 
-import javax.persistence.CascadeType;
+import java.io.Serializable;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-/**
- *
- * @author Guy Fieri
- */
 @Data
 @Entity
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"drink", "user_id"})
+@ToString(exclude = {"drink","user_id"})
+
 @AllArgsConstructor
-public class Vote {
+public class Vote implements Serializable {
+    
+    @EmbeddedId
+    private PK pk;
+    
+    @Embeddable
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+    public static class PK implements Serializable {
+        private Long user_id;
+        private Long drink;
+    }
+    
     //a vote is cast by a user
-    @Id 
+    @MapsId("user_id")
     @ManyToOne(optional = false)
+    @JoinColumn(name="user_id")
     private User user_id;
-    //a drink has multiple votes, list of all votes by drink_id
-    @Id
-    @ManyToOne(optional = false, cascade=CascadeType.REMOVE)
+    
+    //a vote is cast on a drink
+    @MapsId("drink")
+    @ManyToOne(optional = false)
     @JoinColumn(name="drink_id")
     private Drink drink;
-    private int value;
+    
+    // a vote can be either positive or negative
+    private int val;
     
 }
