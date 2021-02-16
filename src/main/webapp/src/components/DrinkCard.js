@@ -9,7 +9,12 @@ export default function DrinkCard(props) {
   const data = props.data;
 
   const tags = data.ingredients.map((ingredient) => 
-    <Chip key={ingredient} className="ingredient-tag pmr-2 p-mb-2" label={ingredient}></Chip>
+    <span key={ingredient} onClick={() => props.handleIngredientTagClick(ingredient)}>
+      <Chip 
+        className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.includes(ingredient) ? "selected-ingredient" : ""}`} 
+        label={ingredient}>
+      </Chip>
+    </span>
   );
   return (
     <div className="p-col-12 p-md-4 p-lg-3">

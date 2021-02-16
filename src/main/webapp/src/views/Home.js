@@ -2,6 +2,7 @@ import React from "react";
 import { DataView, DataViewLayoutOptions } from 'primereact/dataview';
 import { Dropdown } from 'primereact/dropdown';
 
+import Search from '../components/Search';
 import DrinkCard from '../components/DrinkCard';
 import DrinkListItem from '../components/DrinkListItem';
 
@@ -15,6 +16,7 @@ export default class Home extends React.Component {
       layout: "grid",
       sortOrder: null,
       sortField: null,
+      searchQueries: [],
       sortOptions: [
         {
           label: "Most popular", value: "!voteCount"
@@ -63,7 +65,6 @@ export default class Home extends React.Component {
     }
   }
 
-
   onSortChange = (event) => {
     // TODO: Should fetch data from backend instead of sorting existing entries
     const value = event.value;
@@ -73,12 +74,27 @@ export default class Home extends React.Component {
       this.setState({sortOrder: 1, sortField: value, sortKey: value});
 
     }
-  };
+  }
+
+  onQueryChange = (event) => {
+    this.setState({searchQueries: event.value});
+  }
+
+  handleIngredientTagClick = (ingredient) => {
+    if (this.state.searchQueries.includes(ingredient)) {
+      // Remove ingredient from query list
+      this.setState((state) => ({searchQueries: state.searchQueries.filter((i) => i !== ingredient)}));
+    } else {
+      // Add ingredient to query list
+      this.setState((state) => ({searchQueries: [...state.searchQueries, ingredient]}));
+
+    }
+  }
 
   render() {
     const header = (
       <div className="p-grid p-nogutter">
-        <div className="p-col-6" style={{ textAlign: "left" }}>
+        <div className="p-col-10 p-d-sm-flex" style={{ textAlign: "left" }}>
           <Dropdown
             options={this.state.sortOptions}
             value={this.state.sortKey}
@@ -86,8 +102,14 @@ export default class Home extends React.Component {
             placeholder="Most popular"
             onChange={this.onSortChange}
           />
+          <div className="p-ml-sm-3 p-mt-2 p-mt-sm-0">
+            <Search 
+              searchQueries={this.state.searchQueries} 
+              onQueryChange={this.onQueryChange} 
+            />
+          </div>
         </div>
-        <div className="p-col-6" style={{ textAlign: "right" }}>
+        <div className="p-col-2" style={{ textAlign: "right" }}>
           <DataViewLayoutOptions
             layout={this.state.layout}
             onChange={(e) => this.setState({layout: e.value})}
@@ -98,17 +120,16 @@ export default class Home extends React.Component {
 
     const itemTemplate = (data, layout) => {
       if (layout === "list") {
-        return <DrinkListItem data={data} sendVote={this.sendVote}></DrinkListItem>;
+        return <DrinkListItem data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkListItem>;
       }
       if (layout === "grid") {
-        return <DrinkCard data={data} sendVote={this.sendVote}></DrinkCard>;
+        return <DrinkCard data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkCard>;
       }
     };
     return (
       <div>
         <h1>Home</h1>
         <DataView
-          className="dataview-demo"
           value={this.state.drinks}
           layout={this.state.layout}
           sortOrder={this.state.sortOrder}
