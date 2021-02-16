@@ -35,7 +35,9 @@ public class IngredientDAOTest {
     }
     @EJB
     private UserDAO userDAO;
+    @EJB
     private DrinkDAO drinkDAO;
+    @EJB
     private IngredientDAO ingredientDAO;
     
     @Before
@@ -50,14 +52,11 @@ public class IngredientDAOTest {
 	Drink d = new Drink();
 	d.setName("Margarita");
 	d.setDescription("Mums");
-	usr.addDrink(d);
 	d.setUser(usr);
 	d.addIngredient(i);
 	d.addIngredient(i2);
-	out.println(i);
+	usr.addDrink(d);
 	userDAO.create(usr);
-	ingredientDAO.create(i);
-	ingredientDAO.create(i2);
     }
     
     @Test
