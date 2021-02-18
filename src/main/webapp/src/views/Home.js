@@ -28,26 +28,8 @@ export default class Home extends React.Component {
           label: "Oldest", value: "datePosted"
         }
       ],
-      drinks: [
-        {
-          id: '1',
-          name: "en drink",
-          ingredients: ["vodka", "cyanid", "citron"],
-          description: "en mycket god drink",
-          voteCount: 32,
-          datePosted: "2020",
-          image:
-            "https://grandbaby-cakes.com/wp-content/uploads/2019/12/New-Orleans-Hurricane-Drink-2.jpg",
-        },
-        {
-          id: '2',
-          name: "en drink till",
-          description: "lorem ipsum",
-          voteCount: 33,
-          datePosted: "2021",
-          ingredients: ["rom", "coke"],
-        },
-      ],
+      drinks: 
+        null,
     };
   }
 
@@ -64,6 +46,13 @@ export default class Home extends React.Component {
       ));
     }
   }
+
+  componentDidMount() {
+    fetch("https://64c5188c-a93a-4c2c-997b-72d0b5c6b0da.mock.pstmn.io/ws/fineDrink/")
+      .then(response => response.json())
+      .then(data => this.setState({ "drinks" : [data] }));
+  }
+
 
   onSortChange = (event) => {
     // TODO: Should fetch data from backend instead of sorting existing entries
