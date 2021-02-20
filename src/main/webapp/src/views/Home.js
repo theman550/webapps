@@ -50,7 +50,7 @@ export default class Home extends React.Component {
   componentDidMount() {
     fetch("https://64c5188c-a93a-4c2c-997b-72d0b5c6b0da.mock.pstmn.io/ws/fineDrink/")
       .then(response => response.json())
-      .then(data => this.setState({ "drinks" : [data] }));
+      .then(data => this.setState({ drinks: data }));
   }
 
 
