@@ -12,12 +12,23 @@ export default class Search extends Component {
         }
     }
 
+    /* 
+    Fetches both drink and ingredient names that start with the
+    current search query and updates the suggestion list.
+    The api should return a JSON list of "suggestion objects":
+    Example:
+    [{"name":"a drink suggestion","type":"drink"},
+     {"name":"an ingredient suggestion","type":"ingredient"}]
+    */
     autoComplete = (e) => {
-        // TODO: Send a GET request to api (e.g /search?query=searchQuery)
-        // The api should respond with a list of suggestions of drinks and/or ingredients (names only)
-        setTimeout(() => {
-            this.setState({searchSuggestions: ['a suggestion','vodka']});
-        }, 250);
+        fetch(process.env.REACT_APP_API_URL+"/autocomplete?s="+e.query)
+            .then(response => response.json())
+            .then(suggestions => {
+                this.setState({searchSuggestions: suggestions});
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     render() {
@@ -26,6 +37,7 @@ export default class Search extends Component {
                 <span className="p-fluid">
                     <AutoComplete
                         multiple
+                        field="name"
                         forceSelection={false}
                         placeholder="Search"
                         autoFocus={true}
