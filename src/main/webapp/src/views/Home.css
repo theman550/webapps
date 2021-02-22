@@ -21,3 +21,11 @@
     font-weight: 600;
     vertical-align: middle;
 }
+
+.p-chip {
+    cursor: pointer;
+}
+
+.p-chip.selected-ingredient {
+    background: rgb(149, 177, 255);
+}

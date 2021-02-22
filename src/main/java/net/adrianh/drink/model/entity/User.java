@@ -1,6 +1,7 @@
 package net.adrianh.drink.model.entity;
 
 import java.io.Serializable;
+import javax.json.bind.annotation.JsonbTransient;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "DRINK_USER") // "USER" is reserved
+@Table(name = "drink_user") // "USER" is reserved
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements Serializable {
@@ -28,10 +29,12 @@ public class User implements Serializable {
     
     //a user has many created drinks
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonbTransient
     private List<Drink> createdDrinks = new ArrayList<>();
     
     //a user has many votes
     @OneToMany(mappedBy="user_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonbTransient
     private List<Vote> votes = new ArrayList<>();
     
     public void addVote(Vote vote) {

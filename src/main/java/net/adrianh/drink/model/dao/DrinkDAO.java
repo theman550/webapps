@@ -1,7 +1,9 @@
 package net.adrianh.drink.model.dao;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,6 +18,22 @@ public class DrinkDAO extends AbstractDAO<Drink> {
 
     public DrinkDAO() {
         super(Drink.class);
+    }
+
+    
+    public List<Drink> allDrinks(){
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QDrink drink = QDrink.drink;
+	List<Drink> queryDrinks = queryFactory.selectFrom(drink)
+	    .fetch();
+        
+        ArrayList<Drink> drinks = new ArrayList<>();
+        
+        for(Drink d : queryDrinks){            
+            drinks.add(d);  
+        }
+
+	return drinks;
     }
     
     public List<Drink> findDrinksMatchingName(String s){

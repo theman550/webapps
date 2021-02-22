@@ -1,6 +1,7 @@
 package net.adrianh.drink.model.entity;
 
 import java.io.Serializable;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -50,5 +51,6 @@ public class Ingredient implements Serializable {
     @Id
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name="drink_id")
+    @JsonbTransient
     private Drink drink;
 }
