@@ -9,13 +9,8 @@ export default function DrinkCard(props) {
   const data = props.data;
   console.log("aaaaa" + JSON.stringify(data));
   
-  const tags = data.ingredients.map((ingredient) => 
-    <span key={ingredient} onClick={() => props.handleIngredientTagClick(ingredient)}>
-      <Chip 
-       className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.includes(ingredient.name) ? "selected-ingredient" : ""}`} 
-       label={ingredient}>
-      </Chip>
-    </span>
+  const tags = data.ingredients.map((ingredient) =>  
+        <div className="ingredient-tag">{ingredient.name}</div>
   );
         
   return (
