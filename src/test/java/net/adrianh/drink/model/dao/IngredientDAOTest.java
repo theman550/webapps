@@ -64,24 +64,24 @@ public class IngredientDAOTest {
     public void checkThatAddWorks(){
         Assert.assertTrue(1 > 0); 
     }
-  /*  @Test
+    @Test
     public void testCreateIngredient(){
 	Assert.assertTrue("Ingredient was not created, so that's bad", !ingredientDAO.findAll().isEmpty());
     }
     
     // True om det finns minst en ingrediens i drinken
-    @Test
+   /* @Test
     public void findIngredientsFromDrink(){
 	Drink d = userDAO.findAll().get(0).getCreatedDrinks().get(0);
 	Assert.assertTrue(d.getIngredients().size()>0);
-    }
+    }*/
     
     @Test
     //True om det finns minst en drink med Coke 
     public void checkThatFindDrinksByIngredientWorks(){ 
 	List<Drink> drinkar = ingredientDAO.findDrinksFromIngredient("Coke");
 	Assert.assertTrue(drinkar.size() > 0);
-    }*/
+    }
     
    /* @After
     public void clean(){

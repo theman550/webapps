@@ -49,18 +49,14 @@ public class UserDAOTest {
 	userDAO.create(usr);
     }
     
-   @Test
-    // True om det finns någon drink alls
-    public void checkThatAddWorks(){
-        Assert.assertTrue(1 > 0); 
-    }
        
-    // True if a user is created and the class is User (meh)
-   /* @Test
+     //True if a user is created and the class is User (meh)
+   @Test
     public void addUser(){
 	List<User> usrs = userDAO.findAll();
 	Assert.assertTrue(usrs.size() > 0 && usrs.get(0).getClass().equals(User.class));
-    }*/
+    }
+             
    /* @After
     public void clean(){
         List <User> users = userDAO.findAll();

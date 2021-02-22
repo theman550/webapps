@@ -21,7 +21,7 @@ public class DrinkResource {
     @EJB
     private DrinkDAO drink;
 
-    @GET // curl -X GET --basic http://localhost:8080/wsbooks/ws/shelf
+    @GET 
     public List<Drink> list() {
         return drink.allDrinks();
     }

@@ -52,18 +52,6 @@ public class DrinkDAOTest {
     @Test
     // True om det finns någon drink alls
     public void checkThatAddWorks(){
-        Assert.assertTrue(1 > 0); 
-    }
-    
-   /* @Test
-    // True om det finns någon drink alls
-    public void checkThatGetAllDrinksWorks(){
-        Assert.assertTrue(drinkDAO.getAllDrinks().size() > 0); 
-    }*/
-    /*
-    @Test
-    // True om det finns någon drink alls
-    public void checkThatAddWorks(){
         Assert.assertTrue(drinkDAO.findAll().size() > 0); 
     }
     
@@ -80,7 +68,7 @@ public class DrinkDAOTest {
     public void checkThatGetDrinkByNameWorks(){
 	List<Drink> margaritas = drinkDAO.findDrinksMatchingName("Margarita");
 	Assert.assertTrue(margaritas.get(0).getName().equals("Margarita"));
-    } */
+    } 
    
     /*@After
     public void clean(){
