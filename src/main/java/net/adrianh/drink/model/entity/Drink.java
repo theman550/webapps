@@ -39,7 +39,6 @@ public class Drink implements Serializable {
     
     //all the drinks ingredients
     @OneToMany(mappedBy = "drink", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonbTransient
     private List<Ingredient> ingredients = new ArrayList<>();
     
     //drink belongs to user as liked element

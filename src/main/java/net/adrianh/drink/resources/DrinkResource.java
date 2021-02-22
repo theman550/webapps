@@ -14,6 +14,8 @@ import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.QDrink;
 import javax.persistence.EntityManager;
+import net.adrianh.drink.model.dao.IngredientDAO;
+import net.adrianh.drink.model.entity.Ingredient;
 
 @Path("drinkre")
 public class DrinkResource {
@@ -21,9 +23,10 @@ public class DrinkResource {
     @EJB
     private DrinkDAO drink;
 
-    @GET 
-    public List<Drink> list() {
+
+    @GET
+    public List<Drink> drinkList() {
         return drink.allDrinks();
-    }
+    } 
 
 }

@@ -3,13 +3,16 @@ package net.adrianh.drink.model.dao;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
+import net.adrianh.drink.model.entity.Ingredient;
 import net.adrianh.drink.model.entity.QDrink;
+import net.adrianh.drink.model.entity.QIngredient;
 
 @Stateless
 public class DrinkDAO extends AbstractDAO<Drink> {
@@ -19,18 +22,23 @@ public class DrinkDAO extends AbstractDAO<Drink> {
     public DrinkDAO() {
         super(Drink.class);
     }
-
     
     public List<Drink> allDrinks(){
 	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;
-	List<Drink> queryDrinks = queryFactory.selectFrom(drink)
+	List<Drink> drinks = queryFactory.selectFrom(drink)
 	    .fetch();
         
-        ArrayList<Drink> drinks = new ArrayList<>();
-        
-        for(Drink d : queryDrinks){            
-            drinks.add(d);  
+	QIngredient ingredient = QIngredient.ingredient;
+	List<Ingredient> ingredients = queryFactory.selectFrom(ingredient)
+	    .fetch();
+      
+        for(Drink d : drinks){
+            for(Ingredient i : ingredients){
+                if(Objects.equals(d.getId(), i.getDrink())){
+                    d.addIngredient(i);   
+                }
+            }
         }
 
 	return drinks;

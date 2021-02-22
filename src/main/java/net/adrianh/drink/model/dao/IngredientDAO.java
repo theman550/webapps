@@ -20,6 +20,15 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
         super(Ingredient.class);
     }
     
+    public List<Ingredient> allIngredients(){
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QIngredient ingredient = QIngredient.ingredient;
+	List<Ingredient> ingredients = queryFactory.selectFrom(ingredient)
+	    .fetch();
+
+	return ingredients;
+    }
+    
     public List<Ingredient> findIngredientsMatchingName(String s) {
 	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QIngredient ingredient = QIngredient.ingredient;

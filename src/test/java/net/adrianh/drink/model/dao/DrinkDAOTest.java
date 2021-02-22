@@ -37,12 +37,17 @@ public class DrinkDAOTest {
     
     @Before
     public void init() {
+        Ingredient i = new Ingredient("Ost", Ingredient.Unit.LITRE,9.0,0.0,null);
+	Ingredient i2 = new Ingredient("Salt", Ingredient.Unit.LITRE,15.0,0.0,null);
+        
         User usr = new User(null,"usr", null, null);
         usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 	Drink d = new Drink();
         d.setName("Margarita");
         d.setDescription("gooood");
+        d.addIngredient(i);
+	d.addIngredient(i2);
 	d.setUser(usr);
 	usr.addDrink(d);
 
