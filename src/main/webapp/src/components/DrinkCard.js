@@ -7,25 +7,24 @@ import "./DrinkCard.css";
 
 export default function DrinkCard(props) {
   const data = props.data;
-
-    const tags = null;
-  /*const tags = data.drinks.getIngredients().map((ingredient) => 
+  console.log("aaaaa" + JSON.stringify(data));
+  
+  const tags = data.ingredients.map((ingredient) => 
     <span key={ingredient} onClick={() => props.handleIngredientTagClick(ingredient)}>
       <Chip 
-        className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.includes(ingredient) ? "selected-ingredient" : ""}`} 
-        label={ingredient}>
+       className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.includes(ingredient.name) ? "selected-ingredient" : ""}`} 
+       label={ingredient}>
       </Chip>
     </span>
-  );*/
+  );
         
-  //{tags} *insert on line 28*
   return (
     <div className="p-col-12 p-md-4 p-lg-3">
       <div className="product-grid-item p-shadow-3">
         <div className="product-grid-item-top">
           <div>
             <i className="pi pi-tag product-category-icon"></i>
-
+                {tags}
           </div>
           <Avatar icon="pi pi-user" shape="circle"></Avatar>
         </div>
