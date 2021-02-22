@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import Search from '../components/Search';
 import DrinkCard from '../components/DrinkCard';
 import DrinkListItem from '../components/DrinkListItem';
+import Dashboard from "../components/Dashboard";
 
 import './Home.css';
 
@@ -80,6 +81,7 @@ export default class Home extends React.Component {
   render() {
     const header = (
       <div className="p-grid p-nogutter">
+        {/* <Dashboard/> */}
         <div className="p-col-10 p-d-sm-flex" style={{ textAlign: "left" }}>
           <Dropdown
             options={this.state.sortOptions}
