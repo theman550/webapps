@@ -14,18 +14,14 @@ export default class Home extends React.Component {
     super(props);
     this.state = {
       layout: "grid",
-      sortOrder: null,
-      sortField: null,
+      sortKey: null,
       searchQueries: [],
       sortOptions: [
         {
-          label: "Most popular", value: "!voteCount"
+          label: "Most popular", value: "popular"
         },
         {
-          label: "Newest", value: "!datePosted"
-        },
-        {
-          label: "Oldest", value: "datePosted"
+          label: "Newest", value: "new"
         }
       ],
       drinks: 
@@ -48,34 +44,35 @@ export default class Home extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://64c5188c-a93a-4c2c-997b-72d0b5c6b0da.mock.pstmn.io/ws/fineDrink/")
-      .then(response => response.json())
-      .then(data => this.setState({ drinks: data }));
+    // Set default sorting choice (and call fetchDrinks)
+    this.setState((state) => ({sortKey: state.sortOptions[0].value}),this.fetchDrinks);
   }
 
-
+  // When user selects a new sorting option
   onSortChange = (event) => {
-    // TODO: Should fetch data from backend instead of sorting existing entries
-    const value = event.value;
-    if (value.indexOf('!') === 0) {
-      this.setState({sortOrder: -1, sortField: value.substring(1,value.length), sortKey: value});
-    } else {
-      this.setState({sortOrder: 1, sortField: value, sortKey: value});
-
-    }
+    this.setState({sortKey: event.value}, this.fetchDrinks);
   }
 
+  fetchDrinks = () => {
+    // TODO: Maybe find a cleaner way to encode queries in url
+    fetch(process.env.REACT_APP_API_URL+"/drinks/"+this.state.sortKey + "?" + new URLSearchParams({query: JSON.stringify(this.state.searchQueries)}))
+      .then(response => response.json())
+      .then(data => this.setState({ drinks: data.drinks }));
+  }
+
+  // When the user enters a new search tag
   onQueryChange = (event) => {
-    this.setState({searchQueries: event.value});
+    this.setState({searchQueries: event.value}, this.fetchDrinks);
   }
 
+  // When the user clicks on an ingredient name in the search results
   handleIngredientTagClick = (ingredient) => {
-    if (this.state.searchQueries.includes(ingredient)) {
+    if (this.state.searchQueries.map((i) => i.name).includes(ingredient)) {
       // Remove ingredient from query list
-      this.setState((state) => ({searchQueries: state.searchQueries.filter((i) => i !== ingredient)}));
+      this.setState((state) => ({searchQueries: state.searchQueries.filter((i) => i.name !== ingredient)}), this.fetchDrinks);
     } else {
       // Add ingredient to query list
-      this.setState((state) => ({searchQueries: [...state.searchQueries, ingredient]}));
+      this.setState((state) => ({searchQueries: [...state.searchQueries, {name:ingredient,type:"ingredient"}]}), this.fetchDrinks);
 
     }
   }

@@ -22,7 +22,7 @@ export default class Search extends Component {
     */
     autoComplete = (e) => {
         fetch(process.env.REACT_APP_API_URL+"/autocomplete?s="+e.query)
-            .then(response => response.json())
+            .then(response => response.ok ? response.json() : Promise.reject(response.status))
             .then(suggestions => {
                 this.setState({searchSuggestions: suggestions});
             })

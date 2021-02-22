@@ -8,7 +8,7 @@ export default function DrinkListItem(props) {
     const tags = data.ingredients.map((ingredient) => 
       <span key={ingredient} onClick={() => props.handleIngredientTagClick(ingredient)}>
         <Chip 
-          className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.includes(ingredient) ? "selected-ingredient" : ""}`} 
+        className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.map((i) => i.name).includes(ingredient) ? "selected-ingredient" : ""}`} 
           label={ingredient}>
         </Chip>
       </span>
