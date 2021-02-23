@@ -39,66 +39,66 @@ import fresh4 from '../images/fresh4.jpg';
 
 class Login extends Component {
 
-constructor(props) {
-super(props);
-}
-navigate = (path) => {
-this.props.history.push(path);
-}
+    constructor(props) {
+        super(props);
+    }
+    navigate = (path) => {
+        this.props.history.push(path);
+    }
 
-render() {
+    render() {
 
-const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
+        const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
         return (
                 <div>
-
-    <div  className="split left">
-        <div className="background" class="left-background">
-            <div class="container" >
-
-                <img src={fresh}/>
-                <img src={fresh2}/>
-                <img src={fresh3}/>
-                <img src={fresh4}/>
-               
-            </div>
-        </div>
-
-    </div>
-                                
-    <div  className="split right">
-        <div className="card" class="card" >
-            <div class="logo">
-                <h2 class = "login-logo">Login</h2>
-            </div>
-            <div className="text-input">
-
-                <div className="p-username" class="username-input">
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">
-                            <i className="pi pi-user"></i>
-                        </span>
-                        <InputText placeholder="Username" />
+                
+                    <div  className="split left">
+                        <div className="background" class="left-background">
+                            <div class="container" >
+                
+                                <img src={fresh}/>
+                                <img src={fresh2}/>
+                                <img src={fresh3}/>
+                                <img src={fresh4}/>
+                
+                            </div>
+                        </div>
+                
+                    </div>
+                
+                    <div  className="split right">
+                        <div className="card" class="card" >
+                            <div class="logo">
+                                <h2 class = "login-logo">Login</h2>
+                            </div>
+                            <div className="text-input">
+                
+                                <div className="p-username" class="username-input">
+                                    <div className="p-inputgroup">
+                                        <span className="p-inputgroup-addon">
+                                            <i className="pi pi-user"></i>
+                                        </span>
+                                        <InputText placeholder="Username" />
+                                    </div>
+                                </div>
+                                <div className="p-password" class="password-input">
+                                    <div className="p-inputgroup">
+                                        <span className="p-inputgroup-addon">**</span>
+                                        <InputText placeholder="Password" />              
+                                    </div>
+                                </div>
+                            </div>
+                
+                            {/* <div><TextInput/></div>*/}
+                
+                            <div className="p-logButton">
+                                <div className="Login">
+                                    <div class="btn">{loginButton}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="p-password" class="password-input">
-                    <div className="p-inputgroup">
-                        <span className="p-inputgroup-addon">**</span>
-                        <InputText placeholder="Password" />              
-                    </div>
-                </div>
-            </div>
-
-            {/* <div><TextInput/></div>*/}
-
-            <div className="p-logButton">
-                <div className="Login">
-                    <div class="btn">{loginButton}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
                 );
 

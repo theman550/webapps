@@ -10,27 +10,20 @@
 }
 .split {
     height: 100%;
-    width: 50%;
     position: fixed;
-    z-index: 1;
     top: 0;
-    overflow-x: hidden;
-    padding-top: 20px;
+    z-index: -1;
 }
 /* Control the left side */
 .left {
     left: 0;
     width: 40%;
-    padding-top: 20px;
-    background-color: lightgray;
+    overflow: hidden;
 }
-img{
 
-}
 /* Control the right side */
 .right {
     right: 0;
-
     width: 60%;
     padding-top: 20px;
 }
@@ -43,12 +36,8 @@ img{
     margin-left: 5px;
 }
 .left-background {
-    position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     text-align: center;
-
 }
 /* Style the image inside the centered container, if needed */
 .centered img {
@@ -56,12 +45,12 @@ img{
     border-radius: 50%;
 }
 
-
 .container {
     filter: brightness(70%);
     position:relative;
-    height:610px;
+    height:1220px;
     width:610px;
+    overflow: hidden;
 }
 .container img {
     position:absolute;
