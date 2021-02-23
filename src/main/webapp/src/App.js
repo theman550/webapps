@@ -42,19 +42,19 @@ class App extends React.Component {
         PrimeReact.ripple = true;  //button effect
 
         const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
-        const loginButton = <Button label="Log in" onClick={() =>  this.navigate('/Login')} ></Button>
+        const loginButton = <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
         return (
                 <div className="App">
                     <Menubar model={items} start={navbrand} end={loginButton}></Menubar>
                     <Switch>
                     <Route path="/login">
-                        <Login>HelloooooooooAbout</Login>
+                        <Login></Login>
                     </Route>
                     <Route path="/about">
-                        <About>HelloooooooooAbout</About>
+                        <About></About>
                     </Route>
                     <Route path="/">
-                        <Home>Hoooooooooooome</Home>
+                        <Home></Home>
                     </Route>
                     </Switch>
                 </div>
