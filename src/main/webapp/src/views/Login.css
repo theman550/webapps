@@ -1,0 +1,121 @@
+.login-logo{
+    position: relative;
+    left: 0px;
+}
+.username-input{
+    margin-bottom: 20px;
+}
+.password-input{
+    margin-bottom: 20px;
+}
+.split {
+    height: 100%;
+    position: fixed;
+    top: 0;
+    z-index: -1;
+}
+/* Control the left side */
+.left {
+    left: 0;
+    width: 40%;
+    overflow: hidden;
+}
+
+/* Control the right side */
+.right {
+    right: 0;
+    width: 60%;
+    padding-top: 20px;
+}
+.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    margin-left: 5px;
+}
+.left-background {
+    top: 50%;
+    text-align: center;
+}
+/* Style the image inside the centered container, if needed */
+.centered img {
+    width: 150px;
+    border-radius: 50%;
+}
+
+.container {
+    filter: brightness(70%);
+    position:relative;
+    height:1220px;
+    width:610px;
+    overflow: hidden;
+}
+.container img {
+    position:absolute;
+    left:0;
+}
+@keyframes imgFade {
+    0% {
+        opacity:1;
+    }
+    17% {
+        opacity:1;
+    }
+    25% {
+        opacity:0;
+    }
+    92% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@-webkit-keyframes imgFade {
+    0% {
+        opacity:1;
+    }
+    17% {
+        opacity:1;
+    }
+    25% {
+        opacity:0;
+    }
+    92% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+.container img {
+    -webkit-animation-name: imgFade;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 8s;
+
+    animation-name: imgFade;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 8s;
+}
+
+.container img:nth-of-type(1) {
+    -webkit-animation-delay: 6s;
+    animation-delay: 6s;
+}
+.container img:nth-of-type(2) {
+    -webkit-animation-delay: 4s;
+    animation-delay: 4s;
+}
+.container img:nth-of-type(3) {
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
+}
+.container img:nth-of-type(4) {
+    -webkit-animation-delay: 0;
+    animation-delay: 0;
+}
