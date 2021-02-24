@@ -15,7 +15,7 @@ import lombok.Data;
 import net.adrianh.drink.model.dao.DrinkDAO;
 
 @Path("autocomplete")
-public class DrinkResources {
+public class AutoComplete {
     
     @Data
     @AllArgsConstructor

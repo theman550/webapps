@@ -3,6 +3,7 @@ package net.adrianh.drink.model.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,10 +29,12 @@ public class User implements Serializable {
     
     //a user has many created drinks
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonbTransient
     private List<Drink> createdDrinks = new ArrayList<>();
     
     //a user has many votes
     @OneToMany(mappedBy="user_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonbTransient
     private List<Vote> votes = new ArrayList<>();
     
     public void addVote(Vote vote) {
