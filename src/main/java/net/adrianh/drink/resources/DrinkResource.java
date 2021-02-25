@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -58,14 +57,19 @@ public class DrinkResource {
                 allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONObject(i).getString("name")));
             }
         }
-        
+
         List<Drink> selectedDrinks = new ArrayList<>();
         selectedDrinks.addAll(allDrinks);
+        
+        // Calculate the voteCount field
+        for (Drink d : selectedDrinks) {
+            d.setVoteCount(d.getVotes().stream().reduce(0,(a,b) -> a + b.getVal(), Integer::sum));
+        }
         
         Collections.sort(selectedDrinks, new Comparator<Drink>(){
             @Override
             public int compare(Drink d1, Drink d2) {
-                return d1.getVotes().stream().reduce(0, (a,b)-> a+b.getVal(), Integer::sum)-d2.getVotes().stream().reduce(0, (a,b)-> a+b.getVal(), Integer::sum);
+                return d1.getVoteCount() - d2.getVoteCount();
             }
         });
         
