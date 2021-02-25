@@ -11,8 +11,6 @@
 .split {
     height: 100%;
     position: fixed;
-    top: 0;
-    z-index: -1;
 }
 /* Control the left side */
 .left {
@@ -24,16 +22,64 @@
 /* Control the right side */
 .right {
     right: 0;
+    display: flex;
     width: 60%;
-    padding-top: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    border: 0;
+    font-family: inherit;
+    font-size: 100%;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+
+.googleSignin {
+    margin: 0 0 40px;
+    display: -ms-flexbox;
+    display: flex;
+}
+.logo{
+
+    font: bold 24px/29px "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-bottom: 26px;
+
+}
+a {
+    color: #4f3cc9;
+    font-weight: normal;
+    float: right;
+    position: relative;
+    top: 6px;
+    font-size: 14px;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
 }
 .card {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: 0;
+    max-width: 500px;
+    padding: 20px 40px 0;
+    /* position: absolute; */
+    /* top: 50%; */
+    width: 100%;
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
     text-align: left;
-    margin-left: 5px;
+    /* margin-left: 5px; */
 }
 .left-background {
     top: 50%;

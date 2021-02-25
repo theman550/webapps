@@ -19,6 +19,7 @@ import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
+import { Divider } from 'primereact/divider';
 
 import ReactDOM from 'react-dom';
 
@@ -71,6 +72,15 @@ class Login extends Component {
                             <div class="logo">
                                 <h2 class = "login-logo">Login</h2>
                             </div>
+                            <div class="googleSignin">
+                                <form action="/auth/google">
+                                    <button class="btn">Google</button>
+                                </form>
+                            </div>
+                            <Divider layout="horizontal">
+                                <b>OR</b>
+                            </Divider>
+                
                             <div className="text-input">
                 
                                 <div className="p-username" class="username-input">
@@ -92,6 +102,7 @@ class Login extends Component {
                             {/* <div><TextInput/></div>*/}
                 
                             <div className="p-logButton">
+                                <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
                                     <div class="btn">{loginButton}</div>
                                 </div>
