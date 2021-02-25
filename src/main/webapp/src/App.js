@@ -12,7 +12,7 @@ import Login from './views/Login.js';
 import PrimeReact from 'primereact/api';
 import { SelectItem } from 'primereact/api';
 import { MenuItem } from 'primereact/api';
-
+import AddDrink from './views/AddDrink.js';
 class App extends React.Component {
 
     constructor(props) {
@@ -30,6 +30,10 @@ class App extends React.Component {
                 command: () => {
                     this.navigate('/')
                 }
+            },
+            {
+              label: 'Add drink',
+              command: ()=>{this.navigate('/AddDrink')}
             },
             {
                 label: 'About',
@@ -52,6 +56,9 @@ class App extends React.Component {
                     </Route>
                     <Route path="/about">
                         <About></About>
+                    </Route>
+                    <Route path="/AddDrink">
+                        <AddDrink/>
                     </Route>
                     <Route path="/">
                         <Home></Home>
