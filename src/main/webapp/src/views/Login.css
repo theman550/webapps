@@ -1,0 +1,167 @@
+.login-logo{
+    position: relative;
+    left: 0px;
+}
+.username-input{
+    margin-bottom: 20px;
+}
+.password-input{
+    margin-bottom: 20px;
+}
+.split {
+    height: 100%;
+    position: fixed;
+}
+/* Control the left side */
+.left {
+    left: 0;
+    width: 40%;
+    overflow: hidden;
+}
+
+/* Control the right side */
+.right {
+    right: 0;
+    display: flex;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+}
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    border: 0;
+    font-family: inherit;
+    font-size: 100%;
+    font-style: inherit;
+    font-weight: inherit;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+
+.googleSignin {
+    margin: 0 0 40px;
+    display: -ms-flexbox;
+    display: flex;
+}
+.logo{
+
+    font: bold 24px/29px "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-bottom: 26px;
+
+}
+a {
+    color: #4f3cc9;
+    font-weight: normal;
+    float: right;
+    position: relative;
+    top: 6px;
+    font-size: 14px;
+    text-decoration: none;
+}
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.card {
+    margin: 0;
+    max-width: 500px;
+    padding: 20px 40px 0;
+    /* position: absolute; */
+    /* top: 50%; */
+    width: 100%;
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    text-align: left;
+    /* margin-left: 5px; */
+}
+.left-background {
+    top: 50%;
+    text-align: center;
+}
+/* Style the image inside the centered container, if needed */
+.centered img {
+    width: 150px;
+    border-radius: 50%;
+}
+
+.container {
+    filter: brightness(70%);
+    position:relative;
+    height:1220px;
+    width:610px;
+    overflow: hidden;
+}
+.container img {
+    position:absolute;
+    left:0;
+}
+@keyframes imgFade {
+    0% {
+        opacity:1;
+    }
+    17% {
+        opacity:1;
+    }
+    25% {
+        opacity:0;
+    }
+    92% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@-webkit-keyframes imgFade {
+    0% {
+        opacity:1;
+    }
+    17% {
+        opacity:1;
+    }
+    25% {
+        opacity:0;
+    }
+    92% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+.container img {
+    -webkit-animation-name: imgFade;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 8s;
+
+    animation-name: imgFade;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 8s;
+}
+
+.container img:nth-of-type(1) {
+    -webkit-animation-delay: 6s;
+    animation-delay: 6s;
+}
+.container img:nth-of-type(2) {
+    -webkit-animation-delay: 4s;
+    animation-delay: 4s;
+}
+.container img:nth-of-type(3) {
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
+}
+.container img:nth-of-type(4) {
+    -webkit-animation-delay: 0;
+    animation-delay: 0;
+}

@@ -1,0 +1,5 @@
+.votes {
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+}
