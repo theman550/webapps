@@ -46,6 +46,7 @@ export default class Search extends Component {
                         suggestions={this.state.searchSuggestions}
                         completeMethod={(e) => this.autoComplete(e)}
                         onChange={(e) => this.props.onQueryChange(e)}
+                        onUnSelect={(e) => this.props.onQueryChange(e)}
                     ></AutoComplete>
                 </span>
             </div>

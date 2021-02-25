@@ -1,6 +1,7 @@
 package net.adrianh.drink.model.entity;
 
 import java.io.Serializable;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -38,12 +39,14 @@ public class Vote implements Serializable {
     @MapsId("user_id")
     @ManyToOne(optional = false)
     @JoinColumn(name="user_id")
+    @JsonbTransient
     private User user_id;
     
     //a vote is cast on a drink
     @MapsId("drink")
     @ManyToOne(optional = false)
     @JoinColumn(name="drink_id")
+    @JsonbTransient
     private Drink drink;
     
     // a vote can be either positive or negative

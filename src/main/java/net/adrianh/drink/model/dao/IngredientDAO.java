@@ -37,4 +37,13 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
 	}
 	return drinkar;
     }
+    
+    public List<Ingredient> findIngredientsStartingWith(String s){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QIngredient ingredient = QIngredient.ingredient;
+        List<Ingredient> ingredients = queryFactory.selectFrom(ingredient)
+            .where(ingredient.name.startsWith(s))
+            .fetch();
+        return ingredients;
+    }
 }

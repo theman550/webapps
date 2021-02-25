@@ -3,6 +3,7 @@ package net.adrianh.drink.model.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -33,11 +35,15 @@ public class Drink implements Serializable {
     
     //all the drinks votes
     @OneToMany(mappedBy="drink", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonbTransient
     private List<Vote> votes = new ArrayList<>();
     
     //all the drinks ingredients
     @OneToMany(mappedBy = "drink", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients = new ArrayList<>();
+
+    @Transient
+    private int voteCount;
     
     //drink belongs to user as liked element
     @ManyToOne(optional = false)

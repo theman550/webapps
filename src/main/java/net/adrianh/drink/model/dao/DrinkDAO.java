@@ -34,4 +34,12 @@ public class DrinkDAO extends AbstractDAO<Drink> {
 	    .fetch();
 	return drinks;
     }
+    public List<Drink> findDrinksStartMatchingName(String s){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        List<Drink> drinks = queryFactory.selectFrom(drink)
+            .where(drink.name.startsWith(s))
+            .fetch();
+        return drinks;
+    }
 }
