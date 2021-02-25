@@ -3,27 +3,32 @@
     left: 0px;
 }
 .username-input{
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 .password-input{
     margin-bottom: 20px;
 }
+
+
 .split {
-    height: 100%;
     position: fixed;
 }
 /* Control the left side */
 .left {
+    height: 100%;
     left: 0;
     width: 40%;
     overflow: hidden;
+    
 }
 
 /* Control the right side */
 .right {
+    height: 50%;
     right: 0;
     display: flex;
-    width: 60%;
+    width: 100%;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
@@ -31,7 +36,7 @@
     padding: 0;
 }
 
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+/*html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     border: 0;
     font-family: inherit;
     font-size: 100%;
@@ -41,14 +46,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     margin: 0;
     padding: 0;
     vertical-align: baseline;
-}
+}*/
 
-
-.googleSignin {
-    margin: 0 0 40px;
-    display: -ms-flexbox;
-    display: flex;
-}
 .logo{
 
     font: bold 24px/29px "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -73,6 +72,7 @@ a:-webkit-any-link {
     margin: 0;
     max-width: 500px;
     padding: 20px 40px 0;
+    height: 100%;
     /* position: absolute; */
     /* top: 50%; */
     width: 100%;
@@ -81,6 +81,12 @@ a:-webkit-any-link {
     text-align: left;
     /* margin-left: 5px; */
 }
+
+.inline-block-child{
+    padding: 5px;
+    display: inline-block;
+}
+
 .left-background {
     top: 50%;
     text-align: center;
