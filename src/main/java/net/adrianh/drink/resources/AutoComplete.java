@@ -1,6 +1,7 @@
 package net.adrianh.drink.resources;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import net.adrianh.drink.model.dao.DrinkDAO;
+import net.adrianh.drink.model.dao.IngredientDAO;
 
 @Path("autocomplete")
 public class AutoComplete {
@@ -26,11 +28,19 @@ public class AutoComplete {
     
     @EJB
     DrinkDAO drinkDAO;
+    @EJB
+    IngredientDAO ingredientDAO;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(@QueryParam("s") String s) {
-        List<AutoCompleteResponse> r = drinkDAO.findDrinksStartMatchingName(s).stream().map((drink) -> new AutoCompleteResponse("drink",drink.getName())).collect(Collectors.toList());
+        List<AutoCompleteResponse> r = new ArrayList<>();
+        
+        // Add suggsetions for all drinks whose name match the query
+        r.addAll(drinkDAO.findDrinksStartMatchingName(s).stream().map((drink) -> new AutoCompleteResponse("drink",drink.getName())).collect(Collectors.toList()));
+        
+        // Add suggestions for all drinks with ingredients matching the query
+        r.addAll(ingredientDAO.findIngredientsStartingWith(s).stream().map((ingredient) -> new AutoCompleteResponse("ingredient",ingredient.getName())).collect(Collectors.toList()));
         return Response.status(Response.Status.OK).entity(r).build();
     }
 }
