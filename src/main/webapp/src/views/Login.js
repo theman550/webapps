@@ -51,7 +51,7 @@ class Login extends Component {
 
         const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
         return (
-                <div>
+                <div className="login-page">
                 
                     <div  className="split left">
                         <div className="background" class="left-background">
