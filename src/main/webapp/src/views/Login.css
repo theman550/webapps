@@ -145,7 +145,7 @@ a:-webkit-any-link {
         opacity:1;
     }
 }
-
+/*
 .container img {
     -webkit-animation-name: imgFade;
     -webkit-animation-timing-function: ease-in-out;
@@ -157,7 +157,7 @@ a:-webkit-any-link {
     animation-iteration-count: infinite;
     animation-duration: 8s;
 }
-
+*/
 .container img:nth-of-type(1) {
     -webkit-animation-delay: 6s;
     animation-delay: 6s;
