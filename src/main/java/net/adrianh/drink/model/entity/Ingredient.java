@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.json.bind.annotation.JsonbTransient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -49,6 +50,7 @@ public class Ingredient implements Serializable {
     //ingredient belongs to drink as element of list
     @Id
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonbTransient
     @JoinColumn(name="drink_id")
     private Drink drink;
 }

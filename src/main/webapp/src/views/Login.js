@@ -42,14 +42,27 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            showRegFields: false
+        }
     }
     navigate = (path) => {
         this.props.history.push(path);
     }
 
+    toggleReg = () => {
+        this.setState({
+            showRegFields: !this.state.showRegFields
+        })
+    }
+
     render() {
 
         const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
+        const toggleButton = <Button label="Click to register!" onClick={() => this.toggleReg()} ></Button>
+        const regButton = <Button label="Register" onClick={() => this.navigate('/home')} ></Button>
+
         return (
                 <div>
                 
@@ -72,14 +85,6 @@ class Login extends Component {
                             <div class="logo">
                                 <h2 class = "login-logo">Login</h2>
                             </div>
-                            <div class="googleSignin">
-                                <form action="/auth/google">
-                                    <button class="btn">Google</button>
-                                </form>
-                            </div>
-                            <Divider layout="horizontal">
-                                <b>OR</b>
-                            </Divider>
                 
                             <div className="text-input">
                 
@@ -94,18 +99,55 @@ class Login extends Component {
                                 <div className="p-password" class="password-input">
                                     <div className="p-inputgroup">
                                         <span className="p-inputgroup-addon">**</span>
-                                        <InputText placeholder="Password" />              
+                                        <InputText placeholder="Password" type="password" name="password" />              
                                     </div>
                                 </div>
                             </div>
                 
-                            {/* <div><TextInput/></div>*/}
                 
                             <div className="p-logButton">
                                 <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
-                                    <div class="btn">{loginButton}</div>
+                                    <div className="btnLogIn">{loginButton}</div>
                                 </div>
+                            </div>
+                            <Divider layout="horizontal">
+                                <b>OR</b>
+                            </Divider>
+                
+                            <div className="register">
+                                <h3 class='child inline-block-child'>No account?</h3>
+                                <div class='child inline-block-child'>{toggleButton} </div>
+                
+                                {
+                                    this.state.showRegFields ?
+                                    <div className="text-input">
+                    
+                                        <div className="p-username" class="username-input">
+                                            <div className="p-inputgroup">
+                                                <span className="p-inputgroup-addon">
+                                                    <i className="pi pi-user"></i>
+                                                </span>
+                                                <InputText placeholder="Username" />
+                                            </div>
+                                        </div>
+                                        <div className="p-password" class="password-input">
+                                            <div className="p-inputgroup">
+                                                <span className="p-inputgroup-addon">**</span>
+                                                <InputText placeholder="Password" type="password" name="password" />              
+                                            </div>
+                                        </div>
+                                        <div className="p-password" class="password-input">
+                                            <div className="p-inputgroup">
+                                                <span className="p-inputgroup-addon">**</span>
+                                                <InputText placeholder="Repeat password" type="password" name="password"/>              
+                                            </div>
+                                        </div>
+                                        <div>{regButton}</div>
+                    
+                                    </div>
+                                            : null
+                                }
                             </div>
                         </div>
                     </div>

@@ -6,13 +6,13 @@ import './DrinkListItem.css';
 export default function DrinkListItem(props) {
     const data = props.data;
     const tags = data.ingredients.map((ingredient) => 
-      <span key={ingredient} onClick={() => props.handleIngredientTagClick(ingredient)}>
-        <Chip 
-        className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.map((i) => i.name).includes(ingredient) ? "selected-ingredient" : ""}`} 
-          label={ingredient}>
-        </Chip>
-      </span>
-    );
+    <span key={ingredient.id} onClick={() => props.handleIngredientTagClick(ingredient.name)}>
+      <Chip 
+        className={`ingredient-tag pmr-2 p-mb-2 ${props.queries.map((i) => i.name).includes(ingredient.name) ? "selected-ingredient" : ""}`} 
+        label={ingredient.name}>
+      </Chip>
+    </span>
+  );
     return (
       <div className="p-col-12">
         <div className="product-list-item">

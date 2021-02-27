@@ -55,10 +55,15 @@ export default class Home extends React.Component {
   }
 
   fetchDrinks = () => {
-    // TODO: Maybe find a cleaner way to encode queries in url
-    fetch(process.env.REACT_APP_API_URL+"/drinks/"+this.state.sortKey + "?" + new URLSearchParams({query: JSON.stringify(this.state.searchQueries)}))
-      .then(response => response.json())
-      .then(data => this.setState({ drinks: data.drinks }));
+    fetch(process.env.REACT_APP_API_URL+"/drinks/"+this.state.sortKey, {
+      method: "POST",
+      body: JSON.stringify(this.state.searchQueries)
+    })
+    .then(response =>  response.ok ? response.json() : Promise.reject(response.status))
+    .then(data => this.setState({ drinks: data}))
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
   // When the user enters a new search tag
