@@ -100,13 +100,14 @@ a:-webkit-any-link {
 .container {
     filter: brightness(70%);
     position:relative;
-    height:1220px;
-    width:610px;
+    height:100%;
+    width:100%;
     overflow: hidden;
+  
  
 }
 .container img {
-    position:absolute;
+  display: block;
     left:0;
     
 }

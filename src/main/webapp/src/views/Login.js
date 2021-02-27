@@ -42,21 +42,21 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
-            showRegFields:false
+            showRegFields: false
         }
     }
     navigate = (path) => {
         this.props.history.push(path);
     }
-    
-    toggleReg = () =>{
+
+    toggleReg = () => {
         this.setState({
-            showRegFields:!this.state.showRegFields
+            showRegFields: !this.state.showRegFields
         })
     }
-   
+
     render() {
 
         const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
@@ -99,27 +99,30 @@ class Login extends Component {
                                 <div className="p-password" class="password-input">
                                     <div className="p-inputgroup">
                                         <span className="p-inputgroup-addon">**</span>
-                                        <InputText placeholder="Password" />              
+                                        <InputText placeholder="Password" type="password" name="password" />              
                                     </div>
                                 </div>
                             </div>
                 
-                      
+                
                             <div className="p-logButton">
                                 <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
                                     <div className="btnLogIn">{loginButton}</div>
                                 </div>
                             </div>
-                           
+                            <Divider layout="horizontal">
+                                <b>OR</b>
+                            </Divider>
+                
                             <div className="register">
                                 <h3 class='child inline-block-child'>No account?</h3>
                                 <div class='child inline-block-child'>{toggleButton} </div>
-                                
-                                    {
-                                    this.state.showRegFields?
+                
+                                {
+                                    this.state.showRegFields ?
                                     <div className="text-input">
-               
+                    
                                         <div className="p-username" class="username-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">
@@ -131,20 +134,20 @@ class Login extends Component {
                                         <div className="p-password" class="password-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
-                                                <InputText placeholder="Password" />              
+                                                <InputText placeholder="Password" type="password" name="password" />              
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
-                                                <InputText placeholder="Repeat password" />              
+                                                <InputText placeholder="Repeat password" type="password" name="password"/>              
                                             </div>
                                         </div>
                                         <div>{regButton}</div>
-
+                    
                                     </div>
-                                    :null
-                                    }
+                                            : null
+                                }
                             </div>
                         </div>
                     </div>
