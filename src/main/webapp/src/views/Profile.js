@@ -2,6 +2,8 @@ import React from "react";
 import {TabPanel, TabView} from "primereact/tabview";
 import { Avatar } from "primereact/avatar";
 
+import DrinkList from "../components/DrinkList.js";
+
 import "./Profile.css";
 
 export default class Profile extends React.Component {
@@ -45,8 +47,10 @@ export default class Profile extends React.Component {
 						</div>
 					</TabPanel>
 					<TabPanel onClick={() => window.location.hash="mydrinks"} header="My Drinks">
+						<DrinkList fetchType="/me/drinks/"></DrinkList>
 					</TabPanel>
 					<TabPanel onClick={() => window.location.hash="upvoted"} header="Upvoted">
+						<DrinkList fetchType="/me/upvoted/"></DrinkList>
 					</TabPanel>
 				</TabView>
 			</div>
