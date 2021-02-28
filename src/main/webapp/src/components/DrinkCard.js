@@ -10,6 +10,7 @@ import React, { Component }
 from 'react';
 
 import Home from '../views/Home.js';
+import Details from '../views/Details.js';
 import "./DrinkCard.css";
 
 class DrinkCard extends Component {
@@ -23,6 +24,10 @@ class DrinkCard extends Component {
         this.props.history.push(path);
     }
 
+    showDetailsDialog() {
+        console.log('Click happened');
+    }
+
     render() {
         const tags = this.data.ingredients.map((ingredient) =>
             <span key={ingredient.id} onClick={() => this.props.handleIngredientTagClick(ingredient.name)}>
@@ -34,7 +39,7 @@ class DrinkCard extends Component {
         );
 
         const data = this.props.data;
-        const detailsButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
+
 
         return (
                 <div className="p-col-12 p-md-4 p-lg-3">
@@ -58,7 +63,7 @@ class DrinkCard extends Component {
                             </div>
                         </div>
                         <div className="product-grid-item-bottom">
-                            <Button label="Details" className="p-button-text" onClick={() => this.navigate('/home')}>{detailsButton}</Button>
+                            <Button label="Details" className="detailsButton" onClick={this.showDetailsDialog}></Button>
                         </div>
                     </div>
                 </div>

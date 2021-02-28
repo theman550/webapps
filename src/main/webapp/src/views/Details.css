@@ -1,0 +1,34 @@
+.mainDetails{
+
+}
+
+
+.drinkName{
+
+}
+.p-dialog {
+
+    display: flex;
+
+    flex-direction: column;
+    pointer-events: auto;
+
+    max-height: 80%;
+    
+
+    max-width: 100%;
+    width: 60%;
+}
+
+.description{
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+}
+
+.ingredients{
+    margin: 5px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
+}
+.mainForm{
+    text-align: left;
+}
