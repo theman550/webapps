@@ -47,32 +47,54 @@ public class DrinkResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(String acr) throws JSONException {
         
-        JSONArray o = new JSONArray(acr);
-        Set<Drink> allDrinks = new HashSet<>();
-        
-        for(int i = 0; i < o.length(); i++) {
-            if("drink".equals(o.getJSONObject(i).getString("type"))) {
-                allDrinks.addAll(drinkDAO.findDrinksMatchingName(o.getJSONObject(i).getString("name")));
-            } else {
-                allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONObject(i).getString("name")));
+        if("[]".equals(acr)) { //if no search, BRING ME THE BEST YOU HAVE
+            List<Drink> allDrinks = new ArrayList<>();
+            
+            allDrinks.addAll(drinkDAO.findAll());
+            
+            // Calculate the voteCount field
+            for (Drink d : allDrinks) {
+                d.setVoteCount(d.getVotes().stream().reduce(0,(a,b) -> a + b.getVal(), Integer::sum));
             }
-        }
+            
+            Collections.sort(allDrinks, new Comparator<Drink>(){
+                @Override
+                public int compare(Drink d1, Drink d2) {
+                    return d1.getVoteCount() - d2.getVoteCount();
+                }
+            });
+            
+            return Response.status(Response.Status.OK).entity(allDrinks).build();
+            
+        } else { //if there is a search term, BRING ME THE BEST OF THEM
+        
+            JSONArray o = new JSONArray(acr);
+            Set<Drink> allDrinks = new HashSet<>();
 
-        List<Drink> selectedDrinks = new ArrayList<>();
-        selectedDrinks.addAll(allDrinks);
-        
-        // Calculate the voteCount field
-        for (Drink d : selectedDrinks) {
-            d.setVoteCount(d.getVotes().stream().reduce(0,(a,b) -> a + b.getVal(), Integer::sum));
-        }
-        
-        Collections.sort(selectedDrinks, new Comparator<Drink>(){
-            @Override
-            public int compare(Drink d1, Drink d2) {
-                return d1.getVoteCount() - d2.getVoteCount();
+            for(int i = 0; i < o.length(); i++) {
+                if("drink".equals(o.getJSONObject(i).getString("type"))) {
+                    allDrinks.addAll(drinkDAO.findDrinksMatchingName(o.getJSONObject(i).getString("name")));
+                } else {
+                    allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONObject(i).getString("name")));
+                }
             }
-        });
-        
-        return Response.status(Response.Status.OK).entity(selectedDrinks).build();
+
+            List<Drink> selectedDrinks = new ArrayList<>();
+            selectedDrinks.addAll(allDrinks);
+
+            // Calculate the voteCount field
+            for (Drink d : selectedDrinks) {
+                d.setVoteCount(d.getVotes().stream().reduce(0,(a,b) -> a + b.getVal(), Integer::sum));
+            }
+
+            Collections.sort(selectedDrinks, new Comparator<Drink>(){
+                @Override
+                public int compare(Drink d1, Drink d2) {
+                    return d1.getVoteCount() - d2.getVoteCount();
+                }
+            });
+
+            return Response.status(Response.Status.OK).entity(selectedDrinks).build();
+        }
     }
 }
