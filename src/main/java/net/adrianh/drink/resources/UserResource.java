@@ -27,26 +27,14 @@ public class UserResource {
       
       
     @POST 
-    @Path("/{name}/{pw}/{confpw}")
+    @Path("/{name}/{pw}")
     public Response addUser(@PathParam("name") String name, 
-                       @PathParam("pw") String pw,
-                       @PathParam("confpw") String confpw){
+                       @PathParam("pw") String pw){
         
-        if(name.isEmpty() || pw.isEmpty() || confpw.isEmpty()){
-            return Response.status(Response.Status.BAD_REQUEST).entity("Empty fields.").build();
-        }
-        else if(!pw.equals(confpw)){
-            return Response.status(Response.Status.BAD_REQUEST).entity("Passwords not equal.").build();
-
-        } else{
             User user = new User();
             user.setName(name);
             user.setPassword(pw);
-
             userDAO.create(user);
-           
-            return Response.status(Response.Status.OK).entity("User created!").build();
-        }  
-    }
-   
+            return Response.status(Response.Status.OK).entity("User created!").build();  
+    }  
 }
