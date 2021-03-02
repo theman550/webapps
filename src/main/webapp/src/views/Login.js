@@ -49,7 +49,8 @@ class Login extends Component {
 
         this.state = {
             regname: '',
-            regpw: ''
+            regpw: '',
+            regconfpw: ''
         };
     }
     
@@ -64,10 +65,11 @@ class Login extends Component {
     }
 
     addUser = () => {
-        fetch(process.env.REACT_APP_API_URL+'/user/'+this.state.regname+'/'+this.state.regpw, {
+        fetch(process.env.REACT_APP_API_URL+'/user/'+
+                this.state.regname+'/'+this.state.regpw+'/'+this.state.regconfpw, {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        })
+        })    
     }
 
     setName = (e) => {
@@ -76,6 +78,10 @@ class Login extends Component {
     
     setPW = (e) => {
         this.setState({ regpw: e.target.value });
+    }
+    
+    setConfPW = (e) => {
+        this.setState({ regconfpw: e.target.value });
     }
     
     render() {
@@ -163,7 +169,7 @@ class Login extends Component {
                                         <div className="p-password" class="password-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
-                                                <InputText placeholder="Repeat password" type="password" name="password" />              
+                                                <InputText placeholder="Repeat password" type="password" name="password" onChange={ this.setConfPW } value={ this.state.regconfpw }  />              
                                             </div>
                                         </div>
                                         <div>{regButton}</div>
