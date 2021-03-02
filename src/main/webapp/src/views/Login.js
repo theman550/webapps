@@ -62,7 +62,6 @@ class Login extends Component {
             showRegFields: !this.state.showRegFields
         })
     }
-    //fetch(process.env.REACT_APP_API_URL+'/user/'+this.state.regname+'/'+this.state.regpw, {
 
     addUser = () => {
         fetch(process.env.REACT_APP_API_URL+'/user/'+this.state.regname+'/'+this.state.regpw, {
