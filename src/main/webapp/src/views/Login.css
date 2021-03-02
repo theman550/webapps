@@ -25,10 +25,10 @@
 
 /* Control the right side */
 .right {
-    height: 50%;
+    height: 100%;
     right: 0;
     display: flex;
-    width: 100%;
+    width: 60%;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
@@ -71,11 +71,11 @@ a:-webkit-any-link {
 .card {
     margin: 0;
     max-width: 500px;
-    padding: 20px 40px 0;
-    height: 100%;
+    padding: 20px 20px 20px 20px;
+    height: auto;
     /* position: absolute; */
     /* top: 50%; */
-    width: 100%;
+     width: auto;
     /* left: 50%; */
     /* transform: translate(-50%, -50%); */
     text-align: left;
@@ -100,14 +100,16 @@ a:-webkit-any-link {
 .container {
     filter: brightness(70%);
     position:relative;
-    height:1220px;
-    width:610px;
+    height:100%;
+    width:100%;
     overflow: hidden;
 }
+
 .container img {
     position:absolute;
-    left:0;
+    display: block;
 }
+
 @keyframes imgFade {
     0% {
         opacity:1;
@@ -143,6 +145,7 @@ a:-webkit-any-link {
     }
 }
 
+/*
 .container img {
     -webkit-animation-name: imgFade;
     -webkit-animation-timing-function: ease-in-out;
@@ -154,7 +157,7 @@ a:-webkit-any-link {
     animation-iteration-count: infinite;
     animation-duration: 8s;
 }
-
+*/
 .container img:nth-of-type(1) {
     -webkit-animation-delay: 6s;
     animation-delay: 6s;
