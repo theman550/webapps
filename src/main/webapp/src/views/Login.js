@@ -137,7 +137,7 @@ class Login extends Component {
                                     {
                                     this.state.showRegFields ?
                                     <div className="text-input">
-               
+                    
                                         <div className="p-username" class="username-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">
@@ -159,7 +159,7 @@ class Login extends Component {
                                             </div>
                                         </div>
                                         <div>{regButton}</div>
-
+                    
                                     </div>
                                     : null
                                     }
