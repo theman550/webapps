@@ -26,7 +26,8 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    
+    private String password;
+   
     //a user has many created drinks
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
