@@ -44,12 +44,12 @@ class Login extends Component {
         super(props);
                 
         this.state = {
-            showRegFields:false
+            showRegFields: false
         };
 
         this.state = {
-            regname: 'c',
-            regpw: 'b'
+            regname: '',
+            regpw: ''
         };
     }
     
@@ -68,6 +68,14 @@ class Login extends Component {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'}
         })
+    }
+
+    setName = (e) => {
+        this.setState({ regname: e.target.value });
+    }
+    
+    setPW = (e) => {
+        this.setState({ regpw: e.target.value });
     }
     
     render() {
@@ -143,13 +151,13 @@ class Login extends Component {
                                                 <span className="p-inputgroup-addon">
                                                     <i className="pi pi-user"></i>
                                                 </span>
-                                                <InputText placeholder="Username" regnameval={this.state.regname} />
+                                                <InputText placeholder="Username" onChange={ this.setName } value={ this.state.regname } />
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
-                                                <InputText placeholder="Password" type="password" name="password" regpwval={this.state.regpw} />              
+                                                <InputText placeholder="Password" type="password" name="password" onChange={ this.setPW } value={ this.state.regpw } />              
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
