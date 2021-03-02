@@ -56,7 +56,7 @@ export default class DrinkList extends React.Component {
 	fetchDrinks = () => {
     fetch(process.env.REACT_APP_API_URL+this.props.fetchType+this.state.sortKey, {
       method: "POST",
-      body: JSON.stringify(this.state.searchQueries)
+      body:"{\"page\":1,\"queries\":" + JSON.stringify(this.state.searchQueries)+"}"
     })
     .then(response =>  response.ok ? response.json() : Promise.reject(response.status))
     .then(data => this.setState({ drinks: data}))

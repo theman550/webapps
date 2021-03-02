@@ -42,4 +42,14 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .fetch();
         return drinks;
     }
+    public List<Drink> findMostPopularFromOffset(int offset) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        List<Drink> drinks = (List<Drink>) queryFactory.selectFrom(drink)
+            .offset(offset)
+            .limit(20)
+            .orderBy(drink.voteCount.desc())
+            .fetch();
+        return drinks;
+    }
 }
