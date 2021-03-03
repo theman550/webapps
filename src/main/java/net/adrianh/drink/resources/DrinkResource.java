@@ -75,7 +75,7 @@ public class DrinkResource {
             Collections.sort(selectedDrinks, new Comparator<Drink>(){
                 @Override
                 public int compare(Drink d1, Drink d2) {
-                    return d1.getVoteCount() - d2.getVoteCount();
+                    return d2.getVoteCount() - d1.getVoteCount();
                 }
             });
 

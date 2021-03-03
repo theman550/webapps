@@ -38,7 +38,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         List<Drink> drinks = queryFactory.selectFrom(drink)
-            .where(drink.name.startsWith(s))
+            .where(drink.name.startsWithIgnoreCase(s))
             .fetch();
         return drinks;
     }
