@@ -17,6 +17,8 @@ export default class DrinkList extends React.Component {
       layout: "grid",
       sortKey: null,
       searchQueries: [],
+      totalRecords: null,
+      currentPage: 0,
       sortOptions: [
         {
           label: "Most popular", value: "popular"
@@ -26,7 +28,7 @@ export default class DrinkList extends React.Component {
         }
       ],
       drinks:
-        null,
+        [],
     };
   }
   sendVote = (id, isUpvote) => {
@@ -56,10 +58,10 @@ export default class DrinkList extends React.Component {
 	fetchDrinks = () => {
     fetch(process.env.REACT_APP_API_URL+this.props.fetchType+this.state.sortKey, {
       method: "POST",
-      body:"{\"page\":1,\"queries\":" + JSON.stringify(this.state.searchQueries)+"}"
+      body:"{\"page\":"+this.state.currentPage+",\"queries\":" + JSON.stringify(this.state.searchQueries)+"}"
     })
     .then(response =>  response.ok ? response.json() : Promise.reject(response.status))
-    .then(data => this.setState({ drinks: data}))
+    .then(data => this.setState({drinks: data.drinks, totalRecords: data.total}))
     .catch((error) => {
       console.error(error);
     });
@@ -81,7 +83,14 @@ export default class DrinkList extends React.Component {
 
     }
   }
-	
+onPage = (pageIndex) => {
+  this.setState ({
+      currentPage: pageIndex.originalEvent.page,
+      first: pageIndex.first
+    },
+    this.fetchDrinks
+  )
+}
 	render() {
     const header = (
       <div className="p-grid p-nogutter">
@@ -127,6 +136,15 @@ export default class DrinkList extends React.Component {
 						sortField={this.state.sortField}
 						header={header}
 						itemTemplate={itemTemplate}
+            paginator={true}
+            alwaysShowPaginator={true}
+            paginatorPosition={"both"}
+            emptyMessage={"No records found"}
+            onPage={(e) => this.onPage(e)}
+            lazy={true}
+            first={0}
+            totalRecords={this.state.totalRecords}
+            rows={this.state.drinks.length} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
 				></DataView>
 			</div>
 		);

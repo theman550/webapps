@@ -1,5 +1,6 @@
 package net.adrianh.drink.resources;
 
+import com.querydsl.core.QueryResults;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +38,14 @@ public class DrinkResource {
         private int page;
     }
     
+    @Data
+    @XmlRootElement
+    @AllArgsConstructor
+    public class DrinkResponse {
+        private int total;
+        private List<Drink> drinks;
+    }
+    
     @EJB
     DrinkDAO drinkDAO;
     @EJB
@@ -53,9 +62,11 @@ public class DrinkResource {
         if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
             
-            allDrinks.addAll(drinkDAO.findMostPopularFromOffset(o.getInt("page")*20-20));
+            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("page"))*20);
+            allDrinks.addAll(qr.getResults());
+            DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
             
-            return Response.status(Response.Status.OK).entity(allDrinks).build();
+            return Response.status(Response.Status.OK).entity(drinks).build();
             
         } else { //if there is a search term, BRING ME THE BEST OF THEM
         
