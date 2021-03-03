@@ -1,196 +1,201 @@
 import React from 'react';
 import { Text, View, StyleSheet, TextInput, Alert } from 'react-native';
-import { Formik, ErrorMessage } from 'formik';
+import { Formik, Field, Form, ErrorMessage, yupToFormErrors, FieldArray, insert } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from 'primereact/fileupload';
 import { Dropdown } from 'primereact/dropdown';
- 
-export default class AddDrink extends React.Component {
-  descriptionInput = null;
-  unit = "null";
+import { render } from '@testing-library/react';
 
-  setUnit(e){
-    console.log("yo");
-    this.unit = e;
-  }
+const ingredientItem = {
+      name: '',
+      percentage: '',
+      amount: '',
+      unit: '',
+};
+
+const initialValues = {
+      drinkName: '',
+      description: '',
+    ingredients: [
+      {
+        name: '',
+        percentage: '',
+        amount: '',
+        unit: '',
+      }
+    ],
+  };
   
-  render() {
-    return (
-      <center>
-      <View style={styles.container}>
-        <Text style={styles.title}>Add a drink </Text>
-        <Text style={styles.title}></Text>
-        <Formik
-          initialValues={{ drinkName: '', description: '', ingredientItem: ''}}
-          validationSchema={Yup.object({
-            drinkName: Yup.string()              
-              .required('Required'),
-            description: Yup.string()
-              .required('Required'),
-            ingredientItem: Yup.string()
-              .required('Required'),
-          })}
-          onSubmit={(values, formikActions) => {
-            console.log("yo");
-            setTimeout(() => {
-              Alert.alert(JSON.stringify(values));
-              console.log(JSON.stringify(values))
-              const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: {values}
-            };
-            fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-                .then(response => response.json())
-                .then(data => this.setState({ postId: data.id }));
+  const validationSchema=Yup.object({
+      drinkName: Yup.string()
+      .required('A name is required'),
+      description: Yup.string()
+      .required('Please describe how to make your drink'),
+      ingredients: Yup.array().of(
+        Yup.object().shape({
+          name: Yup.string()
+          .required('A name is required'),
+          percentage: Yup.number()
+          .required('Required')
+          .min(0, "Must be at least 0%")
+          .max(100, "Must be less than 100%"),
+          amount: Yup.number()
+          .required('Required'),
+          unit: Yup.string()
+          .required('Required'),
+        })
+      )
+    })
 
-              // Important: Make sure to setSubmitting to false so our loading indicator
-              // goes away.
-              formikActions.setSubmitting(false);
+export default class AddDrink extends React.Component {
+  render(){
+    return(
+      <Formik 
+        component={AddDrinkComponent} 
+        initialValues={initialValues} 
+        validationSchema={validationSchema}
+        validateOnChange={false}
+        validateOnBlur={false}
+        onSubmit = {(values, formikActions) => {
+            setTimeout(() => {
+                console.log("Transmitting drink data to database...");
+                console.log(JSON.stringify(values));
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: {values}
+                };
+            fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
+            .then(response => response.json())
+            .then(data => alert("drink created!"));
+            formikActions.setSubmitting(false);
             }, 500);
-          }}>
-          {props => (
-            <View>
-             <TextInput
-                onChangeText={props.handleChange('drinkName')}
-                onBlur={props.handleBlur('drinkName')}
-                value={props.values.drinkName}
-                autoFocus
-                placeholder="Name of the drink"
-                style={styles.input}
-                onSubmitEditing={() => {
-                  // on certain forms, it is nice to move the user's focus
-                  // to the next input when they press enter.
-                  this.descriptionInput.focus()
-                }}
-              />
-              {props.touched.drinkName && props.errors.drinkName ? (
-                <Text style={styles.error}>{props.errors.drinkName}</Text>
-              ) : null}
-               <TextInput
-                multiline={true}
-                numberOfLines={4}
-                blurOnSubmit="true"
-                onChangeText={props.handleChange('description')}
-                onBlur={props.handleBlur('description')}
-                value={props.values.description}
-                placeholder="Description"
-                style={styles.descriptionInput}
-                ref={el => this.descriptionInput = el}
-              />  
-              {props.touched.description && props.errors.description ? (
-                <Text style={styles.error}>{props.errors.description}</Text>
-              ) : null}
-              <TextInput
-                blurOnSubmit="true"
-                onChangeText={props.handleChange('ingredientItem')}
-                onBlur={props.handleBlur('ingredientItem')}
-                value={props.values.ingredientItem}
-                placeholder="Ingredients"
-                style={styles.input}
-                ref={el => this.ingredientItemInput = el} 
-              />
-              {props.touched.ingredientItem && props.errors.ingredientItem ? (
-                <Text style={styles.error}>{props.errors.ingredientItem}</Text>
-              ) : null}
-              <Dropdown value={this.unit} optionLabel="label" optionValue="value" options={unitSelectItems} onChange={(e) => this.setUnit(e.value)} placeholder="Select unit"/>
-              <Button
-                onClick={props.handleSubmit}
-                color="black"
-                mode="contained"
-                loading={props.isSubmitting}
-                disabled={props.isSubmitting}
-                style={{marginTop: 16}}>
-                Submit
-              </Button>
-              <Button
-                onClick={props.handleReset}
-                color="black"
-                mode="outlined"
-                disabled={props.isSubmitting}
-                style={{ marginTop: 16 }}>
-                Reset
-              </Button>
-            </View>
-          )}
-        </Formik>
-{/*           <FileUpload name="Upload butt" url="./upload" accept="image/*"></FileUpload> */}
+            }}
+        />
+    )
+  }
+}
+const AddDrinkComponent = ({
+  handleChange,
+  handleBlur,
+  values,
+  }) => (
+  <Form>
+    <center>
+    <View style={styles.container}>
+        <TextInput
+            type="text"
+            onChange={handleChange('drinkName')}
+            onBlur={handleBlur('drinkName')}
+            value={values.drinkName}
+            name="drinkName"
+            autoFocus
+            placeholder="Name of the drink"
+            style={styles.input}
+        />
+        <ErrorMessage name={`drinkName`} />
+        <TextInput
+            type="text"
+            multiline={true}
+            numberOfLines={4}
+            onChange={handleChange('description')}
+            onBlur={handleBlur('description')}
+            value={values.description}
+            name="description"
+            placeholder="Describe how to make your drink"
+            style={styles.descriptionInput}
+        />
+        <ErrorMessage name={`description`} />
+        <FieldArray name="ingredients">
+          {({ remove, push }) => (
+            <div>
+              {values.ingredients.length > 0 &&
+                values.ingredients.map((ingredient, index) => (
+                <div className="row" key={index}>
+                  <div className="col">
+                    <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
+                    <Field name={`ingredients[${index}].name`}  />
+                    <ErrorMessage name={`ingredients.${index}.name`} />
+                  <label htmlFor={`ingredients.${index}.percentage`}>&emsp;Percentage:&ensp;</label>
+                    <Field name={`ingredients.${index}.percentage`} />                    
+                    <ErrorMessage name={`ingredients.${index}.percentage`} />
+                  <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
+                    <Field name={`ingredients.${index}.amount`} />
+                    <ErrorMessage name={`ingredients.${index}.amount`} />
+                  <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
+                    <Field name={`ingredients.${index}.unit`} />
+                    <ErrorMessage name={`ingredients.${index}.unit`} />
+                    &emsp;
+                    <Button type="Button"
+                    className="secondary" 
+                    onClick={() => remove(index)}>
+                       Remove ingredient
+                    </Button>
+                  </div>
+                </div>
+                ))}
+                <br/>
+               <Button
+                  type="Button"
+                  className="secondary"
+                  onClick={() => push({
+                    name: '',
+                    percentage: '',
+                    amount: '',
+                    unit: '',
+                    })}
+                >
+                Add another ingredient
+                </Button>
+            </div>
+            )}
+            </FieldArray>
+            <br/>
+            <Button type="submit">Submit drink</Button>
       </View>
       </center>
-    );
-  }
-
-
-
-/*     renderIngredientItem(){
-      return(
-        <div>
-          <TextInput
-            className="ingredientInput"
-            blurOnSubmit="true"
-            onChangeText={this.props.handleChange('ingredientList')}
-            onBlur={this.props.handleBlur('ingredientList')}
-            value={this.props.values.ingredientList}
-            placeholder="ingredientList"
-            style={styles.ingredientList}
-            ref={el => this.ingredientItem = el} 
-          />
-        </div>
-      ); 
-    }*/
-}
-const unitSelectItems = [
-    {label: 'CL', value: 'CL'},
-    {label: 'DL', value: 'DL'},
-    {label: 'Grams', value: 'g'},
-];
-
-const selectAmountItems = [
-    {label: '1', value: 1},
-    {label: '2', value: 2},
-    {label: '3', value: 3},
-];
-
+    </Form>
+);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F',
-    width: '50%',
-    padding: 8,
-    borderStyle: 'line',
-    borderWidth: '1px',
-    borderColor: '#0',
-  },
-  title: {
-    margin: 24,
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  error: {
-    margin: 8,
-    fontSize: 14,
-    color: 'red',
-    fontWeight: 'bold',
-    textAlign: 'left',
-  },
-  input: {
-    height: 50,
-    paddingHorizontal: 8,
-    width: '40%',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    backgroundColor: '#fff',
-  },
-  descriptionInput: {
-    height: 200,
-    paddingHorizontal: 8,
-    width: '80%',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    backgroundColor: '#fff',
-  },
-});
+    container: {
+      flex: 1,
+      backgroundColor: '#F',
+      width: '70%',
+      padding: 8,
+      borderStyle: 'line',
+      borderWidth: '1px',
+      borderColor: '#0',
+    },
+    title: {
+      margin: 24,
+      fontSize: 24,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    error: {
+      margin: 8,
+      fontSize: 14,
+      color: 'red',
+      fontWeight: 'bold',
+      textAlign: 'left',
+    },
+    input: {
+      height: 50,
+      paddingHorizontal: 8,
+      width: '40%',
+      borderColor: '#ddd',
+      borderWidth: 1,
+      backgroundColor: '#fff',
+    },
+    descriptionInput: {
+      height: 200,
+      paddingHorizontal: 8,
+      width: '80%',
+      borderColor: '#ddd',
+      borderWidth: 1,
+      backgroundColor: '#fff',
+    },
+  });
