@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostLoad;
 import javax.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Drink implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String name;
@@ -42,8 +43,15 @@ public class Drink implements Serializable {
     @OneToMany(mappedBy = "drink", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    @Transient
     private int voteCount;
+    
+    @PostLoad
+    private void voteCount() {
+        voteCount = 0;
+        for (Vote v : this.votes) {
+            this.voteCount += v.getVal();
+        }
+    }
     
     //drink belongs to user as liked element
     @ManyToOne(optional = false)

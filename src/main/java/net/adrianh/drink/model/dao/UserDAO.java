@@ -27,6 +27,7 @@ public class UserDAO extends AbstractDAO<User> {
         return users.get(0);
     }
     
+
     public boolean checkExist(String name, String pw){        
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
@@ -37,4 +38,14 @@ public class UserDAO extends AbstractDAO<User> {
         return users.size() > 0;
     }
     
+
+    public List<User> findUserByID(Long id){
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QUser user = QUser.user;
+	List<User> users = queryFactory.selectFrom(user)
+	    .where(user.id.eq(id))
+	    .fetch();
+	return users;
+    }
+
 }

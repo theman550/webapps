@@ -134,7 +134,7 @@ class Login extends Component {
         const regButton = <Button label="Register" onClick={() => this.addUser()} ></Button>
      
         return (
-                <div>
+                <div className="login-page">
                 
                     <div  className="split left">
                         <div className="background" class="left-background">

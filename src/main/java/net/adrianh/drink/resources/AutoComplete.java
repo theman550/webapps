@@ -1,8 +1,8 @@
 package net.adrianh.drink.resources;
 
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -34,7 +34,7 @@ public class AutoComplete {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(@QueryParam("s") String s) {
-        List<AutoCompleteResponse> r = new ArrayList<>();
+        Set<AutoCompleteResponse> r = new HashSet<>();
         
         // Add suggsetions for all drinks whose name match the query
         r.addAll(drinkDAO.findDrinksStartMatchingName(s).stream().map((drink) -> new AutoCompleteResponse("drink",drink.getName())).collect(Collectors.toList()));

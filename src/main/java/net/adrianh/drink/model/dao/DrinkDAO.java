@@ -1,5 +1,6 @@
 package net.adrianh.drink.model.dao;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -38,8 +39,18 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         List<Drink> drinks = queryFactory.selectFrom(drink)
-            .where(drink.name.startsWith(s))
+            .where(drink.name.startsWithIgnoreCase(s))
             .fetch();
+        return drinks;
+    }
+    public QueryResults<Drink> findMostPopularFromOffset(int offset) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        QueryResults<Drink> drinks = (QueryResults<Drink>) queryFactory.selectFrom(drink)
+            .offset(offset)
+            .limit(20)
+            .orderBy(drink.voteCount.desc())
+            .fetchResults();
         return drinks;
     }
 }

@@ -12,11 +12,16 @@ import Login from './views/Login.js';
 import PrimeReact from 'primereact/api';
 import { SelectItem } from 'primereact/api';
 import { MenuItem } from 'primereact/api';
+import Details from './views/Details.js';
 import AddDrink from './views/AddDrink.js';
+import Profile from './views/Profile.js';
 class App extends React.Component {
 
     constructor(props) {
         super(props);
+				this.state = {
+					username: "User"
+				}
     }
 
     navigate = (path) => {
@@ -28,31 +33,48 @@ class App extends React.Component {
             {
                 label: 'Home',
                 command: () => {
-                    this.navigate('/')
+                    this.navigate('/');
                 }
             },
             {
-              label: 'Add drink',
-              command: ()=>{this.navigate('/AddDrink')}
+                label: 'Add drink',
+                command: () => {
+                    this.navigate('/AddDrink');
+                }
             },
             {
                 label: 'About',
                 command: () => {
-                    this.navigate('/about')
+                    this.navigate('/about');
+                }
+            },
+            {
+                label: 'Details',
+                command: () => {
+                    this.navigate('/Details');
                 }
             }
 
-        ]
+        ];
         PrimeReact.ripple = true;  //button effect
 
+
         const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
-        const loginButton = <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
+				const end = (
+					<div>
+        		<Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
+						<Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
+					</div>
+				)
         return (
                 <div className="App">
-                    <Menubar model={items} start={navbrand} end={loginButton}></Menubar>
+                    <Menubar model={items} start={navbrand} end={end}></Menubar>
                     <Switch>
                     <Route path="/login">
                         <Login></Login>
+                    </Route>
+                    <Route path="/Details">
+                        <Details/>
                     </Route>
                     <Route path="/about">
                         <About></About>
@@ -60,6 +82,9 @@ class App extends React.Component {
                     <Route path="/AddDrink">
                         <AddDrink/>
                     </Route>
+										<Route path="/profile">
+											<Profile username={this.state.username}/>
+										</Route>
                     <Route path="/">
                         <Home></Home>
                     </Route>
