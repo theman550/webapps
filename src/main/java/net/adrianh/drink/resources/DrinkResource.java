@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -22,7 +24,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.IngredientDAO;
+import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
+import net.adrianh.drink.model.entity.Ingredient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +54,19 @@ public class DrinkResource {
     DrinkDAO drinkDAO;
     @EJB
     IngredientDAO ingredientDAO;
+    @EJB
+    UserDAO userDAO;
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDrink(Drink d) {
+        d.setUser(userDAO.findUserByID(1L).get(0)); 
+        for (Ingredient i: d.getIngredients()) {
+            i.setDrink(d);
+        }
+        drinkDAO.create(d);
+        return Response.status(Response.Status.OK).build();
+    }
     
     @POST
     @Path("popular")
@@ -93,4 +110,5 @@ public class DrinkResource {
             return Response.status(Response.Status.OK).entity(selectedDrinks).build();
         }
     }
+    
 }

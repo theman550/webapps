@@ -28,7 +28,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Drink implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String name;

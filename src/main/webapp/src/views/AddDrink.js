@@ -16,7 +16,7 @@ const ingredientItem = {
 };
 
 const initialValues = {
-      drinkName: '',
+      name: '',
       description: '',
     ingredients: [
       {
@@ -29,7 +29,7 @@ const initialValues = {
   };
   
   const validationSchema=Yup.object({
-      drinkName: Yup.string()
+      name: Yup.string()
       .required('A name is required'),
       description: Yup.string()
       .required('Please describe how to make your drink'),
@@ -65,7 +65,7 @@ export default class AddDrink extends React.Component {
                 const requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: {values}
+                    body: JSON.stringify(values)
                 };
             fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
             .then(response => response.json())
@@ -87,15 +87,15 @@ const AddDrinkComponent = ({
     <View style={styles.container}>
         <TextInput
             type="text"
-            onChange={handleChange('drinkName')}
-            onBlur={handleBlur('drinkName')}
-            value={values.drinkName}
-            name="drinkName"
+            onChange={handleChange('name')}
+            onBlur={handleBlur('name')}
+            value={values.name}
+            name="name"
             autoFocus
             placeholder="Name of the drink"
             style={styles.input}
         />
-        <ErrorMessage name={`drinkName`} />
+        <ErrorMessage name={`name`} />
         <TextInput
             type="text"
             multiline={true}
