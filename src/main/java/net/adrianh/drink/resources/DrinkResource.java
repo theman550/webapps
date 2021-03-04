@@ -1,5 +1,6 @@
 package net.adrianh.drink.resources;
 
+import com.querydsl.core.QueryResults;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,7 +24,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.IngredientDAO;
+import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
+import net.adrianh.drink.model.entity.Ingredient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,12 +39,34 @@ public class DrinkResource {
     public class AutoCompleteResponse {
         private String type;
         private String name;
+        private int page;
+    }
+    
+    @Data
+    @XmlRootElement
+    @AllArgsConstructor
+    public class DrinkResponse {
+        private int total;
+        private List<Drink> drinks;
     }
     
     @EJB
     DrinkDAO drinkDAO;
     @EJB
     IngredientDAO ingredientDAO;
+    @EJB
+    UserDAO userDAO;
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDrink(Drink d) {
+        d.setUser(userDAO.findUserByID(1L).get(0)); 
+        for (Ingredient i: d.getIngredients()) {
+            i.setDrink(d);
+        }
+        drinkDAO.create(d);
+        return Response.status(Response.Status.OK).build();
+    }
     
     @POST
     @Path("popular")
@@ -47,32 +74,41 @@ public class DrinkResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(String acr) throws JSONException {
         
-        JSONArray o = new JSONArray(acr);
-        Set<Drink> allDrinks = new HashSet<>();
+        JSONObject o = new JSONObject(acr);
         
-        for(int i = 0; i < o.length(); i++) {
-            if("drink".equals(o.getJSONObject(i).getString("type"))) {
-                allDrinks.addAll(drinkDAO.findDrinksMatchingName(o.getJSONObject(i).getString("name")));
-            } else {
-                allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONObject(i).getString("name")));
-            }
-        }
+        if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
+            List<Drink> allDrinks = new ArrayList<>();
+            
+            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("page"))*20);
+            allDrinks.addAll(qr.getResults());
+            DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
+            
+            return Response.status(Response.Status.OK).entity(drinks).build();
+            
+        } else { //if there is a search term, BRING ME THE BEST OF THEM
+        
+            Set<Drink> allDrinks = new HashSet<>();
 
-        List<Drink> selectedDrinks = new ArrayList<>();
-        selectedDrinks.addAll(allDrinks);
-        
-        // Calculate the voteCount field
-        for (Drink d : selectedDrinks) {
-            d.setVoteCount(d.getVotes().stream().reduce(0,(a,b) -> a + b.getVal(), Integer::sum));
-        }
-        
-        Collections.sort(selectedDrinks, new Comparator<Drink>(){
-            @Override
-            public int compare(Drink d1, Drink d2) {
-                return d1.getVoteCount() - d2.getVoteCount();
+            for(int i = 0; i < o.getJSONArray("queries").length(); i++) {
+                if("drink".equals(o.getJSONArray("queries").getJSONObject(i).getString("type"))) {
+                    allDrinks.addAll(drinkDAO.findDrinksMatchingName(o.getJSONArray("queries").getJSONObject(i).getString("name")));
+                } else {
+                    allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONArray("queries").getJSONObject(i).getString("name")));
+                }
             }
-        });
-        
-        return Response.status(Response.Status.OK).entity(selectedDrinks).build();
+
+            List<Drink> selectedDrinks = new ArrayList<>();
+            selectedDrinks.addAll(allDrinks);
+
+            Collections.sort(selectedDrinks, new Comparator<Drink>(){
+                @Override
+                public int compare(Drink d1, Drink d2) {
+                    return d2.getVoteCount() - d1.getVoteCount();
+                }
+            });
+
+            return Response.status(Response.Status.OK).entity(selectedDrinks).build();
+        }
     }
+    
 }

@@ -42,7 +42,7 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QIngredient ingredient = QIngredient.ingredient;
         List<Ingredient> ingredients = queryFactory.selectFrom(ingredient)
-            .where(ingredient.name.startsWith(s))
+            .where(ingredient.name.startsWithIgnoreCase(s))
             .fetch();
         return ingredients;
     }

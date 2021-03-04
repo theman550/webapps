@@ -1,30 +1,41 @@
-.login-logo{
+.login-page .login-logo{
     position: relative;
     left: 0px;
 }
-.username-input{
+
+.login-page .username-input{
     margin-top: 20px;
+
     margin-bottom: 20px;
 }
-.password-input{
+.login-page .password-input{
     margin-bottom: 20px;
 }
 
 
-.split {
+
+.login-page .split {
     position: fixed;
 }
 /* Control the left side */
-.left {
+.login-page .left {
     height: 100%;
+
+.login-page .split {
+    height: 100%;
+    position: fixed;
+}
+/* Control the left side */
+.login-page .left {
+
     left: 0;
     width: 40%;
-    overflow: hidden;
-    
+    overflow: hidden; 
 }
 
 /* Control the right side */
-.right {
+
+.login-page .right  {
     height: 100%;
     right: 0;
     display: flex;
@@ -36,25 +47,17 @@
     padding: 0;
 }
 
-/*html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dd, dl, dt, li, ol, ul, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
-    border: 0;
-    font-family: inherit;
-    font-size: 100%;
-    font-style: inherit;
-    font-weight: inherit;
-    line-height: 1;
-    margin: 0;
-    padding: 0;
-    vertical-align: baseline;
-}*/
 
-.logo{
-
+.login-page .googleSignin {
+    margin: 0 0 40px;
+    display: -ms-flexbox;
+    display: flex;
+}
+.login-page .logo{
     font: bold 24px/29px "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-bottom: 26px;
-
 }
-a {
+.login-page a {
     color: #4f3cc9;
     font-weight: normal;
     float: right;
@@ -63,12 +66,13 @@ a {
     font-size: 14px;
     text-decoration: none;
 }
-a:-webkit-any-link {
+
+.login-page a:-webkit-any-link {
     color: -webkit-link;
     cursor: pointer;
     text-decoration: underline;
 }
-.card {
+.login-page .card {
     margin: 0;
     max-width: 500px;
     padding: 20px 20px 20px 20px;
@@ -82,22 +86,25 @@ a:-webkit-any-link {
     /* margin-left: 5px; */
 }
 
-.inline-block-child{
+
+.login-page .inline-block-child{
     padding: 5px;
     display: inline-block;
 }
 
-.left-background {
+
+.login-page .left-background {
+
     top: 50%;
     text-align: center;
 }
 /* Style the image inside the centered container, if needed */
-.centered img {
+.login-page .centered img {
     width: 150px;
     border-radius: 50%;
 }
 
-.container {
+.login-page .container {
     filter: brightness(70%);
     position:relative;
     height:100%;
@@ -106,11 +113,13 @@ a:-webkit-any-link {
   
  
 }
-.container img {
-  display: block;
+
+.login-page container img {
+    position:absolute;
     left:0;
     
 }
+
 @keyframes imgFade {
     0% {
         opacity:1;
@@ -145,8 +154,11 @@ a:-webkit-any-link {
         opacity:1;
     }
 }
+
 /*
-.container img {
+
+.login-page .container img {
+
     -webkit-animation-name: imgFade;
     -webkit-animation-timing-function: ease-in-out;
     -webkit-animation-iteration-count: infinite;
@@ -157,20 +169,24 @@ a:-webkit-any-link {
     animation-iteration-count: infinite;
     animation-duration: 8s;
 }
+
 */
-.container img:nth-of-type(1) {
+
+
+.login-page .container img:nth-of-type(1) {
+
     -webkit-animation-delay: 6s;
     animation-delay: 6s;
 }
-.container img:nth-of-type(2) {
+.login-page .container img:nth-of-type(2) {
     -webkit-animation-delay: 4s;
     animation-delay: 4s;
 }
-.container img:nth-of-type(3) {
+.login-page .container img:nth-of-type(3) {
     -webkit-animation-delay: 2s;
     animation-delay: 2s;
 }
-.container img:nth-of-type(4) {
+.login-page .container img:nth-of-type(4) {
     -webkit-animation-delay: 0;
     animation-delay: 0;
 }
