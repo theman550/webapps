@@ -20,7 +20,7 @@
 /* Control the left side */
 .login-page .left {
     height: 100%;
-
+}
 .login-page .split {
     height: 100%;
     position: fixed;
@@ -110,14 +110,14 @@
     height:100%;
     width:100%;
     overflow: hidden;
-  
- 
+
+
 }
 
 .login-page container img {
     position:absolute;
     left:0;
-    
+
 }
 
 @keyframes imgFade {
