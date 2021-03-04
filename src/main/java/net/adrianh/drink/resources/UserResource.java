@@ -5,6 +5,8 @@
  */
 package net.adrianh.drink.resources;
 
+import java.nio.charset.Charset;
+import java.util.Random;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,8 +48,17 @@ public class UserResource {
         
         User user = new User();
         user.setName(name);
-        user.setPassword(pw);
+        user.setSalt(generateMockSalt());
+        user.setPassword(pw+user.getSalt());
         userDAO.create(user);
         return Response.status(Response.Status.OK).entity("User created!").build();  
     }  
+    
+    private String generateMockSalt(){
+        byte[] array = new byte[7]; 
+        new Random().nextBytes(array);
+        String mockSalt = new String(array, Charset.forName("UTF-8"));
+
+        return mockSalt;
+    }
 }
