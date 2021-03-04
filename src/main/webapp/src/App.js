@@ -12,6 +12,7 @@ import Login from './views/Login.js';
 import PrimeReact from 'primereact/api';
 import { SelectItem } from 'primereact/api';
 import { MenuItem } from 'primereact/api';
+import Details from './views/Details.js';
 import AddDrink from './views/AddDrink.js';
 import Profile from './views/Profile.js';
 class App extends React.Component {
@@ -32,25 +33,33 @@ class App extends React.Component {
             {
                 label: 'Home',
                 command: () => {
-                    this.navigate('/')
+                    this.navigate('/');
                 }
             },
             {
-              label: 'Add drink',
-              command: ()=>{this.navigate('/AddDrink')}
+                label: 'Add drink',
+                command: () => {
+                    this.navigate('/AddDrink');
+                }
             },
             {
                 label: 'About',
                 command: () => {
-                    this.navigate('/about')
+                    this.navigate('/about');
+                }
+            },
+            {
+                label: 'Details',
+                command: () => {
+                    this.navigate('/Details');
                 }
             }
 
-        ]
+        ];
         PrimeReact.ripple = true;  //button effect
 
-        const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
 
+        const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
 				const end = (
 					<div>
         		<Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
@@ -63,6 +72,9 @@ class App extends React.Component {
                     <Switch>
                     <Route path="/login">
                         <Login></Login>
+                    </Route>
+                    <Route path="/Details">
+                        <Details/>
                     </Route>
                     <Route path="/about">
                         <About></About>
