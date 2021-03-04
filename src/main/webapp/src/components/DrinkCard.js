@@ -29,17 +29,17 @@ class DrinkCard extends Component {
     }
 
     render() {
-        const tags = this.data.ingredients.map((ingredient) =>
-            <span key={ingredient.id} onClick={() => this.props.handleIngredientTagClick(ingredient.name)}>
+
+        const data = this.props.data;
+
+        const tags = data.ingredients.map((ingredient) =>
+            <span key={ingredient.name} onClick={() => this.props.handleIngredientTagClick(ingredient.name)}>
                 <Chip 
                     className={`ingredient-tag pmr-2 p-mb-2 ${this.props.queries.map((i) => i.name).includes(ingredient.name) ? "selected-ingredient" : ""}`} 
                     label={ingredient.name}>
                 </Chip>
             </span>
         );
-
-        const data = this.props.data;
-
 
         return (
                 <div className="p-col-12 p-md-4 p-lg-3">
@@ -63,7 +63,7 @@ class DrinkCard extends Component {
                             </div>
                         </div>
                         <div className="product-grid-item-bottom">
-                            <Button label="Details" className="detailsButton" onClick={this.showDetailsDialog}></Button>
+                            <Button label="Details" className="detailsButton p-button-text" onClick={this.showDetailsDialog}></Button>
                         </div>
                     </div>
                 </div>
