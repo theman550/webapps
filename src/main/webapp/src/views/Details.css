@@ -1,9 +1,28 @@
 .mainDetails{
 
 }
+.mainImg{
 
+    float: left;
+    text-align: left;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: .1rem;
+    box-shadow: 0 0 .1rem;
+    margin: .5rem .75rem;
+}
+.header{
+    display: flex;
+    text-align: center;
+}
 
-.drinkName{
+.header h3{
+    float: right;
+    padding: 15px;
+    padding-top: 25px;
+    margin: 10px;
+    text-align: center;
 
 }
 .p-dialog {
@@ -14,7 +33,7 @@
     pointer-events: auto;
 
     max-height: 80%;
-    
+
 
     max-width: 100%;
     width: 60%;

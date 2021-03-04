@@ -16,6 +16,7 @@ class Details extends React.Component {
     }
 
     render() {
+        const data = this.props.data;
         return (
                 <div className="mainDetails">
                     <div>
@@ -28,9 +29,10 @@ class Details extends React.Component {
                             onHide={e => this.setState({visible: false})}
                             maximizable={true}
                             >
-                
-                            <h3 className="drinkName">Drink name</h3>
-                
+                            <div className="header">
+                                <img className="mainImg"/>
+                                <h3 className="drinkName">Drink name</h3>
+                            </div>
                 
                             <form className="mainForm">
                 
@@ -73,7 +75,8 @@ class Details extends React.Component {
                         <Button
                             label='Details'
                             icon='pi pi-info-circle'
-                            onClick={e => this.setState({visible: true})}
+                            onClick={e => this.setState({visible: true}
+                                    )}
                             />
                     </div>
                 
