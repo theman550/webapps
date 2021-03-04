@@ -47,6 +47,11 @@ class Login extends Component {
             showRegFields: false
         };
 
+        //todo: fix this 
+        this.state = {
+            tempSolutionFix: ''
+        };
+
         this.state = {
             input: [],
             messages: []
@@ -55,12 +60,12 @@ class Login extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
     
-      handleChange(event) {
+    handleChange(event) {
         let input = this.state.input;
         input[event.target.name] = event.target.value;
   
         this.setState({input});
-  }
+    }
     
     navigate = (path) => {
         this.props.history.push(path);
@@ -69,10 +74,21 @@ class Login extends Component {
     toggleReg() {
         this.setState({showRegFields: !this.state.showRegFields})
     }
+    
+    loginUser() {
+        fetch(process.env.REACT_APP_API_URL+'/user/login/'+
+        this.state.input.logname+'/'+this.state.input.logpw, {
+            method: 'GET',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        })    
+        .then(response =>  response.ok ? 
+         this.setState({tempSolutionFix: ["Login worked!"]}) : 
+         this.setState({tempSolutionFix: ["No such user"]}))
+    }
 
     addUser() {
-        if(this.validate()){
-            fetch(process.env.REACT_APP_API_URL+'/user/'+
+        if(this.validateReg()){
+            fetch(process.env.REACT_APP_API_URL+'/user/create/'+
             this.state.input.regname+'/'+this.state.input.regpw, {
                 method: 'POST',
                 headers: {'Content-Type':'application/x-www-form-urlencoded'}
@@ -81,28 +97,28 @@ class Login extends Component {
         }
     }
 
-    validate(){
+    validateReg(){
         let input = this.state.input;
         let newErrors = [];
         let isValid = true;
   
-        if (!input["regname"]) {
+        
+        if (!input.regname) {
             isValid = false;
             newErrors.push("Must enter name.");
         }
 
-        if (!input["regpw"]) {
+        if (!input.regpw) {
             isValid = false;
             newErrors.push("Must enter password."); 
         }
   
-        if (!input["confpw"]) {
+        if (!input.confpw) {
             isValid = false;
             newErrors.push("Must enter confirm password.");
         }
   
-          
-        if (input["regpw"] != input["confpw"]) {
+        if (input.regpw !== input.confpw) {
             isValid = false;
             newErrors.push("Passwords must match.");
         } 
@@ -113,7 +129,7 @@ class Login extends Component {
     }
     
     render() {
-        const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
+        const loginButton = <Button label="Login" onClick={() => this.loginUser()} ></Button>
         const toggleButton = <Button label="Click to register!" onClick={() => this.toggleReg()} ></Button>
         const regButton = <Button label="Register" onClick={() => this.addUser()} ></Button>
      
@@ -147,13 +163,22 @@ class Login extends Component {
                                         <span className="p-inputgroup-addon">
                                             <i className="pi pi-user"></i>
                                         </span>
-                                        <InputText placeholder="Username" />
+                                        <InputText 
+                                            placeholder="Username" 
+                                            name="logname"
+                                            onChange={ this.handleChange }
+                                            value={ this.state.input.logname }/>
                                     </div>
                                 </div>
                                 <div className="p-password" class="password-input">
                                     <div className="p-inputgroup">
                                         <span className="p-inputgroup-addon">**</span>
-                                         <InputText placeholder="Password" type="password" name="password" />            
+                                         <InputText 
+                                            placeholder="Password" 
+                                            type="password" 
+                                            name="logpw" 
+                                            onChange={ this.handleChange }
+                                            value={ this.state.input.logpw }/>            
                                     </div>
                                 </div>
                             </div>
@@ -163,6 +188,7 @@ class Login extends Component {
                             <div className="p-logButton">
                                 <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
+                                    <h4>{this.state.tempSolutionFix} </h4>
                                     <div className="btnLogIn">{loginButton}</div>
                                 </div>
                             </div>
