@@ -42,27 +42,97 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-
+                
         this.state = {
             showRegFields: false
-        }
+        };
+
+        //todo: fix this 
+        this.state = {
+            tempSolutionFix: ''
+        };
+
+        this.state = {
+            input: [],
+            messages: []
+        };
+        
+        this.handleChange = this.handleChange.bind(this);
     }
+    
+    handleChange(event) {
+        let input = this.state.input;
+        input[event.target.name] = event.target.value;
+  
+        this.setState({input});
+    }
+    
     navigate = (path) => {
         this.props.history.push(path);
     }
-
-    toggleReg = () => {
-        this.setState({
-            showRegFields: !this.state.showRegFields
-        })
+    
+    toggleReg() {
+        this.setState({showRegFields: !this.state.showRegFields})
+    }
+    
+    loginUser() {
+        fetch(process.env.REACT_APP_API_URL+'/user/login/'+
+        this.state.input.logname+'/'+this.state.input.logpw, {
+            method: 'GET',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'}
+        })    
+        .then(response =>  response.ok ? 
+         this.setState({tempSolutionFix: ["Login worked!"]}) : 
+         this.setState({tempSolutionFix: ["No such user"]}))
     }
 
+    addUser() {
+        if(this.validateReg()){
+            fetch(process.env.REACT_APP_API_URL+'/user/create/'+
+            this.state.input.regname+'/'+this.state.input.regpw, {
+                method: 'POST',
+                headers: {'Content-Type':'application/x-www-form-urlencoded'}
+            })
+            this.setState({messages: ["Welcome " + this.state.input.regname + "!"]});
+        }
+    }
+
+    validateReg(){
+        let input = this.state.input;
+        let newErrors = [];
+        let isValid = true;
+  
+        
+        if (!input.regname) {
+            isValid = false;
+            newErrors.push("Must enter name.");
+        }
+
+        if (!input.regpw) {
+            isValid = false;
+            newErrors.push("Must enter password."); 
+        }
+  
+        if (!input.confpw) {
+            isValid = false;
+            newErrors.push("Must enter confirm password.");
+        }
+  
+        if (input.regpw !== input.confpw) {
+            isValid = false;
+            newErrors.push("Passwords must match.");
+        } 
+  
+        this.setState({messages: newErrors});
+                        
+        return isValid;
+    }
+    
     render() {
-
-        const loginButton = <Button label="Login" onClick={() => this.navigate('/home')} ></Button>
+        const loginButton = <Button label="Login" onClick={() => this.loginUser()} ></Button>
         const toggleButton = <Button label="Click to register!" onClick={() => this.toggleReg()} ></Button>
-        const regButton = <Button label="Register" onClick={() => this.navigate('/home')} ></Button>
-
+        const regButton = <Button label="Register" onClick={() => this.addUser()} ></Button>
+     
         return (
                 <div className="login-page">
                 
@@ -93,33 +163,45 @@ class Login extends Component {
                                         <span className="p-inputgroup-addon">
                                             <i className="pi pi-user"></i>
                                         </span>
-                                        <InputText placeholder="Username" />
+                                        <InputText 
+                                            placeholder="Username" 
+                                            name="logname"
+                                            onChange={ this.handleChange }
+                                            value={ this.state.input.logname }/>
                                     </div>
                                 </div>
                                 <div className="p-password" class="password-input">
                                     <div className="p-inputgroup">
                                         <span className="p-inputgroup-addon">**</span>
-                                        <InputText placeholder="Password" type="password" name="password" />              
+                                         <InputText 
+                                            placeholder="Password" 
+                                            type="password" 
+                                            name="logpw" 
+                                            onChange={ this.handleChange }
+                                            value={ this.state.input.logpw }/>            
                                     </div>
                                 </div>
                             </div>
                 
-                
+                            {/* <div><TextInput/></div>*/}
+                      
                             <div className="p-logButton">
                                 <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
+                                    <h4>{this.state.tempSolutionFix} </h4>
                                     <div className="btnLogIn">{loginButton}</div>
                                 </div>
                             </div>
+                            
                             <Divider layout="horizontal">
                                 <b>OR</b>
                             </Divider>
-                
+                           
                             <div className="register">
                                 <h3 class='child inline-block-child'>No account?</h3>
                                 <div class='child inline-block-child'>{toggleButton} </div>
-                
-                                {
+                                
+                                    {
                                     this.state.showRegFields ?
                                     <div className="text-input">
                     
@@ -128,33 +210,48 @@ class Login extends Component {
                                                 <span className="p-inputgroup-addon">
                                                     <i className="pi pi-user"></i>
                                                 </span>
-                                                <InputText placeholder="Username" />
+                                                <InputText 
+                                                    placeholder="Username" 
+                                                    name="regname" 
+                                                    onChange={ this.handleChange } 
+                                                    value={ this.state.input.regname } />
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
-                                                <InputText placeholder="Password" type="password" name="password" />              
+                                                <InputText 
+                                                    placeholder="Password" 
+                                                    type="password" 
+                                                    name="regpw" 
+                                                    onChange={ this.handleChange } 
+                                                    value={ this.state.input.regpw } />              
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
-                                                <InputText placeholder="Repeat password" type="password" name="password"/>              
+                                                <InputText 
+                                                    placeholder="Repeat password" 
+                                                    type="password" 
+                                                    name="confpw" 
+                                                    onChange={ this.handleChange } 
+                                                    value={ this.state.input.confpw }  />              
                                             </div>
                                         </div>
+                                        
+                                        <h3>{this.state.messages[0]} </h3> 
                                         <div>{regButton}</div>
                     
                                     </div>
-                                            : null
-                                }
+                                    : null
+                                    }
                             </div>
                         </div>
                     </div>
                 </div>
 
                 );
-
     }
 
 }

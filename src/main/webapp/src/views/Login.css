@@ -79,7 +79,7 @@
     height: auto;
     /* position: absolute; */
     /* top: 50%; */
-    width: auto;
+     width: auto;
     /* left: 50%; */
     /* transform: translate(-50%, -50%); */
     text-align: left;
@@ -114,9 +114,11 @@
 
 }
 
+
 .login-page container img {
     position:absolute;
     left:0;
+
 
 }
 
