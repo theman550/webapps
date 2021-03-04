@@ -43,7 +43,7 @@ public class UserDAOTest {
     
     @Before
     public void init() {
-	User usr = new User(null,"usr", null, null);
+	User usr = new User(null,"usr", "pw", "salt", null, null);
 	usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 	userDAO.create(usr);

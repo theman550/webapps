@@ -37,7 +37,8 @@ public class DrinkDAOTest {
     
     @Before
     public void init() {
-        User usr = new User(null,"usr", null, null);
+        User usr = new User(null,"usr", "pw", "salt", null, null);
+        
         usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 	Drink d = new Drink();
