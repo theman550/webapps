@@ -125,8 +125,17 @@ const AddDrinkComponent = ({
                     <Field name={`ingredients.${index}.amount`} />
                     <ErrorMessage name={`ingredients.${index}.amount`} />
                   <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
-                    <Field name={`ingredients.${index}.unit`} />
+                    <Field as="select" name={`ingredients.${index}.unit`}>
+                      <option value="">Select</option>
+                      <option value="MILLILITRE">Ml</option>
+                      <option value="CENTILITRE">Cl</option>
+                      <option value="DECILITRE">Dl</option>
+                      <option value="LITRE">L</option>
+                      <option value="GRAMS">Grams</option>
+                      <option value="PIECES">Pieces</option>
                     <ErrorMessage name={`ingredients.${index}.unit`} />
+                  </Field>
+
                     &emsp;
                     <Button type="Button"
                     className="secondary" 
@@ -158,6 +167,7 @@ const AddDrinkComponent = ({
       </center>
     </Form>
 );
+
 
 const styles = StyleSheet.create({
     container: {
