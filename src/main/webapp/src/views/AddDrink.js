@@ -29,80 +29,43 @@ const initialValues = {
     ],
   };
   
-  const validationSchema=Yup.object({
-      name: Yup.string()
-      .required('A name is required'),
-      description: Yup.string()
-      .required('Please describe how to make your drink'),
-      ingredients: Yup.array().of(
-        Yup.object().shape({
-          name: Yup.string()
-          .required('A name is required'),
-          percentage: Yup.number()
-          .required('Required')
-          .min(0, "Must be at least 0%")
-          .max(100, "Must be less than 100%"),
-          amount: Yup.number()
-          .required('Required'),
-          unit: Yup.string()
-          .required('Required'),
-        })
-      )
-    })
-
-export default class AddDrink extends React.Component {
-  render(){
-    return(
-      <Formik 
-        component={AddDrinkComponent} 
-        initialValues={initialValues} 
-        validationSchema={validationSchema}
-        validateOnChange={false}
-        validateOnBlur={false}
-        onSubmit = {(values, formikActions) => {
-            setTimeout(() => {
-                console.log("Transmitting drink data to database...");
-                console.log(JSON.stringify(values));
-                const requestOptions = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(values)
-                };
-            fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-            .then()
-            .then(formikActions.resetForm);
-            formikActions.setSubmitting(false);
-            }, 500);
-            }}
-        />
+const validationSchema=Yup.object({
+    name: Yup.string()
+    .required('A name is required'),
+    description: Yup.string()
+    .required('Please describe how to make your drink'),
+    ingredients: Yup.array().of(
+      Yup.object().shape({
+        name: Yup.string()
+        .required('A name is required'),
+        percentage: Yup.number()
+        .required('Required')
+        .min(0, "Must be at least 0%")
+        .max(100, "Must be less than 100%"),
+        amount: Yup.number()
+        .required('Required'),
+        unit: Yup.string()
+        .required('Required'),
+      })
     )
-  }
-}
+})
 
-const MessageHandler = () => {
+function AddDrink () {
   const msg = useRef(null);
 
-  const showMessage = () => {
-      msg.current.show({severity: 'success', summary: 'Success', detail: 'Drink created!'})
+  function showMessage() {
+    msg.current.show({severity: 'success', summary: '', detail: 'Drink created!'})
   }
 
-  return(
-      <div className="card">
-          <Messages ref={msg}></Messages>
-          <Button onClick={showMessage} label="Success" className="p-button-success" />
-      </div>
-  )
-}
-
-const AddDrinkComponent = ({
-  handleChange,
-  handleBlur,
-  values,
-  }) => (
-  <Form>
-    <center>
-    <View style={styles.container}>
-    <MessageHandler/>
+  const AddDrinkComponent = ({
+    handleChange,
+    handleBlur,
+    values,
+    }) => (
+    <Form>
+      <center>
+      <View style={styles.container}>
+      <Messages ref={msg}></Messages>
         <TextInput
             type="text"
             onChange={handleChange('name')}
@@ -184,8 +147,33 @@ const AddDrinkComponent = ({
       </View>
       </center>
     </Form>
-);
+  );
 
+  return(
+    <Formik 
+      component={AddDrinkComponent} 
+      initialValues={initialValues} 
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnBlur={false}
+      onSubmit = {(values, formikActions) => {
+          setTimeout(() => {
+              console.log("Transmitting drink data to database...");
+              console.log(JSON.stringify(values));
+              const requestOptions = {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(values)
+              };
+          fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
+          .then(showMessage())
+          .then(formikActions.resetForm);
+          formikActions.setSubmitting(false);
+          }, 500);
+          }}
+      />
+)
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -227,3 +215,4 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
   });
+  export default AddDrink
