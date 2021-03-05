@@ -5,8 +5,8 @@ import * as Yup from 'yup';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from 'primereact/fileupload';
-import { Dropdown } from 'primereact/dropdown';
 import { render } from '@testing-library/react';
+import { Messages } from 'primereact/messages';
 
 const ingredientItem = {
       name: '',
@@ -68,8 +68,8 @@ export default class AddDrink extends React.Component {
                     body: JSON.stringify(values)
                 };
             fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-            .then(response => response.json())
-            .then(data => alert("drink created!"));
+            .then()
+            .then(formikActions.resetForm);
             formikActions.setSubmitting(false);
             }, 500);
             }}
@@ -77,6 +77,22 @@ export default class AddDrink extends React.Component {
     )
   }
 }
+
+const MessageHandler = () => {
+  const msg = useRef(null);
+
+  const showMessage = () => {
+      msg.current.show({severity: 'success', summary: 'Success', detail: 'Drink created!'})
+  }
+
+  return(
+      <div className="card">
+          <Messages ref={msg}></Messages>
+          <Button onClick={showMessage} label="Success" className="p-button-success" />
+      </div>
+  )
+}
+
 const AddDrinkComponent = ({
   handleChange,
   handleBlur,
@@ -85,6 +101,7 @@ const AddDrinkComponent = ({
   <Form>
     <center>
     <View style={styles.container}>
+    <MessageHandler/>
         <TextInput
             type="text"
             onChange={handleChange('name')}
