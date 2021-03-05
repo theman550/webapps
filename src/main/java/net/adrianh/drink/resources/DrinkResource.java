@@ -39,7 +39,7 @@ public class DrinkResource {
     public class AutoCompleteResponse {
         private String type;
         private String name;
-        private int page;
+        private int offset;
     }
     
     @Data
@@ -79,7 +79,7 @@ public class DrinkResource {
         if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
             
-            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("page"))*20);
+            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("offset")));
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
             

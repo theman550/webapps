@@ -18,7 +18,7 @@ export default class DrinkList extends React.Component {
       sortKey: null,
       searchQueries: [],
       totalRecords: null,
-      currentPage: 0,
+      first: 0,
       sortOptions: [
         {
           label: "Most popular", value: "popular"
@@ -58,7 +58,7 @@ export default class DrinkList extends React.Component {
 	fetchDrinks = () => {
     fetch(process.env.REACT_APP_API_URL+this.props.fetchType+this.state.sortKey, {
       method: "POST",
-      body:"{\"page\":"+this.state.currentPage+",\"queries\":" + JSON.stringify(this.state.searchQueries)+"}"
+      body:"{\"offset\":"+this.state.first+",\"queries\":" + JSON.stringify(this.state.searchQueries)+"}"
     })
     .then(response =>  response.ok ? response.json() : Promise.reject(response.status))
     .then(data => this.setState({drinks: data.drinks, totalRecords: data.total}))
@@ -83,11 +83,10 @@ export default class DrinkList extends React.Component {
 
     }
   }
-onPage = (pageIndex) => {
-  this.setState ({
-      currentPage: pageIndex.originalEvent.page,
-      first: pageIndex.first
-    },
+onPage = (event) => {
+  this.setState ((state) => ({
+      first: event.first,
+    }),
     this.fetchDrinks
   )
 }
@@ -120,6 +119,9 @@ onPage = (pageIndex) => {
     );
 
     const itemTemplate = (data, layout) => {
+      if (!data) {
+        return null;
+      }
       if (layout === "list") {
         return <DrinkListItem data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkListItem>;
       }
@@ -142,9 +144,9 @@ onPage = (pageIndex) => {
             emptyMessage={"No records found"}
             onPage={(e) => this.onPage(e)}
             lazy={true}
-            first={0}
-            totalRecords={this.state.totalRecords}
-            rows={this.state.drinks.length} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
+            first={this.state.first}
+            totalRecords={22}
+            rows={20} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
 				></DataView>
 			</div>
 		);
