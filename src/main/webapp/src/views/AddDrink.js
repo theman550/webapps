@@ -1,11 +1,9 @@
 import React, { useRef } from 'react';
 import { Text, View, StyleSheet, TextInput, Alert } from 'react-native';
-import { Formik, Field, Form, ErrorMessage, yupToFormErrors, FieldArray, insert } from 'formik';
+import { Formik, Field, Form, ErrorMessage, yupToFormErrors, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'primereact/button';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from 'primereact/fileupload';
-import { render } from '@testing-library/react';
 import { Messages } from 'primereact/messages';
 
 
@@ -20,12 +18,7 @@ const initialValues = {
       name: '',
       description: '',
     ingredients: [
-      {
-        name: '',
-        percentage: '',
-        amount: '',
-        unit: '',
-      }
+      {ingredientItem}
     ],
   };
   
@@ -130,12 +123,7 @@ function AddDrink () {
                <Button
                   type="Button"
                   className="secondary"
-                  onClick={() => push({
-                    name: '',
-                    percentage: '',
-                    amount: '',
-                    unit: '',
-                    })}
+                  onClick={() => push(ingredientItem)}
                 >
                 Add another ingredient
                 </Button>
