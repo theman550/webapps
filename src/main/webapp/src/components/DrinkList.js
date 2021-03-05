@@ -145,7 +145,7 @@ onPage = (event) => {
             onPage={(e) => this.onPage(e)}
             lazy={true}
             first={this.state.first}
-            totalRecords={22}
+            totalRecords={this.state.totalRecords}
             rows={20} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
 				></DataView>
 			</div>

@@ -60,7 +60,7 @@ public class DrinkResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDrink(Drink d) {
-        d.setUser(userDAO.findUserByID(1L).get(0)); 
+        d.setUser(userDAO.findUserByID(8L).get(0)); 
         for (Ingredient i: d.getIngredients()) {
             i.setDrink(d);
         }
@@ -72,7 +72,7 @@ public class DrinkResource {
     @Path("popular")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list(String acr) throws JSONException {
+    public Response listPopular(String acr) throws JSONException {
         
         JSONObject o = new JSONObject(acr);
         
@@ -91,9 +91,9 @@ public class DrinkResource {
 
             for(int i = 0; i < o.getJSONArray("queries").length(); i++) {
                 if("drink".equals(o.getJSONArray("queries").getJSONObject(i).getString("type"))) {
-                    allDrinks.addAll(drinkDAO.findDrinksMatchingName(o.getJSONArray("queries").getJSONObject(i).getString("name")));
+                    allDrinks.addAll(drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset")).getResults());
                 } else {
-                    allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONArray("queries").getJSONObject(i).getString("name")));
+                    allDrinks.addAll(ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset")).getResults());
                 }
             }
 
@@ -106,8 +106,9 @@ public class DrinkResource {
                     return d2.getVoteCount() - d1.getVoteCount();
                 }
             });
+            
 
-            return Response.status(Response.Status.OK).entity(selectedDrinks).build();
+            return Response.status(Response.Status.OK).entity(selectedDrinks.subList(o.getInt("offset"), o.getInt("offset")+20)).build();
         }
     }
     

@@ -13,7 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
-import javax.persistence.Transient;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,9 @@ public class Drink implements Serializable {
     
     private String name;
     private String description;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Calendar createdTime;
     
     //all the drinks votes
     @OneToMany(mappedBy="drink", cascade = CascadeType.ALL, orphanRemoval = true)
