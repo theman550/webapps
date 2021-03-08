@@ -60,7 +60,7 @@ public class DrinkResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDrink(Drink d) {
-        d.setUser(userDAO.findUserByID(1L).get(0)); 
+        d.setUser(userDAO.findUserByID(8L).get(0)); 
         for (Ingredient i: d.getIngredients()) {
             i.setDrink(d);
         }

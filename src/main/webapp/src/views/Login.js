@@ -89,11 +89,13 @@ class Login extends Component {
     addUser() {
         if(this.validateReg()){
             fetch(process.env.REACT_APP_API_URL+'/user/create/'+
-            this.state.input.regname+'/'+this.state.input.regpw, {
+            this.state.input.regname+'/'+this.state.input.displayname+'/'+this.state.input.regpw, {
                 method: 'POST',
                 headers: {'Content-Type':'application/x-www-form-urlencoded'}
             })
-            this.setState({messages: ["Welcome " + this.state.input.regname + "!"]});
+            .then(response =>  response.ok ? 
+            this.setState({messages: ["Welcome " + this.state.input.displayname + "!"]}) :
+            this.setState({messages: ["Accountname must be unique!"]})) 
         }
     }
 
@@ -105,7 +107,12 @@ class Login extends Component {
         
         if (!input.regname) {
             isValid = false;
-            newErrors.push("Must enter name.");
+            newErrors.push("Must enter account name.");
+        }
+        
+        if (!input.displayname) {
+            isValid = false;
+            newErrors.push("Must enter display name.");
         }
 
         if (!input.regpw) {
@@ -211,10 +218,22 @@ class Login extends Component {
                                                     <i className="pi pi-user"></i>
                                                 </span>
                                                 <InputText 
-                                                    placeholder="Username" 
+                                                    placeholder="Account name" 
                                                     name="regname" 
                                                     onChange={ this.handleChange } 
                                                     value={ this.state.input.regname } />
+                                            </div>
+                                        </div>
+                                        <div className="p-username" class="username-input">
+                                            <div className="p-inputgroup">
+                                                <span className="p-inputgroup-addon">
+                                                    <i className="pi pi-user"></i>
+                                                </span>
+                                                <InputText 
+                                                    placeholder="Display name" 
+                                                    name="displayname" 
+                                                    onChange={ this.handleChange } 
+                                                    value={ this.state.input.displayname } />
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
@@ -232,7 +251,7 @@ class Login extends Component {
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
                                                 <InputText 
-                                                    placeholder="Repeat password" 
+                                                    placeholder="Confirm password" 
                                                     type="password" 
                                                     name="confpw" 
                                                     onChange={ this.handleChange } 

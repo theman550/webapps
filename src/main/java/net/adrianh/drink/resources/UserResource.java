@@ -33,7 +33,7 @@ public class UserResource {
     public Response loginUser(@PathParam("name") String name, 
                        @PathParam("pw") String pw){
        
-       if(userDAO.checkExist(name, pw)){
+       if(userDAO.areCredentialsMatching(name, pw)){
             User user = userDAO.login(name, pw);
             return Response.status(Response.Status.OK).entity(user).build();  
        } else{
@@ -42,16 +42,23 @@ public class UserResource {
     }  
       
     @POST 
-    @Path("create/{name}/{pw}")
-    public Response addUser(@PathParam("name") String name, 
+    @Path("create/{accName}/{dispName}/{pw}")
+    public Response addUser(@PathParam("accName") String accName, 
+                       @PathParam("dispName") String dispName,
                        @PathParam("pw") String pw){
         
-        User user = new User();
-        user.setName(name);
-        user.setSalt(generateMockSalt());
-        user.setPassword(pw+user.getSalt());
-        userDAO.create(user);
-        return Response.status(Response.Status.OK).entity("User created!").build();  
+        if(userDAO.isAccNameUnique(accName)){
+            User user = new User();
+            user.setAccountName(accName);
+            user.setDisplayName(dispName);
+            user.setSalt(generateMockSalt());
+            user.setPassword(pw+user.getSalt());
+            userDAO.create(user);
+            return Response.status(Response.Status.OK).entity("User created!").build(); 
+        } else{
+           return Response.status(Response.Status.CONFLICT).entity("Account name not unique!").build(); 
+        }
+  
     }  
     
     private String generateMockSalt(){
