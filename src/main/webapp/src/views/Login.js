@@ -42,24 +42,20 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-                
+                            
         this.state = {
             showRegFields: false
         };
 
-        //todo: fix this 
-        this.state = {
-            tempSolutionFix: ''
-        };
-
         this.state = {
             input: [],
-            messages: []
+            regMessages: [],
+            loginMessage: ''
         };
         
         this.handleChange = this.handleChange.bind(this);
     }
-    
+
     handleChange(event) {
         let input = this.state.input;
         input[event.target.name] = event.target.value;
@@ -81,22 +77,35 @@ class Login extends Component {
             method: 'GET',
             headers: {'Content-Type':'application/x-www-form-urlencoded'}
         })    
-        .then(response =>  response.ok ? 
-         this.setState({tempSolutionFix: ["Login worked!"]}) : 
-         this.setState({tempSolutionFix: ["No such user"]}))
+        .then(response => {
+            if(response.status === 200){
+                this.setState({loginMessage: ["Login worked!"]});
+            } else if(response.status === 401){
+                this.setState({loginMessage: ["No such account!"]});
+            } else{
+                this.setState({loginMessage: ["Error"]});
+            }
+        }) 
     }
 
     addUser() {
-        if(this.validateReg()){
+        if(this.validateReg()){            
             fetch(process.env.REACT_APP_API_URL+'/user/create/'+
             this.state.input.regname+'/'+this.state.input.displayname+'/'+this.state.input.regpw, {
                 method: 'POST',
-                headers: {'Content-Type':'application/x-www-form-urlencoded'}
+                headers: {'Content-Type':'application/x-www-form-urlencoded'}              
             })
-            .then(response =>  response.ok ? 
-            this.setState({messages: ["Welcome " + this.state.input.displayname + "!"]}) :
-            this.setState({messages: ["Accountname must be unique!"]})) 
-        }
+            .then(response => {
+                if(response.status === 200){
+                    this.clearRegFields();
+                    this.setState({regMessages: ["Register worked!"]});
+                } else if(response.status === 409){
+                    this.setState({regMessages: ["Accountname must be unique!"]});
+                } else{
+                    this.setState({regMessages: ["Error"]});
+                }
+            })   
+        }     
     }
 
     validateReg(){
@@ -129,17 +138,26 @@ class Login extends Component {
             isValid = false;
             newErrors.push("Passwords must match.");
         } 
-  
-        this.setState({messages: newErrors});
+        
+        this.setState({regMessages: newErrors});
                         
         return isValid;
+    }
+    
+    clearRegFields() {
+        let input = this.state.input;
+        
+        input.regname = '';
+        input.displayname = '';
+        input.regpw = '';
+        input.confpw = '';
     }
     
     render() {
         const loginButton = <Button label="Login" onClick={() => this.loginUser()} ></Button>
         const toggleButton = <Button label="Click to register!" onClick={() => this.toggleReg()} ></Button>
         const regButton = <Button label="Register" onClick={() => this.addUser()} ></Button>
-     
+
         return (
                 <div className="login-page">
                 
@@ -191,19 +209,19 @@ class Login extends Component {
                             </div>
                 
                             {/* <div><TextInput/></div>*/}
-                      
+
                             <div className="p-logButton">
                                 <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
-                                    <h4>{this.state.tempSolutionFix} </h4>
+                                    <h4>{this.state.loginMessage} </h4>
                                     <div className="btnLogIn">{loginButton}</div>
                                 </div>
                             </div>
+
                             
                             <Divider layout="horizontal">
                                 <b>OR</b>
                             </Divider>
-                           
                             <div className="register">
                                 <h3 class='child inline-block-child'>No account?</h3>
                                 <div class='child inline-block-child'>{toggleButton} </div>
@@ -259,7 +277,7 @@ class Login extends Component {
                                             </div>
                                         </div>
                                         
-                                        <h3>{this.state.messages[0]} </h3> 
+                                        <h3>{this.state.regMessages[0]} </h3> 
                                         <div>{regButton}</div>
                     
                                     </div>
