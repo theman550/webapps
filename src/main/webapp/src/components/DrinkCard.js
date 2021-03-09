@@ -26,6 +26,7 @@ class DrinkCard extends Component {
 
     showDetailsDialog() {
         console.log('Click happened');
+
     }
 
     render() {
@@ -63,7 +64,13 @@ class DrinkCard extends Component {
                             </div>
                         </div>
                         <div className="product-grid-item-bottom">
-                            <Button label="Details" className="detailsButton p-button-text" onClick={this.showDetailsDialog}></Button>
+                            <Details 
+                                src={data.image}
+                                alt={data.name}
+                                drinkName={data.name}
+                                ingredients= {tags}
+                                description={data.description}
+                                />
                         </div>
                     </div>
                 </div>
