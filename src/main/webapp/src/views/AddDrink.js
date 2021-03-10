@@ -46,8 +46,11 @@ const validationSchema=Yup.object({
 function AddDrink () {
   const msg = useRef(null);
 
-  function showMessage() {
+  function showCreatedMessage() {
     msg.current.show({severity: 'success', summary: '', detail: 'Drink created!'})
+  }
+  function showErrorMessage() {
+    msg.current.show({severity: 'failure', summary: '', detail: 'Something went wrong.'})
   }
 
   const AddDrinkComponent = ({
@@ -57,6 +60,7 @@ function AddDrink () {
     }) => (
     <Form>
       <center>
+      <div>
       <View style={styles.container}>
       <Messages ref={msg}></Messages>
         <TextInput
@@ -112,9 +116,10 @@ function AddDrink () {
 
                     &emsp;
                     <Button type="Button"
-                    className="secondary" 
+                    className="secondary"
+                    style={{height: '25px'}} 
                     onClick={() => remove(index)}>
-                       Remove ingredient
+                       Remove
                     </Button>
                   </div>
                 </div>
@@ -131,8 +136,12 @@ function AddDrink () {
             )}
             </FieldArray>
             <br/>
-            <Button type="submit">Submit drink</Button>
+            <right>
+              <Button type="submit" style={{width: '130px'}}>Submit drink</Button>
+            </right>
+
       </View>
+      </div>
       </center>
     </Form>
   );
@@ -145,22 +154,25 @@ function AddDrink () {
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit = {(values, formikActions) => {
-          setTimeout(() => {
-              console.log("Transmitting drink data to database...");
-              console.log(JSON.stringify(values));
-              const requestOptions = {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(values)
-              };
+        setTimeout(() => {
+          console.log("Transmitting drink data to database...");
+          console.log(JSON.stringify(values));
+          const requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(values)
+          };
           fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-          .then(showMessage())
-          .then(formikActions.resetForm);
+          .then(response => response.ok ?
+            showCreatedMessage()
+            :
+            showErrorMessage())
+          .then(formikActions.resetForm)
           formikActions.setSubmitting(false);
-          }, 500);
-          }}
-      />
-)
+        }, 500);
+        }}
+    />
+  )
 }
 
 const styles = StyleSheet.create({
