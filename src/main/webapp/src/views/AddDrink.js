@@ -1,11 +1,9 @@
 import React, { useRef } from 'react';
 import { Text, View, StyleSheet, TextInput, Alert } from 'react-native';
-import { Formik, Field, Form, ErrorMessage, yupToFormErrors, FieldArray, insert } from 'formik';
+import { Formik, Field, Form, ErrorMessage, yupToFormErrors, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'primereact/button';
-import { InputTextarea } from 'primereact/inputtextarea';
 import { FileUpload } from 'primereact/fileupload';
-import { render } from '@testing-library/react';
 import { Messages } from 'primereact/messages';
 
 
@@ -20,89 +18,51 @@ const initialValues = {
       name: '',
       description: '',
     ingredients: [
-      {
-        name: '',
-        percentage: '',
-        amount: '',
-        unit: '',
-      }
+      {ingredientItem}
     ],
   };
   
-  const validationSchema=Yup.object({
-      name: Yup.string()
-      .required('A name is required'),
-      description: Yup.string()
-      .required('Please describe how to make your drink'),
-      ingredients: Yup.array().of(
-        Yup.object().shape({
-          name: Yup.string()
-          .required('A name is required'),
-          percentage: Yup.number()
-          .required('Required')
-          .min(0, "Must be at least 0%")
-          .max(100, "Must be less than 100%"),
-          amount: Yup.number()
-          .required('Required'),
-          unit: Yup.string()
-          .required('Required'),
-        })
-      )
-    })
-
-export default class AddDrink extends React.Component {
-  render(){
-    return(
-      <Formik 
-        component={AddDrinkComponent} 
-        initialValues={initialValues} 
-        validationSchema={validationSchema}
-        validateOnChange={false}
-        validateOnBlur={false}
-        onSubmit = {(values, formikActions) => {
-            setTimeout(() => {
-                console.log("Transmitting drink data to database...");
-                console.log(JSON.stringify(values));
-                const requestOptions = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(values)
-                };
-            fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-            .then()
-            .then(formikActions.resetForm);
-            formikActions.setSubmitting(false);
-            }, 500);
-            }}
-        />
+const validationSchema=Yup.object({
+    name: Yup.string()
+    .required('A name is required'),
+    description: Yup.string()
+    .required('Please describe how to make your drink'),
+    ingredients: Yup.array().of(
+      Yup.object().shape({
+        name: Yup.string()
+        .required('A name is required'),
+        percentage: Yup.number()
+        .required('Required')
+        .min(0, "Must be at least 0%")
+        .max(100, "Must be less than 100%"),
+        amount: Yup.number()
+        .required('Required'),
+        unit: Yup.string()
+        .required('Required'),
+      })
     )
-  }
-}
+})
 
-const MessageHandler = () => {
+function AddDrink () {
   const msg = useRef(null);
 
-  const showMessage = () => {
-      msg.current.show({severity: 'success', summary: 'Success', detail: 'Drink created!'})
+  function showCreatedMessage() {
+    msg.current.show({severity: 'success', summary: '', detail: 'Drink created!'})
+  }
+  function showErrorMessage() {
+    msg.current.show({severity: 'failure', summary: '', detail: 'Something went wrong.'})
   }
 
-  return(
-      <div className="card">
-          <Messages ref={msg}></Messages>
-          <Button onClick={showMessage} label="Success" className="p-button-success" />
-      </div>
-  )
-}
-
-const AddDrinkComponent = ({
-  handleChange,
-  handleBlur,
-  values,
-  }) => (
-  <Form>
-    <center>
-    <View style={styles.container}>
-    <MessageHandler/>
+  const AddDrinkComponent = ({
+    handleChange,
+    handleBlur,
+    values,
+    }) => (
+    <Form>
+      <center>
+      <div>
+      <View style={styles.container}>
+      <Messages ref={msg}></Messages>
         <TextInput
             type="text"
             onChange={handleChange('name')}
@@ -156,9 +116,10 @@ const AddDrinkComponent = ({
 
                     &emsp;
                     <Button type="Button"
-                    className="secondary" 
+                    className="secondary"
+                    style={{height: '25px'}} 
                     onClick={() => remove(index)}>
-                       Remove ingredient
+                       Remove
                     </Button>
                   </div>
                 </div>
@@ -167,12 +128,7 @@ const AddDrinkComponent = ({
                <Button
                   type="Button"
                   className="secondary"
-                  onClick={() => push({
-                    name: '',
-                    percentage: '',
-                    amount: '',
-                    unit: '',
-                    })}
+                  onClick={() => push(ingredientItem)}
                 >
                 Add another ingredient
                 </Button>
@@ -180,12 +136,44 @@ const AddDrinkComponent = ({
             )}
             </FieldArray>
             <br/>
-            <Button type="submit">Submit drink</Button>
+            <right>
+              <Button type="submit" style={{width: '130px'}}>Submit drink</Button>
+            </right>
+
       </View>
+      </div>
       </center>
     </Form>
-);
+  );
 
+  return(
+    <Formik 
+      component={AddDrinkComponent} 
+      initialValues={initialValues} 
+      validationSchema={validationSchema}
+      validateOnChange={false}
+      validateOnBlur={false}
+      onSubmit = {(values, formikActions) => {
+        setTimeout(() => {
+          console.log("Transmitting drink data to database...");
+          console.log(JSON.stringify(values));
+          const requestOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(values)
+          };
+          fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
+          .then(response => response.ok ?
+            showCreatedMessage()
+            :
+            showErrorMessage())
+          .then(formikActions.resetForm)
+          formikActions.setSubmitting(false);
+        }, 500);
+        }}
+    />
+  )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -227,3 +215,4 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
     },
   });
+  export default AddDrink
