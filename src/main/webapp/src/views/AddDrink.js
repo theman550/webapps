@@ -18,8 +18,13 @@ const initialValues = {
       name: '',
       description: '',
     ingredients: [
-      {ingredientItem}
-    ],
+      {
+      name: '',
+      percentage: '',
+      amount: '',
+      unit: '',
+      }
+    ]
   };
   
 const validationSchema=Yup.object({
@@ -145,34 +150,45 @@ function AddDrink () {
       </center>
     </Form>
   );
-
-  return(
-    <Formik 
+  if(localStorage.getItem("currentUser") != null){
+    return(
+      <Formik 
       component={AddDrinkComponent} 
       initialValues={initialValues} 
       validationSchema={validationSchema}
       validateOnChange={false}
       validateOnBlur={false}
       onSubmit = {(values, formikActions) => {
-        setTimeout(() => {
-          console.log("Transmitting drink data to database...");
-          console.log(JSON.stringify(values));
-          const requestOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(values)
-          };
-          fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-          .then(response => response.ok ?
-            showCreatedMessage()
-            :
-            showErrorMessage())
-          .then(formikActions.resetForm)
-          formikActions.setSubmitting(false);
-        }, 500);
-        }}
-    />
-  )
+        setTimeout(() => {      
+            var User = JSON.parse(localStorage.getItem("currentUser"));
+            console.log("Transmitting drink data to database...");
+            console.log(JSON.stringify(values));
+            console.log(User.id);
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'userID' : User.id.toString(), 'userHash' : User.name},
+                body: JSON.stringify(values)
+            };
+            console.log(requestOptions);
+            fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
+            .then(response => response.ok ?
+              showCreatedMessage()
+              :
+              showErrorMessage())
+            .then(formikActions.resetForm)
+            formikActions.setSubmitting(false);
+          }, 500);
+          }}
+      />
+    )
+  }
+  else{
+    return(
+      <div>
+        You must log in to create a drink.
+      </div>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
