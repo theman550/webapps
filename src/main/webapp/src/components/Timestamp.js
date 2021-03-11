@@ -10,12 +10,12 @@ import React, { Component } from 'react'
 import './Timestamp.css';
 export default function Timestamp(props) {
     const data = props.data;
-   // let timestamp = props.timestamp;
-    let date = new Date().toLocaleString();
+    let timestamp = data.createdAt;
+    //let date = new Date().toLocaleString();
 
     return (
             <div className="p-col-12">
-                <a>{date}</a>
+                <a>{timestamp}</a>
             
             </div>
             );
