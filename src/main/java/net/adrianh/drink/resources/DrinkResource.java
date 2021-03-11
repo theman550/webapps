@@ -96,15 +96,28 @@ public class DrinkResource {
         } else { //if there is a search term, BRING ME THE BEST OF THEM
         
             Set<Drink> allDrinks = new HashSet<>();
-
-            for(int i = 0; i < o.getJSONArray("queries").length(); i++) {
-                if("drink".equals(o.getJSONArray("queries").getJSONObject(i).getString("type"))) {
-                    allDrinks.addAll(drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset")).getResults());
-                } else {
-                    allDrinks.addAll(ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset")).getResults());
+            int total = 0;
+            
+            if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                allDrinks.addAll(dr.getResults());
+                total = (int) dr.getTotal();
+            } else {
+                QueryResults ir = null;
+                for(int i = 0; i < o.getJSONArray("queries").length(); i++){
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    if(allDrinks.isEmpty()){
+                        allDrinks.addAll(ir.getResults());
+                        total = (int) ir.getTotal();
+                    } else {
+                        allDrinks.retainAll(ir.getResults());
+                    }
+                    if(total > ir.getTotal())
+                        total = (int)ir.getTotal();
+                    //this isn't a real solution, however due to time constraints this will have to suffice
                 }
             }
-
+            
             List<Drink> selectedDrinks = new ArrayList<>();
             selectedDrinks.addAll(allDrinks);
 
@@ -115,8 +128,8 @@ public class DrinkResource {
                 }
             });
             
-
-            return Response.status(Response.Status.OK).entity(selectedDrinks.subList(o.getInt("offset"), o.getInt("offset")+20)).build();
+            DrinkResponse drinkResponse = new DrinkResponse(total, selectedDrinks);
+            return Response.status(Response.Status.OK).entity(drinkResponse).build();
         }
     }
     

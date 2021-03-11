@@ -50,7 +50,7 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
             .fetch();
         return ingredients;
     }
-    
+  
     public QueryResults<Drink> findDrinksFromIngredientsMatchingNameFromOffset(String s, int offset) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;

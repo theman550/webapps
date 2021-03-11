@@ -72,7 +72,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         QueryResults<Drink> drinks = (QueryResults<Drink>) queryFactory.selectFrom(drink)
             .offset(offset)
             .limit(20)
-            .orderBy(drink.createdTime.desc())
+            .orderBy(drink.createdAt.desc())
             .fetchResults();
         return drinks;
     }
