@@ -166,7 +166,8 @@ function AddDrink () {
             //console.log(User.id);
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem("currentUser")?.token}`},
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
                 body: JSON.stringify(values)
             };
             console.log(requestOptions);
