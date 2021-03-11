@@ -44,7 +44,7 @@ class Login extends Component {
         super(props);
                 
         this.state = {
-            showRegFields: false
+            showRegFields: false,
         };
 
         //todo: fix this 
@@ -81,9 +81,19 @@ class Login extends Component {
             method: 'GET',
             headers: {'Content-Type':'application/x-www-form-urlencoded'}
         })    
-        .then(response =>  response.ok ? 
-         this.setState({tempSolutionFix: ["Login worked!"]}) : 
-         this.setState({tempSolutionFix: ["No such user"]}))
+        .then(response => {
+            if(response.ok){
+                this.setState({tempSolutionFix: ["Login worked!"]});
+                return response.json(); 
+            }
+            else{
+                this.setState({tempSolutionFix: ["No such user"]});
+            }
+        })
+        .then(UserAsJson => {
+            console.log(UserAsJson);
+            localStorage.setItem('currentUser', JSON.stringify(UserAsJson));
+        })
     }
 
     addUser() {
@@ -132,9 +142,10 @@ class Login extends Component {
         const loginButton = <Button label="Login" onClick={() => this.loginUser()} ></Button>
         const toggleButton = <Button label="Click to register!" onClick={() => this.toggleReg()} ></Button>
         const regButton = <Button label="Register" onClick={() => this.addUser()} ></Button>
-     
-        return (
-                <div className="login-page">
+
+        if(localStorage.getItem("currentUser") === null){
+            return (
+               <div className="login-page">
                 
                     <div  className="split left">
                         <div className="background" class="left-background">
@@ -164,6 +175,7 @@ class Login extends Component {
                                             <i className="pi pi-user"></i>
                                         </span>
                                         <InputText 
+                                            autoComplete="off"
                                             placeholder="Username" 
                                             name="logname"
                                             onChange={ this.handleChange }
@@ -252,6 +264,15 @@ class Login extends Component {
                 </div>
 
                 );
+                                }
+                                else{
+                                    return(
+                                        <div>
+                                            You're already logged in!
+                                            (kör kommandot "localStorage.clear()"" i chrome-konsolen så loggas du ut)
+                                        </div>
+                                    )
+                                }
     }
 
 }
