@@ -60,7 +60,7 @@ public class DrinkResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDrink(Drink d) {
-        d.setUser(userDAO.findUserByID(1L).get(0)); 
+        d.setUser(userDAO.findUserByID(3L).get(0)); 
         for (Ingredient i: d.getIngredients()) {
             i.setDrink(d);
         }
@@ -72,7 +72,7 @@ public class DrinkResource {
     @Path("popular")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response list(String acr) throws JSONException {
+    public Response listPopular(String acr) throws JSONException {
         
         JSONObject o = new JSONObject(acr);
         
@@ -88,15 +88,28 @@ public class DrinkResource {
         } else { //if there is a search term, BRING ME THE BEST OF THEM
         
             Set<Drink> allDrinks = new HashSet<>();
-
-            for(int i = 0; i < o.getJSONArray("queries").length(); i++) {
-                if("drink".equals(o.getJSONArray("queries").getJSONObject(i).getString("type"))) {
-                    allDrinks.addAll(drinkDAO.findDrinksMatchingName(o.getJSONArray("queries").getJSONObject(i).getString("name")));
-                } else {
-                    allDrinks.addAll(ingredientDAO.findDrinksFromIngredient(o.getJSONArray("queries").getJSONObject(i).getString("name")));
+            int total = 0;
+            
+            if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                allDrinks.addAll(dr.getResults());
+                total = (int) dr.getTotal();
+            } else {
+                QueryResults ir = null;
+                for(int i = 0; i < o.getJSONArray("queries").length(); i++){
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    if(allDrinks.isEmpty()){
+                        allDrinks.addAll(ir.getResults());
+                        total = (int) ir.getTotal();
+                    } else {
+                        allDrinks.retainAll(ir.getResults());
+                    }
+                    if(total > ir.getTotal())
+                        total = (int)ir.getTotal();
+                    //this isn't a real solution, however due to time constraints this will have to suffice
                 }
             }
-
+            
             List<Drink> selectedDrinks = new ArrayList<>();
             selectedDrinks.addAll(allDrinks);
 
@@ -106,8 +119,9 @@ public class DrinkResource {
                     return d2.getVoteCount() - d1.getVoteCount();
                 }
             });
-
-            return Response.status(Response.Status.OK).entity(selectedDrinks).build();
+            
+            DrinkResponse drinkResponse = new DrinkResponse(total, selectedDrinks);
+            return Response.status(Response.Status.OK).entity(drinkResponse).build();
         }
     }
     

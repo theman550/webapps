@@ -1,5 +1,6 @@
 package net.adrianh.drink.model.dao;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.persistence.PersistenceContext;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.Ingredient;
+import net.adrianh.drink.model.entity.QDrink;
 import net.adrianh.drink.model.entity.QIngredient;
 
 @Stateless
@@ -45,5 +47,16 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
             .where(ingredient.name.startsWithIgnoreCase(s))
             .fetch();
         return ingredients;
+    }
+    public QueryResults<Drink> findDrinksFromIngredientsMatchingNameFromOffset(String s, int offset) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QDrink drink = QDrink.drink;
+	QueryResults<Drink> drinks = queryFactory.selectFrom(drink)
+	    .where(drink.ingredients.any().name.eq(s))
+            .limit(20)
+            .offset(offset)
+            .orderBy(drink.voteCount.desc())
+	    .fetchResults();
+	return drinks;
     }
 }

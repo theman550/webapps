@@ -43,6 +43,17 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .fetch();
         return drinks;
     }
+    public QueryResults<Drink> findDrinksMatchingNameFromOffset(String s, int offset) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QDrink drink = QDrink.drink;
+	QueryResults<Drink> drinks = queryFactory.selectFrom(drink)
+	    .where(drink.name.eq(s))
+            .limit(20)
+            .offset(offset)
+            .orderBy(drink.voteCount.desc())
+	    .fetchResults();
+	return drinks;
+    }
     public QueryResults<Drink> findMostPopularFromOffset(int offset) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
@@ -50,6 +61,16 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .offset(offset)
             .limit(20)
             .orderBy(drink.voteCount.desc())
+            .fetchResults();
+        return drinks;
+    }
+    public QueryResults<Drink> findNewestFromOffest(int offset) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        QueryResults<Drink> drinks = (QueryResults<Drink>) queryFactory.selectFrom(drink)
+            .offset(offset)
+            .limit(20)
+            .orderBy(drink.createdAt.desc())
             .fetchResults();
         return drinks;
     }
