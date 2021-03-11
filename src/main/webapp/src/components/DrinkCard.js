@@ -71,7 +71,9 @@ class DrinkCard extends Component {
                                 ingredients= {tags}
                                 description={data.description}
                                 />
-                            <Timestamp/>
+                            <Timestamp 
+                               
+                                />
                         </div>
                     </div>
                 </div>
