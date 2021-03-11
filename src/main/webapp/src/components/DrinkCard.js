@@ -72,7 +72,7 @@ class DrinkCard extends Component {
                                 description={data.description}
                                 />
                             <Timestamp 
-                               
+                               data={data}
                                 />
                         </div>
                     </div>

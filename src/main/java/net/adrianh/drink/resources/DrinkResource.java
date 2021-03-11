@@ -133,4 +133,62 @@ public class DrinkResource {
         }
     }
     
+    @POST
+    @Path("newest")
+    @Consumes("*/*")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listNewest(String acr) throws JSONException {
+        
+        JSONObject o = new JSONObject(acr);
+        
+        if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
+            List<Drink> allDrinks = new ArrayList<>();
+            
+            QueryResults qr = drinkDAO.findNewestFromOffset((o.getInt("offset")));
+            allDrinks.addAll(qr.getResults());
+            DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
+            
+            return Response.status(Response.Status.OK).entity(drinks).build();
+            
+        } else { //if there is a search term, BRING ME THE BEST OF THEM
+        
+            Set<Drink> allDrinks = new HashSet<>();
+            int total = 0;
+            
+            if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                allDrinks.addAll(dr.getResults());
+                total = (int) dr.getTotal();
+            } else {
+                QueryResults ir = null;
+                for(int i = 0; i < o.getJSONArray("queries").length(); i++){
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    if(allDrinks.isEmpty()){
+                        allDrinks.addAll(ir.getResults());
+                        total = (int) ir.getTotal();
+                    } else {
+                        allDrinks.retainAll(ir.getResults());
+                    }
+                    if(total > ir.getTotal())
+                        total = (int)ir.getTotal();
+                    //this isn't a real solution, however due to time constraints this will have to suffice
+                }
+            }
+            
+            List<Drink> selectedDrinks = new ArrayList<>();
+            selectedDrinks.addAll(allDrinks);
+
+            Collections.sort(selectedDrinks, new Comparator<Drink>(){
+                @Override
+                public int compare(Drink d1, Drink d2) {
+                    return d2.getCreatedAt().compareTo(d1.getCreatedAt());
+                }
+            });
+            
+            DrinkResponse drinkResponse = new DrinkResponse(total, selectedDrinks);
+            return Response.status(Response.Status.OK).entity(drinkResponse).build();
+        }
+    }
+    
+    
 }

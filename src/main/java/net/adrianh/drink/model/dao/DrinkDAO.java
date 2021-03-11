@@ -66,7 +66,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .fetchResults();
         return drinks;
     }
-    public QueryResults<Drink> findNewestFromOffest(int offset) {
+    public QueryResults<Drink> findNewestFromOffset(int offset) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         QueryResults<Drink> drinks = (QueryResults<Drink>) queryFactory.selectFrom(drink)

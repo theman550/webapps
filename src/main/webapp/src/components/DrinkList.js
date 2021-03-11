@@ -24,7 +24,7 @@ export default class DrinkList extends React.Component {
                     label: "Most popular", value: "popular"
                 },
                 {
-                    label: "Newest", value: "new"
+                    label: "Newest", value: "newest"
                 }
             ],
             drinks:
