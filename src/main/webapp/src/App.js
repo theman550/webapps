@@ -19,9 +19,9 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-				this.state = {
-					username: "User"
-				}
+        this.state = {
+            username: "User"
+        }
     }
 
     navigate = (path) => {
@@ -47,14 +47,7 @@ class App extends React.Component {
                 command: () => {
                     this.navigate('/about');
                 }
-            },
-            {
-                label: 'Details',
-                command: () => {
-                    this.navigate('/Details');
-                }
             }
-
         ];
         PrimeReact.ripple = true;  //button effect
 
@@ -65,6 +58,7 @@ class App extends React.Component {
         }
 
         const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
+
 
         const renderEnd = () => {
             if(localStorage.getItem("currentUser") === null){
@@ -97,10 +91,7 @@ class App extends React.Component {
                     <Switch>
                     <Route path="/login">
                         <Login></Login>
-                    </Route>
-                    <Route path="/Details">
-                        <Details/>
-                    </Route>
+                    </Route>             
                     <Route path="/about">
                         <About></About>
                     </Route>
