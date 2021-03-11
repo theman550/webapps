@@ -48,4 +48,13 @@ public class UserDAO extends AbstractDAO<User> {
 	return users;
     }
 
+    public List<User> findUserByName(String name) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        List<User> users = queryFactory.selectFrom(user)
+                .where(user.name.eq(name))
+                .fetch();
+        return users;
+    }
+
 }

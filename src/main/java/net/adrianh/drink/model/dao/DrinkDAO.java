@@ -40,6 +40,8 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         QDrink drink = QDrink.drink;
         List<Drink> drinks = queryFactory.selectFrom(drink)
             .where(drink.name.startsWithIgnoreCase(s))
+            .limit(5)
+            .orderBy(drink.voteCount.desc())
             .fetch();
         return drinks;
     }

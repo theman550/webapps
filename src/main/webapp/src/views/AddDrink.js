@@ -160,13 +160,14 @@ function AddDrink () {
       validateOnBlur={false}
       onSubmit = {(values, formikActions) => {
         setTimeout(() => {      
-            var User = JSON.parse(localStorage.getItem("currentUser"));
+            //var User = JSON.parse(localStorage.getItem("currentUser"));
             console.log("Transmitting drink data to database...");
             console.log(JSON.stringify(values));
-            console.log(User.id);
+            //console.log(User.id);
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'userID' : User.id.toString(), 'userHash' : User.name},
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
                 body: JSON.stringify(values)
             };
             console.log(requestOptions);

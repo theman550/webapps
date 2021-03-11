@@ -45,9 +45,12 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
         QIngredient ingredient = QIngredient.ingredient;
         List<Ingredient> ingredients = queryFactory.selectFrom(ingredient)
             .where(ingredient.name.startsWithIgnoreCase(s))
+            .limit(5)
+            .orderBy(ingredient.drink.voteCount.desc())
             .fetch();
         return ingredients;
     }
+  
     public QueryResults<Drink> findDrinksFromIngredientsMatchingNameFromOffset(String s, int offset) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;

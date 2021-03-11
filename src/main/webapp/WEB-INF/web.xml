@@ -19,6 +19,10 @@
             <param-name>cors.allowed.origins</param-name>
             <param-value>http://localhost:3000,http://localhost:8080</param-value>
         </init-param>
+        <init-param>
+            <param-name>cors.allowed.headers</param-name>
+            <param-value>Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>CORS Filter</filter-name>
