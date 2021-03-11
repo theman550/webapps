@@ -1,4 +1,6 @@
 
+/* global props */
+
 import './Details.css';
 import App from '../App.js';
 import AddDrink from '../views/AddDrink.js';
@@ -11,15 +13,31 @@ import { Button } from 'primereact/button';
 class Details extends React.Component {
 
     constructor(props) {
+
         super(props);
-        this.state = {};
+        this.state = {
+            drinkImage: null,
+            drinkName: "Drink name",
+            ingredients: "ingredints content",
+            description: "description content",
+            visible: false 
+        };
+        this.openDialog = this.openDialog.bind(this);
+        this.closeDialog = this.closeDialog.bind(this);
+    }
+    openDialog() {
+        this.setState({visible: true});
+    }
+
+    closeDialog() {
+        this.setState({visible: false});
     }
 
     render() {
         const data = this.props.data;
         return (
                 <div className="mainDetails">
-                    <div>
+                    <Button label="Details" className="detailsButton p-button-text" onClick={this.openDialog}>
                         <Dialog 
                             className="detailsDialog"                         
                             footer={this.footer}
@@ -28,10 +46,11 @@ class Details extends React.Component {
                             modal={true}
                             onHide={e => this.setState({visible: false})}
                             maximizable={true}
+                            onRequestClose={this.closeDialog}
                             >
                             <div className="header">
-                                <img className="mainImg"/>
-                                <h3 className="drinkName">Drink name</h3>
+                                <img className="mainImg" src={this.props.src} alt={this.props.alt}/>
+                                <h3 className="drinkName">{this.props.drinkName}</h3>
                             </div>
                 
                             <form className="mainForm">
@@ -43,14 +62,7 @@ class Details extends React.Component {
                                     </div>
                                 </Divider>
                 
-                                <div className="description">description content Lorem ipsum dolor sit
-                                    amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
-                                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                    ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                                    Duis aute irure dolor in reprehenderit in voluptate velit es
-                                    se cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culp
-                                    a qui officia deserunt mollit anim id est laborum.</div>
+                                <div className="description">{this.props.description}</div>
                 
                                 <Divider align="left">
                                     <div className="p-d-inline-flex p-ai-center">
@@ -59,30 +71,11 @@ class Details extends React.Component {
                                     </div>
                                 </Divider>
                 
-                                <div className="ingredients">ingredients content Lorem ip
-                                    sum dolor sit amet, consectetur adipiscing elit, sed do 
-                                    eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                                    Ut enim ad minim veniam, quis nostrud exercitation
-                                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                    Duis aute irure dolor in reprehenderit in voluptate velit
-                                    esse cillum dolore eu fugiat nulla pariatur.
-                                    Excepteur sint occaecat cupidatat non proident, sunt in
-                                    culpa qui officia deserunt mollit anim id est laborum.</div>
+                                <div className="ingredients">{this.props.ingredients}</div>
                             </form>
                 
                         </Dialog>
-                
-                        <Button
-                            label='Details'
-                            icon='pi pi-info-circle'
-                            onClick={e => this.setState({visible: true}
-                                    )}
-                            />
-                    </div>
-                
-                
-                
-                
+                    </Button>
                 </div>
                 );
     }

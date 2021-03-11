@@ -12,7 +12,7 @@ from 'react';
 import Home from '../views/Home.js';
 import Details from '../views/Details.js';
 import "./DrinkCard.css";
-
+import Timestamp from "../components/Timestamp.js";
 class DrinkCard extends Component {
 
     constructor(props) {
@@ -26,6 +26,7 @@ class DrinkCard extends Component {
 
     showDetailsDialog() {
         console.log('Click happened');
+
     }
 
     render() {
@@ -63,7 +64,16 @@ class DrinkCard extends Component {
                             </div>
                         </div>
                         <div className="product-grid-item-bottom">
-                            <Button label="Details" className="detailsButton p-button-text" onClick={this.showDetailsDialog}></Button>
+                            <Details 
+                                src={data.image}
+                                alt={data.name}
+                                drinkName={data.name}
+                                ingredients= {tags}
+                                description={data.description}
+                                />
+                            <Timestamp 
+                               
+                                />
                         </div>
                     </div>
                 </div>

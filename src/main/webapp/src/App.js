@@ -19,9 +19,9 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-				this.state = {
-					username: "User"
-				}
+        this.state = {
+            username: "User"
+        }
     }
 
     navigate = (path) => {
@@ -47,44 +47,60 @@ class App extends React.Component {
                 command: () => {
                     this.navigate('/about');
                 }
-            },
-            {
-                label: 'Details',
-                command: () => {
-                    this.navigate('/Details');
-                }
             }
-
         ];
         PrimeReact.ripple = true;  //button effect
 
 
+        const logOut = () => {
+            localStorage.removeItem("currentUser");
+            window.location.reload();
+        }
+
         const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
-				const end = (
-					<div>
-        		<Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
-						<Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
-					</div>
-				)
+
+
+        const renderEnd = () => {
+            if(localStorage.getItem("currentUser") === null){
+                return(
+                    <div>
+                        <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
+                        <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
+                    </div>
+                )
+            }
+            else{
+                return(
+                    <div>
+                        <Button label="Log out" onClick={logOut} ></Button>
+                        <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
+                    </div>
+                ) 
+            }
+        }    
+        const end = (
+            <div>
+                <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
+                <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
+            </div>
+        )
+
         return (
                 <div className="App">
-                    <Menubar model={items} start={navbrand} end={end}></Menubar>
+                    <Menubar model={items} start={navbrand} end={renderEnd}></Menubar>
                     <Switch>
                     <Route path="/login">
                         <Login></Login>
-                    </Route>
-                    <Route path="/Details">
-                        <Details/>
-                    </Route>
+                    </Route>             
                     <Route path="/about">
                         <About></About>
                     </Route>
                     <Route path="/AddDrink">
                         <AddDrink/>
                     </Route>
-										<Route path="/profile">
-											<Profile username={this.state.username}/>
-										</Route>
+                    <Route path="/profile">
+                        <Profile username={this.state.username}/>
+                    </Route>
                     <Route path="/">
                         <Home></Home>
                     </Route>
