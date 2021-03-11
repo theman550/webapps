@@ -16,17 +16,21 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.adrianh.drink.Secured;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.IngredientDAO;
 import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.Ingredient;
+import net.adrianh.drink.model.entity.User;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,9 +62,13 @@ public class DrinkResource {
     UserDAO userDAO;
     
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDrink(Drink d) {
-        d.setUser(userDAO.findUserByID(8L).get(0)); 
+    public Response createDrink(Drink d, @Context SecurityContext securityContext) {
+        // Get the name of the authorized user (derived from a valid token)
+        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+        
+        d.setUser(authorizedUser); 
         for (Ingredient i: d.getIngredients()) {
             i.setDrink(d);
         }
