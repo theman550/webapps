@@ -12,7 +12,7 @@ from 'react';
 import Home from '../views/Home.js';
 import Details from '../views/Details.js';
 import "./DrinkCard.css";
-
+import Timestamp from "../components/Timestamp.js";
 class DrinkCard extends Component {
 
     constructor(props) {
@@ -71,6 +71,7 @@ class DrinkCard extends Component {
                                 ingredients= {tags}
                                 description={data.description}
                                 />
+                            <Timestamp/>
                         </div>
                     </div>
                 </div>
