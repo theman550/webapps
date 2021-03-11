@@ -5,14 +5,29 @@
  */
 package net.adrianh.drink.resources;
 
+import io.jsonwebtoken.Jwts;
 import java.nio.charset.Charset;
+import java.security.Key;
 import java.util.Random;
 import javax.ejb.EJB;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import javax.json.Json;
+import javax.json.JsonValue;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import static net.adrianh.drink.TokenServices.createToken;
 
 import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.User;
@@ -24,18 +39,23 @@ import net.adrianh.drink.model.entity.User;
 
 @Path("user")
 public class UserResource {
-   
+    
     @EJB
     private UserDAO userDAO;
       
-    @GET 
-    @Path("login/{name}/{pw}")
-    public Response loginUser(@PathParam("name") String name, 
-                       @PathParam("pw") String pw){
+    @POST 
+    @Path("login")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loginUser(@FormParam("name") String name, 
+                       @FormParam("pw") String pw){
        
        if(userDAO.checkExist(name, pw)){
             User user = userDAO.login(name, pw);
-            return Response.status(Response.Status.OK).entity(user).build();  
+            
+            // Generate signed
+            String jws = createToken(user.getName());
+
+            return Response.status(Response.Status.OK).entity(Json.createObjectBuilder().add("token", jws).add("username",user.getName()).build()).build();  
        } else{
             return Response.status(Response.Status.UNAUTHORIZED).entity("No such user.").build();  
        } 

@@ -20,12 +20,22 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 				this.state = {
-					username: "User"
+					username: "User",
+                    token: null
 				}
     }
 
     navigate = (path) => {
         this.props.history.push(path);
+    }
+
+    onLogin = (data) => {
+        this.setState({username: data.username, token: data.token});
+    }
+
+    componentDidMount = () => {
+        // Load potentially logged in user
+        this.setState({username: JSON.parse(localStorage.getItem("currentUser"))?.username});
     }
 
     render() {
@@ -96,7 +106,7 @@ class App extends React.Component {
                     <Menubar model={items} start={navbrand} end={renderEnd}></Menubar>
                     <Switch>
                     <Route path="/login">
-                        <Login></Login>
+                        <Login onLogin={this.onLogin}></Login>
                     </Route>
                     <Route path="/Details">
                         <Details/>
@@ -108,7 +118,7 @@ class App extends React.Component {
                         <AddDrink/>
                     </Route>
                     <Route path="/profile">
-                        <Profile username={this.state.username}/>
+                        <Profile user={this.state.username}/>
                     </Route>
                     <Route path="/">
                         <Home></Home>
