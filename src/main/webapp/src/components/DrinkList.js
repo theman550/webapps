@@ -131,21 +131,21 @@ export default class DrinkList extends React.Component {
 		return (
 			<div className="drink-view">
 				<DataView
-						value={this.state.drinks}
-						layout={this.state.layout}
-						sortOrder={this.state.sortOrder}
-						sortField={this.state.sortField}
-						header={header}
-						itemTemplate={itemTemplate}
-            paginator={true}
-            alwaysShowPaginator={true}
-            paginatorPosition={"both"}
-            emptyMessage={"No records found"}
-            onPage={(e) => this.onPage(e)}
-            lazy={true}
-            first={this.state.first}
-            totalRecords={this.state.totalRecords}
-            rows={20} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
+                    value={this.state.drinks}
+                    layout={this.state.layout}
+                    sortOrder={this.state.sortOrder}
+                    sortField={this.state.sortField}
+                    header={header}
+                    itemTemplate={itemTemplate}
+                    paginator={true}
+                    alwaysShowPaginator={true}
+                    paginatorPosition={"both"}
+                    emptyMessage={"No records found"}
+                    onPage={(e) => this.onPage(e)}
+                    lazy={true}
+                    first={this.state.first}
+                    totalRecords={this.state.totalRecords}
+                    rows={20} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
 				></DataView>
 			</div>
 		);
