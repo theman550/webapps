@@ -38,6 +38,7 @@ public class Drink implements Serializable {
     private Long id;
     private String name;
     private String description;
+    private String image;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
