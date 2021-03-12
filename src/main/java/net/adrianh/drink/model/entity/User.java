@@ -31,7 +31,10 @@ public class User implements Serializable {
     private String accountName;
     
     private String displayName;
+    
+    @JsonbTransient
     private String password;
+    @JsonbTransient
     private String salt;
 
     //a user has many created drinks
