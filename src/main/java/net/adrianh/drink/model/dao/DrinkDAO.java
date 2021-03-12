@@ -45,6 +45,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .fetch();
         return drinks;
     }
+    //find matching name from offset ordered by popularity
     public QueryResults<Drink> findDrinksMatchingNameFromOffset(String s, int offset) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;
