@@ -75,7 +75,6 @@ class App extends React.Component {
                 return(
                     <div>
                         <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
-                        <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
                     </div>
                 )
             }
@@ -88,12 +87,6 @@ class App extends React.Component {
                 ) 
             }
         }    
-        const end = (
-            <div>
-                <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
-                <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
-            </div>
-        )
 
         return (
                 <div className="App">
