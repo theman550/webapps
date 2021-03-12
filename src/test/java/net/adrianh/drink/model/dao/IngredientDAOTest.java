@@ -43,18 +43,19 @@ public class IngredientDAOTest {
     @Before
     public void init() {
 	
-	User usr = new User(null,"usr", "pw", "salt", null, null);
+	User usr = new User(null,"man","usr", "pw", "salt", null, null);
 	usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 
-	Ingredient i = new Ingredient("Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,null);
-	Ingredient i2 = new Ingredient("Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,null);
+	Ingredient ing = new Ingredient("Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,null);
+	Ingredient ing2 = new Ingredient("Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,null);
 	Drink d = new Drink();
+        d.setIngredients(new ArrayList<>());
 	d.setName("Margarita");
 	d.setDescription("Mums");
 	d.setUser(usr);
-	d.addIngredient(i);
-	d.addIngredient(i2);
+	d.addIngredient(ing);
+	d.addIngredient(ing2);
 	usr.addDrink(d);
 	userDAO.create(usr);
     }

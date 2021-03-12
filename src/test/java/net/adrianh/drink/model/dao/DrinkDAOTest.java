@@ -16,9 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.ArrayList;
-import static java.lang.System.out;
 import net.adrianh.drink.model.entity.User;
 import net.adrianh.drink.model.entity.Vote;
+import java.util.Date;
 
 @RunWith(Arquillian.class)
 public class DrinkDAOTest {
@@ -37,15 +37,40 @@ public class DrinkDAOTest {
     
     @Before
     public void init() {
-        User usr = new User(null,"usr", "pw", "salt", null, null);
+        User usr = new User(1L,"man","usr", "pw", "salt", null, null);
         
         usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 	Drink d = new Drink();
         d.setName("Margarita");
+        d.setVoteCount(1);
+        
+        Drink d2 = new Drink();
+        d2.setName("d2");
+        d2.setVoteCount(2);
+        
+        Drink d3 = new Drink();
+        d3.setName("d3");
+        d3.setVoteCount(3);
+        
+        Drink d4 = new Drink();
+        d4.setName("d4");
+        d4.setVoteCount(4);
+        
+        Drink d5 = new Drink(); //DIFFERENT DRINK, SAME NAME
+        d5.setName("d4");
+        d5.setVoteCount(5);
 
 	d.setUser(usr);
 	usr.addDrink(d);
+	d2.setUser(usr);
+	usr.addDrink(d2);
+	d3.setUser(usr);
+	usr.addDrink(d3);
+	d4.setUser(usr);
+	usr.addDrink(d4);
+        d5.setUser(usr);
+	usr.addDrink(d5);
 
 	userDAO.create(usr);
     }
@@ -70,6 +95,36 @@ public class DrinkDAOTest {
 	List<Drink> margaritas = drinkDAO.findDrinksMatchingName("Margarita");
 	Assert.assertTrue(margaritas.get(0).getName().equals("Margarita"));
     } 
+    
+    @Test
+    //True if autocomplete can find a drink starting with the serach term
+    public void checkThatAutoCompleteWorks() {
+        List<Drink> margaritas = drinkDAO.findDrinksStartMatchingName("Mar");
+	Assert.assertTrue(margaritas.get(0).getName().equals("Margarita"));
+    }
+    
+    @Test
+    //True if drinks[0] is the 3rd most popular drink from all added drinks (drink name "d3")
+    public void checkThatMostPopularFromOffsetWorks() {
+        List<Drink> drinks = drinkDAO.findMostPopularFromOffset(2).getResults();
+        Assert.assertTrue(drinks.get(0).getName().equals("d3"));
+    }
+    
+    @Test
+    //True if drinks[0] is the 2nd most popular drink from all added drinks that start with "d" (drink name "d4" with 4 votes)
+    public void checkThatFindDrinksMatchingNameFromOffsetWorks() {
+        List<Drink> drinks = drinkDAO.findDrinksMatchingNameFromOffset("d4", 1).getResults();
+        Assert.assertTrue(drinks.get(0).getName().equals("d4"));
+        Assert.assertEquals(4, drinks.get(0).getVoteCount());
+    }
+    
+    @Test
+    //True if drinks[0] is the 4th newest drink from all added drinks (drink name "d2")
+    //Due to it being impossible to predict in what order the drinks are created, this test WILL fail from time to time
+    public void checkThatFindNewestFromOffset() {
+        List<Drink> drinks = drinkDAO.findNewestFromOffset(3).getResults();
+        Assert.assertEquals("d2", drinks.get(0).getName());
+    }
    
     @After
     public void clean(){

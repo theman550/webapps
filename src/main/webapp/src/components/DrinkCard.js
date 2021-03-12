@@ -68,11 +68,11 @@ class DrinkCard extends Component {
                                 src={data.image}
                                 alt={data.name}
                                 drinkName={data.name}
-                                ingredients= {tags}
+                                ingredients={data.ingredients}
                                 description={data.description}
                                 />
                             <Timestamp 
-                               
+                               data={data}
                                 />
                         </div>
                     </div>

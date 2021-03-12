@@ -19,13 +19,23 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            username: "User"
-        }
+				this.state = {
+					username: "User",
+                    token: null
+				}
     }
 
     navigate = (path) => {
         this.props.history.push(path);
+    }
+
+    onLogin = (data) => {
+        this.setState({username: data.username, token: data.token});
+    }
+
+    componentDidMount = () => {
+        // Load potentially logged in user
+        this.setState({username: JSON.parse(localStorage.getItem("currentUser"))?.username});
     }
 
     render() {
@@ -65,7 +75,6 @@ class App extends React.Component {
                 return(
                     <div>
                         <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
-                        <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
                     </div>
                 )
             }
@@ -78,19 +87,13 @@ class App extends React.Component {
                 ) 
             }
         }    
-        const end = (
-            <div>
-                <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
-                <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
-            </div>
-        )
 
         return (
                 <div className="App">
                     <Menubar model={items} start={navbrand} end={renderEnd}></Menubar>
                     <Switch>
                     <Route path="/login">
-                        <Login></Login>
+                        <Login onLogin={this.onLogin}></Login>
                     </Route>             
                     <Route path="/about">
                         <About></About>
@@ -99,7 +102,7 @@ class App extends React.Component {
                         <AddDrink/>
                     </Route>
                     <Route path="/profile">
-                        <Profile username={this.state.username}/>
+                        <Profile user={this.state.username}/>
                     </Route>
                     <Route path="/">
                         <Home></Home>

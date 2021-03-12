@@ -9,7 +9,7 @@ import { Messages } from 'primereact/messages';
 
 const ingredientItem = {
       name: '',
-      percentage: '',
+      abv: '',
       amount: '',
       unit: '',
 };
@@ -17,10 +17,11 @@ const ingredientItem = {
 const initialValues = {
       name: '',
       description: '',
+      image: '',
     ingredients: [
       {
       name: '',
-      percentage: '',
+      abv: '',
       amount: '',
       unit: '',
       }
@@ -32,11 +33,12 @@ const validationSchema=Yup.object({
     .required('A name is required'),
     description: Yup.string()
     .required('Please describe how to make your drink'),
+    image: Yup.string().url(),
     ingredients: Yup.array().of(
       Yup.object().shape({
         name: Yup.string()
         .required('A name is required'),
-        percentage: Yup.number()
+        abv: Yup.number()
         .required('Required')
         .min(0, "Must be at least 0%")
         .max(100, "Must be less than 100%"),
@@ -91,6 +93,16 @@ function AddDrink () {
             style={styles.descriptionInput}
         />
         <ErrorMessage name={`description`} />
+        <TextInput
+            type="text"
+            onChange={handleChange('image')}
+            onBlur={handleBlur('image')}
+            value={values.image}
+            name="image"
+            autoFocus
+            placeholder="URL to a picture"
+            style={styles.input}
+        />
         <FieldArray name="ingredients">
           {({ remove, push }) => (
             <div>
@@ -101,9 +113,9 @@ function AddDrink () {
                     <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
                     <Field name={`ingredients[${index}].name`}  />
                     <ErrorMessage name={`ingredients.${index}.name`} />
-                  <label htmlFor={`ingredients.${index}.percentage`}>&emsp;Percentage:&ensp;</label>
-                    <Field name={`ingredients.${index}.percentage`} />                    
-                    <ErrorMessage name={`ingredients.${index}.percentage`} />
+                  <label htmlFor={`ingredients.${index}.abv`}>&emsp;Percentage:&ensp;</label>
+                    <Field name={`ingredients.${index}.abv`} />                    
+                    <ErrorMessage name={`ingredients.${index}.abv`} />
                   <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
                     <Field name={`ingredients.${index}.amount`} />
                     <ErrorMessage name={`ingredients.${index}.amount`} />
@@ -160,23 +172,28 @@ function AddDrink () {
       validateOnBlur={false}
       onSubmit = {(values, formikActions) => {
         setTimeout(() => {      
-            var User = JSON.parse(localStorage.getItem("currentUser"));
+            //var User = JSON.parse(localStorage.getItem("currentUser"));
             console.log("Transmitting drink data to database...");
             console.log(JSON.stringify(values));
-            console.log(User.id);
+            //console.log(User.id);
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'userID' : User.id.toString(), 'userHash' : User.name},
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
                 body: JSON.stringify(values)
             };
             console.log(requestOptions);
             fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-            .then(response => response.ok ?
-              showCreatedMessage()
-              :
-              showErrorMessage())
-            .then(formikActions.resetForm)
-            formikActions.setSubmitting(false);
+            .then(response => {
+              if(response.ok){
+                showCreatedMessage();
+                formikActions.resetForm();
+              }
+              else{
+                showErrorMessage()
+              }
+            })
+            formikActions.setSubmitting(false)
           }, 500);
           }}
       />

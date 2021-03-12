@@ -45,8 +45,14 @@
 }
 
 .ingredients{
-    margin: 5px 5px 5px 5px;
-    padding: 5px 5px 5px 5px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.ingredient{
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
 }
 .mainForm{
     text-align: left;

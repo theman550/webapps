@@ -38,6 +38,7 @@ public class Drink implements Serializable {
     private Long id;
     private String name;
     private String description;
+    private String image;
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -60,7 +61,6 @@ public class Drink implements Serializable {
     
     @PostLoad
     private void voteCount() { //TODO change to a query that fixes the counts of the votes
-        voteCount = 0;
         for (Vote v : this.votes) {
             this.voteCount += v.getVal();
         }
