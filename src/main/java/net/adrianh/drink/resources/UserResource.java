@@ -7,8 +7,15 @@ package net.adrianh.drink.resources;
 
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.KeySpec;
 import java.security.Key;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.EJB;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -49,36 +56,56 @@ public class UserResource {
     public Response loginUser(@FormParam("name") String name, 
                        @FormParam("pw") String pw){
        
-       if(userDAO.checkExist(name, pw)){
-            User user = userDAO.login(name, pw);
-            
+        String salt = userDAO.findSaltByName(name);
+       
+       if(userDAO.areCredentialsMatching(name, mockHash(pw+salt))){
+            User user = userDAO.login(name, mockHash(pw+salt));
             // Generate signed
             String jws = createToken(user.getName());
 
             return Response.status(Response.Status.OK).entity(Json.createObjectBuilder().add("token", jws).add("username",user.getName()).build()).build();  
        } else{
-            return Response.status(Response.Status.UNAUTHORIZED).entity("No such user.").build();  
+            return Response.status(Response.Status.UNAUTHORIZED).entity("No such user.").build();
        } 
     }  
       
     @POST 
-    @Path("create/{name}/{pw}")
-    public Response addUser(@PathParam("name") String name, 
+    @Path("create/{accName}/{dispName}/{pw}")
+    public Response addUser(@PathParam("accName") String accName, 
+                       @PathParam("dispName") String dispName,
                        @PathParam("pw") String pw){
         
-        User user = new User();
-        user.setName(name);
-        user.setSalt(generateMockSalt());
-        user.setPassword(pw+user.getSalt());
-        userDAO.create(user);
-        return Response.status(Response.Status.OK).entity("User created!").build();  
+        if(userDAO.isAccNameUnique(accName)){
+            User user = new User();
+            user.setAccountName(accName);
+            user.setDisplayName(dispName);
+            user.setSalt(generateMockSalt());
+            user.setPassword(mockHash(pw+user.getSalt()));
+            userDAO.create(user);
+            return Response.status(Response.Status.OK).entity("User created!").build(); 
+        } else{
+           return Response.status(Response.Status.CONFLICT).entity("Account name not unique!").build(); 
+        }
+  
     }  
+    
+    private String mockHash(String password){
+        
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        
+        return new String(hashedPassword, Charset.forName("UTF-8"));     
+    }
     
     private String generateMockSalt(){
         byte[] array = new byte[7]; 
         new Random().nextBytes(array);
-        String mockSalt = new String(array, Charset.forName("UTF-8"));
-
-        return mockSalt;
+       
+        return new String(array, Charset.forName("UTF-8"));
     }
 }

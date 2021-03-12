@@ -1,7 +1,13 @@
 package net.adrianh.drink.model.dao;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,37 +23,57 @@ public class UserDAO extends AbstractDAO<User> {
     public UserDAO() {
         super(User.class);
     }   
-    
+       
     public User login(String name, String pw){
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.name.eq(name).and(user.password.eq(user.salt.prepend(pw))))
+            .where(user.accountName.eq(name).and(user.password.eq(pw)))
             .fetch();
         return users.get(0);
     }
     
 
-    public boolean checkExist(String name, String pw){        
+    public boolean areCredentialsMatching(String name, String pw){        
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.name.eq(name).and(user.password.eq(user.salt.prepend(pw))))
+            .where(user.accountName.eq(name).and(user.password.eq(pw)))
+            .fetch();
+                
+        return !users.isEmpty();
+    }
+    
+    public boolean isAccNameUnique(String name){        
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        List<User> users = queryFactory.selectFrom(user)
+            .where(user.accountName.eq(name))
             .fetch();
         
-        return users.size() > 0;
+        return users.isEmpty();
     }
     
 
     public List<User> findUserByID(Long id){
-	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-	QUser user = QUser.user;
-	List<User> users = queryFactory.selectFrom(user)
-	    .where(user.id.eq(id))
-	    .fetch();
-	return users;
+	      JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	      QUser user = QUser.user;
+	      List<User> users = queryFactory.selectFrom(user)
+	          .where(user.id.eq(id))
+	          .fetch();
+	      return users;
     }
-
+  
+   public String findSaltByName(String name){
+	      JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	      QUser user = QUser.user;
+	      List<User> users = queryFactory.selectFrom(user)
+	        .where(user.accountName.eq(name))
+	        .fetch();
+        
+	    return users.get(0).getSalt();
+    }
+  
     public List<User> findUserByName(String name) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
@@ -56,5 +82,4 @@ public class UserDAO extends AbstractDAO<User> {
                 .fetch();
         return users;
     }
-
 }

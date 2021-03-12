@@ -42,7 +42,7 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-                
+                            
         this.state = {
             showRegFields: false,
         };
@@ -52,14 +52,15 @@ class Login extends Component {
             tempSolutionFix: '',
         };
 
-        this.state = {
+      this.state = {
             input: [],
-            messages: []
+            regMessages: [],
+            loginMessage: ''
         };
         
         this.handleChange = this.handleChange.bind(this);
     }
-    
+
     handleChange(event) {
         let input = this.state.input;
         input[event.target.name] = event.target.value;
@@ -88,11 +89,12 @@ class Login extends Component {
             if(response.ok){
                 this.setState({tempSolutionFix: ["Login worked!"]});
                 return response.json(); 
+            } else if(response.status === 401){
+                this.setState({loginMessage: ["No such account!"]});
+            } else{
+                this.setState({loginMessage: ["Error"]});
             }
-            else{
-                this.setState({tempSolutionFix: ["No such user"]});
-            }
-        })
+        }) 
         .then(UserAsJson => {
             if (UserAsJson) {
                 console.log(UserAsJson);
@@ -103,14 +105,23 @@ class Login extends Component {
     }
 
     addUser() {
-        if(this.validateReg()){
+        if(this.validateReg()){            
             fetch(process.env.REACT_APP_API_URL+'/user/create/'+
-            this.state.input.regname+'/'+this.state.input.regpw, {
+            this.state.input.regname+'/'+this.state.input.displayname+'/'+this.state.input.regpw, {
                 method: 'POST',
-                headers: {'Content-Type':'application/x-www-form-urlencoded'}
+                headers: {'Content-Type':'application/x-www-form-urlencoded'}              
             })
-            this.setState({messages: ["Welcome " + this.state.input.regname + "!"]});
-        }
+            .then(response => {
+                if(response.status === 200){
+                    this.clearRegFields();
+                    this.setState({regMessages: ["Register worked!"]});
+                } else if(response.status === 409){
+                    this.setState({regMessages: ["Accountname must be unique!"]});
+                } else{
+                    this.setState({regMessages: ["Error"]});
+                }
+            })   
+        }     
     }
 
     validateReg(){
@@ -121,7 +132,12 @@ class Login extends Component {
         
         if (!input.regname) {
             isValid = false;
-            newErrors.push("Must enter name.");
+            newErrors.push("Must enter account name.");
+        }
+        
+        if (!input.displayname) {
+            isValid = false;
+            newErrors.push("Must enter display name.");
         }
 
         if (!input.regpw) {
@@ -138,10 +154,19 @@ class Login extends Component {
             isValid = false;
             newErrors.push("Passwords must match.");
         } 
-  
-        this.setState({messages: newErrors});
+        
+        this.setState({regMessages: newErrors});
                         
         return isValid;
+    }
+    
+    clearRegFields() {
+        let input = this.state.input;
+        
+        input.regname = '';
+        input.displayname = '';
+        input.regpw = '';
+        input.confpw = '';
     }
     
     render() {
@@ -152,6 +177,7 @@ class Login extends Component {
         if(localStorage.getItem("currentUser") === null){
             return (
                <div className="login-page">
+
                 
                     <div  className="split left">
                         <div className="background" class="left-background">
@@ -202,19 +228,19 @@ class Login extends Component {
                             </div>
                 
                             {/* <div><TextInput/></div>*/}
-                      
+
                             <div className="p-logButton">
                                 <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
-                                    <h4>{this.state.tempSolutionFix} </h4>
+                                    <h4>{this.state.loginMessage} </h4>
                                     <div className="btnLogIn">{loginButton}</div>
                                 </div>
                             </div>
+
                             
                             <Divider layout="horizontal">
                                 <b>OR</b>
                             </Divider>
-                           
                             <div className="register">
                                 <h3 class='child inline-block-child'>No account?</h3>
                                 <div class='child inline-block-child'>{toggleButton} </div>
@@ -229,10 +255,22 @@ class Login extends Component {
                                                     <i className="pi pi-user"></i>
                                                 </span>
                                                 <InputText 
-                                                    placeholder="Username" 
+                                                    placeholder="Account name" 
                                                     name="regname" 
                                                     onChange={ this.handleChange } 
                                                     value={ this.state.input.regname } />
+                                            </div>
+                                        </div>
+                                        <div className="p-username" class="username-input">
+                                            <div className="p-inputgroup">
+                                                <span className="p-inputgroup-addon">
+                                                    <i className="pi pi-user"></i>
+                                                </span>
+                                                <InputText 
+                                                    placeholder="Display name" 
+                                                    name="displayname" 
+                                                    onChange={ this.handleChange } 
+                                                    value={ this.state.input.displayname } />
                                             </div>
                                         </div>
                                         <div className="p-password" class="password-input">
@@ -250,7 +288,7 @@ class Login extends Component {
                                             <div className="p-inputgroup">
                                                 <span className="p-inputgroup-addon">**</span>
                                                 <InputText 
-                                                    placeholder="Repeat password" 
+                                                    placeholder="Confirm password" 
                                                     type="password" 
                                                     name="confpw" 
                                                     onChange={ this.handleChange } 
@@ -258,7 +296,7 @@ class Login extends Component {
                                             </div>
                                         </div>
                                         
-                                        <h3>{this.state.messages[0]} </h3> 
+                                        <h3>{this.state.regMessages[0]} </h3> 
                                         <div>{regButton}</div>
                     
                                     </div>
