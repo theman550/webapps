@@ -5,35 +5,22 @@
  */
 package net.adrianh.drink.resources;
 
-import io.jsonwebtoken.Jwts;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.spec.KeySpec;
-import java.security.Key;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.crypto.spec.PBEKeySpec;
 import javax.ejb.EJB;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.SignatureAlgorithm;
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
 import javax.json.Json;
-import javax.json.JsonValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import static net.adrianh.drink.TokenServices.createToken;
 
 import net.adrianh.drink.model.dao.UserDAO;
@@ -61,9 +48,9 @@ public class UserResource {
        if(userDAO.areCredentialsMatching(name, mockHash(pw+salt))){
             User user = userDAO.login(name, mockHash(pw+salt));
             // Generate signed
-            String jws = createToken(user.getName());
+            String jws = createToken(user.getAccountName());
 
-            return Response.status(Response.Status.OK).entity(Json.createObjectBuilder().add("token", jws).add("username",user.getName()).build()).build();  
+            return Response.status(Response.Status.OK).entity(Json.createObjectBuilder().add("token", jws).add("username",user.getAccountName()).build()).build();  
        } else{
             return Response.status(Response.Status.UNAUTHORIZED).entity("No such user.").build();
        } 

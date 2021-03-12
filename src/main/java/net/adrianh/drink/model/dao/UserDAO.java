@@ -56,29 +56,29 @@ public class UserDAO extends AbstractDAO<User> {
     
 
     public List<User> findUserByID(Long id){
-	      JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-	      QUser user = QUser.user;
-	      List<User> users = queryFactory.selectFrom(user)
-	          .where(user.id.eq(id))
-	          .fetch();
-	      return users;
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        List<User> users = queryFactory.selectFrom(user)
+            .where(user.id.eq(id))
+            .fetch();
+        return users;
     }
   
    public String findSaltByName(String name){
-	      JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-	      QUser user = QUser.user;
-	      List<User> users = queryFactory.selectFrom(user)
-	        .where(user.accountName.eq(name))
-	        .fetch();
-        
-	    return users.get(0).getSalt();
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        List<User> users = queryFactory.selectFrom(user)
+          .where(user.accountName.eq(name))
+          .fetch();
+
+      return users.get(0).getSalt();
     }
   
     public List<User> findUserByName(String name) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-                .where(user.name.eq(name))
+                .where(user.accountName.eq(name))
                 .fetch();
         return users;
     }
