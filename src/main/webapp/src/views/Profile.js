@@ -35,7 +35,7 @@ export default class Profile extends React.Component {
 			<div className="profile-page">
 				<div className="p-d-flex p-m-2 p-ai-center">
 					<Avatar className="p-mr-2" icon="pi pi-user" size="xlarge" shape="circle" />
-					<h1>{this.props.username}</h1>
+					<h1>{this.props.user}</h1>
 				</div>
 				<TabView activeIndex={this.state.activeTab} onTabChange={(e) => this.changeTab(e)}>
 					<TabPanel onClick={() => window.location.hash="info"} header="Info">
