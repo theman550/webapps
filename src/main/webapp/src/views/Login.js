@@ -181,13 +181,8 @@ class Login extends Component {
                 
                     <div  className="split left">
                         <div className="background" class="left-background">
-                            <div class="container" >
-                
-                                <img src={fresh}/>
-                                <img src={fresh2}/>
-                                <img src={fresh3}/>
-                                <img src={fresh4}/>
-                
+                            <div class="container" >                
+                                <img src={fresh}/>                                         
                             </div>
                         </div>
                 
