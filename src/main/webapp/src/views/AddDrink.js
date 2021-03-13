@@ -17,6 +17,7 @@ const ingredientItem = {
 const initialValues = {
       name: '',
       description: '',
+      image: '',
     ingredients: [
       {
       name: '',
@@ -32,6 +33,7 @@ const validationSchema=Yup.object({
     .required('A name is required'),
     description: Yup.string()
     .required('Please describe how to make your drink'),
+    image: Yup.string().url(),
     ingredients: Yup.array().of(
       Yup.object().shape({
         name: Yup.string()
@@ -91,6 +93,16 @@ function AddDrink () {
             style={styles.descriptionInput}
         />
         <ErrorMessage name={`description`} />
+        <TextInput
+            type="text"
+            onChange={handleChange('image')}
+            onBlur={handleBlur('image')}
+            value={values.image}
+            name="image"
+            autoFocus
+            placeholder="URL to a picture"
+            style={styles.input}
+        />
         <FieldArray name="ingredients">
           {({ remove, push }) => (
             <div>
@@ -160,23 +172,28 @@ function AddDrink () {
       validateOnBlur={false}
       onSubmit = {(values, formikActions) => {
         setTimeout(() => {      
-            var User = JSON.parse(localStorage.getItem("currentUser"));
+            //var User = JSON.parse(localStorage.getItem("currentUser"));
             console.log("Transmitting drink data to database...");
             console.log(JSON.stringify(values));
-            console.log(User.id);
+            //console.log(User.id);
             const requestOptions = {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'userID' : User.id.toString(), 'userHash' : User.name},
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
                 body: JSON.stringify(values)
             };
             console.log(requestOptions);
             fetch(process.env.REACT_APP_API_URL+"/drinks/", requestOptions)
-            .then(response => response.ok ?
-              showCreatedMessage()
-              :
-              showErrorMessage())
-            .then(formikActions.resetForm)
-            formikActions.setSubmitting(false);
+            .then(response => {
+              if(response.ok){
+                showCreatedMessage();
+                formikActions.resetForm();
+              }
+              else{
+                showErrorMessage()
+              }
+            })
+            formikActions.setSubmitting(false)
           }, 500);
           }}
       />

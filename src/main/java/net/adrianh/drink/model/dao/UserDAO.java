@@ -63,7 +63,7 @@ public class UserDAO extends AbstractDAO<User> {
 	    .fetch();
 	return users;
     }
-    
+   
     public String findSaltByName(String name){
 	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QUser user = QUser.user;
@@ -74,4 +74,13 @@ public class UserDAO extends AbstractDAO<User> {
 	return users.get(0).getSalt();
     }
     
+
+    public List<User> findUserByName(String name) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        List<User> users = queryFactory.selectFrom(user)
+                .where(user.accountName.eq(name))
+                .fetch();
+        return users;
+    }
 }

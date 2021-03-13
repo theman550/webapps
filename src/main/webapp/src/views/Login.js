@@ -72,14 +72,17 @@ class Login extends Component {
     }
     
     loginUser() {
-        fetch(process.env.REACT_APP_API_URL+'/user/login/'+
-        this.state.input.logname+'/'+this.state.input.logpw, {
-            method: 'GET',
-            headers: {'Content-Type':'application/x-www-form-urlencoded'}
-        })    
+        fetch(process.env.REACT_APP_API_URL+'/user/login/', {
+            method: 'POST',
+            headers: {'Content-Type':'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                'name': this.state.input.logname,
+                'pw': this.state.input.logpw
+            })
+        })
         .then(response => {
             if(response.ok){
-                this.setState({tempSolutionFix: ["Login worked!"]});
+                this.setState({loginMessage: ["Login worked!"]});
                 return response.json(); 
             } else if(response.status === 401){
                 this.setState({loginMessage: ["No such account!"]});
@@ -88,8 +91,11 @@ class Login extends Component {
             }
         }) 
         .then(UserAsJson => {
-            console.log(UserAsJson);
-            localStorage.setItem('currentUser', JSON.stringify(UserAsJson));
+            if (UserAsJson) {
+                console.log(UserAsJson);
+                this.props.onLogin(UserAsJson);
+                localStorage.setItem('currentUser', JSON.stringify(UserAsJson));
+            }
         })
     }
 
@@ -117,7 +123,6 @@ class Login extends Component {
         let input = this.state.input;
         let newErrors = [];
         let isValid = true;
-  
         
         if (!input.regname) {
             isValid = false;

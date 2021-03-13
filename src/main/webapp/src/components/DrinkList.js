@@ -24,7 +24,7 @@ export default class DrinkList extends React.Component {
                     label: "Most popular", value: "popular"
                 },
                 {
-                    label: "Newest", value: "new"
+                    label: "Newest", value: "newest"
                 }
             ],
             drinks:
@@ -117,38 +117,38 @@ export default class DrinkList extends React.Component {
                 </div>
                 );
 
-        const itemTemplate = (data, layout) => {
-            if (!data) {
-                return null;
-            }
-            if (layout === "list") {
-                return <DrinkListItem data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkListItem>;
-            }
-            if (layout === "grid") {
-                return <DrinkCard data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkCard>;
-            }
-        };
-        return (
-                    <div className="drink-view">
-                    <DataView
-                        value={this.state.drinks}
-                        layout={this.state.layout}
-                        sortOrder={this.state.sortOrder}
-                        sortField={this.state.sortField}
-                        header={header}
-                        itemTemplate={itemTemplate}
-                        paginator={true}
-                        alwaysShowPaginator={true}
-                        paginatorPosition={"both"}
-                        emptyMessage={"No records found"}
-                        onPage={(e) => this.onPage(e)}
-                        lazy={true}
-                        first={this.state.first}
-                        totalRecords={22}
-                        rows={20} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
-                        ></DataView>
-                </div>
-                );
-    }
+    const itemTemplate = (data, layout) => {
+      if (!data) {
+        return null;
+      }
+      if (layout === "list") {
+        return <DrinkListItem data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkListItem>;
+      }
+      if (layout === "grid") {
+        return <DrinkCard data={data} handleIngredientTagClick={this.handleIngredientTagClick} queries={this.state.searchQueries} sendVote={this.sendVote}></DrinkCard>;
+      }
+    };
+		return (
+			<div className="drink-view">
+				<DataView
+						value={this.state.drinks}
+						layout={this.state.layout}
+						sortOrder={this.state.sortOrder}
+						sortField={this.state.sortField}
+						header={header}
+						itemTemplate={itemTemplate}
+            paginator={true}
+            alwaysShowPaginator={true}
+            paginatorPosition={"both"}
+            emptyMessage={"No records found"}
+            onPage={(e) => this.onPage(e)}
+            lazy={true}
+            first={this.state.first}
+            totalRecords={this.state.totalRecords}
+            rows={20} //rows = nr. elements according to the ABSOLUTE BUFOONS @primefaces
+				></DataView>
+			</div>
+		);
+	}
 }
 
