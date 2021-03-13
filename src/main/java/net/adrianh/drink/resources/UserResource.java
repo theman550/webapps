@@ -100,22 +100,4 @@ public class UserResource {
         return new String(array, Charset.forName("UTF-8"));
     }
 
-    @POST
-    @Path("mydrinks")
-    @Consumes("*/*")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Drink> getDrinks(@Context SecurityContext securityContext) {
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        return authorizedUser.getDrinks();
-    }
-
-    @POST
-    @Path("upvoted")
-    @Consumes("*/*")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Vote> getVotes(@Context SecurityContext securityContext) {
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        return authorizedUser.getVotes();
-    }
-
 }

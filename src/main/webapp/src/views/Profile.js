@@ -29,25 +29,46 @@ export default class Profile extends React.Component {
         }
     }
 
-    render() {
-        const getDrinks = (e) => {
-            if (localStorage.getItem("currentUser") != null) {
-                const requestOptions = {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
-                    body: JSON.stringify(e)
-                };
+    getUserCreatedDrinks = (e) => {
+        if (localStorage.getItem("currentUser") != null) {
+            const requestOptions = {
+                method: 'POST',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
+                body: JSON.stringify(e)
+            };
 
-                fetch(process.env.REACT_APP_API_URL + "/drinks/mydrinks/", requestOptions)
-                        .then(response => {
-                            console.log(response);
-                        })
-            } else {
-                console.log("Oi! reg or login!");
+            fetch(process.env.REACT_APP_API_URL + "/drinks/mydrinks/", requestOptions)
+                    .then(response => {
+                        console.log(response);
+                    })
+        } else {
+            console.log("Oi! reg or login!");
 
-            }
         }
+    }
+
+    getUserUpvotedDrinks = (e) => {
+        if (localStorage.getItem("currentUser") != null) {
+            const requestOptions = {
+                method: 'POST',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
+                body: JSON.stringify(e)
+            };
+
+            fetch(process.env.REACT_APP_API_URL + "/drinks/upvoted/", requestOptions)
+                    .then(response => {
+                        console.log(response);
+                    })
+        } else {
+            console.log("Oi! reg or login!");
+
+        }
+    }
+
+    render() {
+
         return (
                 <div className="profile-page">
                     <div className="p-d-flex p-m-2 p-ai-center">
@@ -63,11 +84,11 @@ export default class Profile extends React.Component {
                                 </div>
                             </div>
                         </TabPanel>
-                        <TabPanel onClick={(e) => getDrinks()} header="My Drinks">
+                        <TabPanel onClick={(e) => this.getUserCreatedDrinks(e)} header="My Drinks">
                             <DrinkList fetchType="/drinks/mydrinks/"></DrinkList>
                         </TabPanel>
-                        <TabPanel onClick={() => window.location.hash = "upvoted"} header="Upvoted">
-                            <DrinkList fetchType="/user/upvoted/"></DrinkList>
+                        <TabPanel onClick={(e) => this.getUserUpvotedDrinks(e)} header="Upvoted">
+                            <DrinkList fetchType="/drinks/upvoted/"></DrinkList>
                         </TabPanel>
                     </TabView>
                 </div>

@@ -31,6 +31,7 @@ import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.Ingredient;
 import net.adrianh.drink.model.entity.User;
+import net.adrianh.drink.model.entity.Vote;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,14 +79,36 @@ public class DrinkResource {
         return Response.status(Response.Status.OK).build();
     }
 
+    /**
+     *
+     * @param securityContext
+     * @return user created drinks
+     */
     @POST
     @Secured
     @Path("mydrinks")
     @Consumes("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response  getUserCreatedDrinks(@Context SecurityContext securityContext) {
-        List<Drink> userDrinks = drinkDAO.findDrinksByUser(securityContext.getUserPrincipal().getName());
+    public Response getUserCreatedDrinks(@Context SecurityContext securityContext) {
+        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+        List<Drink> userDrinks = drinkDAO.findCreatedDrinksByUser(authorizedUser.getAccountName());
         return Response.status(Response.Status.OK).entity(userDrinks).build();
+    }
+
+    /**
+     *
+     * @param securityContext
+     * @return user upVoted drinks
+     */
+    @POST
+    @Secured
+    @Path("upvoted")
+    @Consumes("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserUpvotedDrinks(@Context SecurityContext securityContext) {
+        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+        List<Vote> userUpvotes = drinkDAO.findUpvotedDrinksByUser(authorizedUser.getAccountName());
+        return Response.status(Response.Status.OK).entity(userUpvotes).build();
     }
 
     @POST
