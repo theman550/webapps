@@ -48,14 +48,18 @@ public class VoteResource {
     public Response upvote(Drink d, @Context SecurityContext securityContext) {
          //Get the name of the authorized user (derived from a valid token)
        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+       long userID = authorizedUser.getId();
+       long drinkID = d.getId();
        
-       if(!voteDAO.hasUserVotedDrink(authorizedUser.getId(), d.getId())){
+            //upvote drink
+       if(!voteDAO.hasUserVotedDrink(userID, drinkID)){
             Vote v = new Vote(null, authorizedUser, d, 1);          
             voteDAO.create(v);
             return Response.status(Response.Status.OK).entity("added").build();
-       } else if(voteDAO.hasUserUpvotedDrink(authorizedUser.getId(), d.getId())){
-           Vote removeVote = voteDAO.selectVote(authorizedUser.getId(), d.getId());
-           voteDAO.remove(removeVote);
+            
+            //already upvoted? remove upvote
+       } else if(voteDAO.hasUserUpvotedDrink(userID,drinkID)){
+           voteDAO.remove(voteDAO.selectVote(userID, drinkID));
            return Response.status(Response.Status.OK).entity("removed").build();
        }
        
