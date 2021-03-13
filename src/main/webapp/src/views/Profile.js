@@ -29,7 +29,7 @@ export default class Profile extends React.Component {
         }
     }
 
-    getUserCreatedDrinks = (e) => {
+    jsonAuthHandler = (e, apiURL) => {
         if (localStorage.getItem("currentUser") != null) {
             const requestOptions = {
                 method: 'POST',
@@ -38,26 +38,7 @@ export default class Profile extends React.Component {
                 body: JSON.stringify(e)
             };
 
-            fetch(process.env.REACT_APP_API_URL + "/drinks/mydrinks/", requestOptions)
-                    .then(response => {
-                        console.log(response);
-                    })
-        } else {
-            console.log("Oi! reg or login!");
-
-        }
-    }
-
-    getUserUpvotedDrinks = (e) => {
-        if (localStorage.getItem("currentUser") != null) {
-            const requestOptions = {
-                method: 'POST',
-                credentials: 'include',
-                headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`},
-                body: JSON.stringify(e)
-            };
-
-            fetch(process.env.REACT_APP_API_URL + "/drinks/upvoted/", requestOptions)
+            fetch(process.env.REACT_APP_API_URL + apiURL, requestOptions)
                     .then(response => {
                         console.log(response);
                     })
@@ -84,10 +65,10 @@ export default class Profile extends React.Component {
                                 </div>
                             </div>
                         </TabPanel>
-                        <TabPanel onClick={(e) => this.getUserCreatedDrinks(e)} header="My Drinks">
+                        <TabPanel onClick={(e) => this.jsonAuthHandler(e, "/drinks/mydrinks/")} header="My Drinks">
                             <DrinkList fetchType="/drinks/mydrinks/"></DrinkList>
                         </TabPanel>
-                        <TabPanel onClick={(e) => this.getUserUpvotedDrinks(e)} header="Upvoted">
+                        <TabPanel onClick={(e) => this.jsonAuthHandler(e, "/drinks/upvoted/")} header="Upvoted">
                             <DrinkList fetchType="/drinks/upvoted/"></DrinkList>
                         </TabPanel>
                     </TabView>
