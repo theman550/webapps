@@ -21,16 +21,20 @@ import javax.ws.rs.core.Response;
 import javax.json.Json;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+import net.adrianh.drink.Secured;
 import static net.adrianh.drink.TokenServices.createToken;
 
 import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.User;
 import net.adrianh.drink.model.entity.Vote;
+import org.json.JSONException;
 
 /**
  * @author andra
@@ -101,15 +105,18 @@ public class UserResource {
     }
 
     @POST
-    @Path("mydrinks")
+    @Secured
+    @Path("mydrinks/{sortOption}")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Drink> getDrinks(@Context SecurityContext securityContext) {
+    public List<Drink> getDrinks(@PathParam("sortOption") String sortOption, String queryObject, @Context SecurityContext securityContext, @Context ResourceContext resourceContext) throws JSONException {
+        DrinkResource r = resourceContext.getResource(DrinkResource.class);
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        return authorizedUser.getDrinks();
+        return authorizedUser.getCreatedDrinks();
     }
 
     @POST
+    @Secured
     @Path("upvoted")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)

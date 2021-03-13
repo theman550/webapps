@@ -1,6 +1,7 @@
 package net.adrianh.drink.model.dao;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -46,47 +47,62 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         return drinks;
     }
     //find matching name from offset ordered by popularity
-    public QueryResults<Drink> findDrinksMatchingNameFromOffset(String s, int offset) {
+    public QueryResults<Drink> findDrinksMatchingNameFromOffset(String s, int offset, String user) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;
-	QueryResults<Drink> drinks = queryFactory.selectFrom(drink)
-	    .where(drink.name.eq(s))
+        JPAQuery jpaQuery = queryFactory.selectFrom(drink)
+            .where(drink.name.eq(s))
             .limit(20)
             .offset(offset)
-            .orderBy(drink.voteCount.desc())
-	    .fetchResults();
+            .orderBy(drink.voteCount.desc());
+        if (user != null) {
+            jpaQuery.where(drink.user.accountName.eq(user));
+        }
+	QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
 	return drinks;
     }
+
     //find matching name from offset ordered by newest
-    public QueryResults<Drink> findDrinksMatchingNameFromOffsetByNewest(String s, int offset) {
+    public QueryResults<Drink> findDrinksMatchingNameFromOffsetByNewest(String s, int offset, String user) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;
-	QueryResults<Drink> drinks = queryFactory.selectFrom(drink)
-	    .where(drink.name.eq(s))
+        JPAQuery jpaQuery = queryFactory.selectFrom(drink)
+            .where(drink.name.eq(s))
             .limit(20)
             .offset(offset)
-            .orderBy(drink.createdAt.desc())
-	    .fetchResults();
+            .orderBy(drink.createdAt.desc());
+        if (user != null) {
+            jpaQuery.where(drink.user.accountName.eq(user));
+        }
+	QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
 	return drinks;
     }
-    public QueryResults<Drink> findMostPopularFromOffset(int offset) {
+
+    public QueryResults<Drink> findMostPopularFromOffset(int offset, String user) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
-        QueryResults<Drink> drinks = (QueryResults<Drink>) queryFactory.selectFrom(drink)
+        JPAQuery jpaQuery = queryFactory.selectFrom(drink)
             .offset(offset)
             .limit(20)
-            .orderBy(drink.voteCount.desc())
-            .fetchResults();
+            .orderBy(drink.voteCount.desc());
+        // Add where clause if fetching a specific user's drinks
+        if (user != null) {
+            jpaQuery.where(drink.user.accountName.eq(user));
+        }
+        QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
-    public QueryResults<Drink> findNewestFromOffset(int offset) {
+    public QueryResults<Drink> findNewestFromOffset(int offset, String user) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
-        QueryResults<Drink> drinks = (QueryResults<Drink>) queryFactory.selectFrom(drink)
+        JPAQuery jpaQuery = queryFactory.selectFrom(drink)
             .offset(offset)
             .limit(20)
-            .orderBy(drink.createdAt.desc())
-            .fetchResults();
+            .orderBy(drink.createdAt.desc());
+        if (user != null) {
+            jpaQuery.where(drink.user.accountName.eq(user));
+        }
+        QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
 }
