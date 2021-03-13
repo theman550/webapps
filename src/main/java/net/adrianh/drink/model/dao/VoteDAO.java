@@ -50,4 +50,14 @@ public class VoteDAO extends AbstractDAO<Vote> {
         return !votes.isEmpty();
     }
     
+    public boolean hasUserDownvotedDrink(long userID, long drinkID){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QVote vote = QVote.vote;
+        List<Vote> votes = queryFactory.selectFrom(vote)
+            .where(vote.user_id.id.eq(userID).and(vote.drink.id.eq(drinkID).and(vote.val.eq((-1)))))
+            .fetch();
+       
+        return !votes.isEmpty();
+    }
+    
 }

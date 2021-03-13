@@ -44,6 +44,7 @@ public class VoteResource {
 
     @POST
     @Secured
+    @Path("upvote")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response upvote(Drink d, @Context SecurityContext securityContext) {
          //Get the name of the authorized user (derived from a valid token)
@@ -65,4 +66,33 @@ public class VoteResource {
        
        return Response.status(Response.Status.CONFLICT).build(); 
     }    
+    
+    
+    @POST
+    @Secured
+    @Path("downvote")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response downvote(Drink d, @Context SecurityContext securityContext) {
+         //Get the name of the authorized user (derived from a valid token)
+       User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+       long userID = authorizedUser.getId();
+       long drinkID = d.getId();
+       
+            //downvote drink
+       if(!voteDAO.hasUserVotedDrink(userID, drinkID)){
+            Vote v = new Vote(null, authorizedUser, d, (-1));          
+            voteDAO.create(v);
+            return Response.status(Response.Status.OK).entity("added").build();
+            
+            //already downvoted? remove downvote
+       } else if(voteDAO.hasUserDownvotedDrink(userID,drinkID)){
+           voteDAO.remove(voteDAO.selectVote(userID, drinkID));
+           return Response.status(Response.Status.OK).entity("removed").build();
+       }
+       
+       return Response.status(Response.Status.CONFLICT).build(); 
+    }    
+    
+    
+    
 }
