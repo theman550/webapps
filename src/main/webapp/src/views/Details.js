@@ -2,16 +2,13 @@
 /* global props */
 
 import './Details.css';
-import App from '../App.js';
-import AddDrink from '../views/AddDrink.js';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import React from 'react';
 import { Divider } from 'primereact/divider';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { Knob } from 'primereact/knob';
 
 class Details extends React.Component {
 
@@ -21,13 +18,14 @@ class Details extends React.Component {
         this.state = {
             visible: false,
             unitMap: {
-                DECILITRE: 'dl',
-                CENTILITRE: 'cl',
-                MILLILITRE: 'ml',
-                LITRE: 'L',
-                GRAMS: 'g',
-                PIECES: 'pcs'
-            }
+                DECILITRE: {unit:'dl',inLitres: 0.1},
+                CENTILITRE: {unit: 'cl', inLitres: 0.01},
+                MILLILITRE: {unit: 'ml', inLitres: 0.001},
+                LITRE: {unit: 'L', inLitres: 1},
+                GRAMS: {unit: 'g', inLitres: null},
+                PIECES: {unit: 'pcs', inLitres: null}
+            },
+            totalAlc: 0
         };
     }
     openDialog = () => {
@@ -36,6 +34,27 @@ class Details extends React.Component {
 
     closeDialog = () => {
         this.setState({visible: false});
+    }
+
+    calculateTotalAlc = () => {
+        let alcVol = 0;
+        let totalVol = 0;
+        this.props.ingredients.map((ingredient) => {
+            // Only include ingredients measured in volume
+            if (ingredient.unit != 'PIECES' && ingredient.unit != 'GRAMS') {
+                console.log(ingredient.name);
+                // Add the total volume of alcohol, converted into litres
+                alcVol += ingredient.amount * (ingredient.abv / 100) * this.state.unitMap[ingredient.unit].inLitres;
+                // Add the total volume, converted into litres
+                totalVol += ingredient.amount * this.state.unitMap[ingredient.unit].inLitres;
+            }
+        this.setState({totalAlc: Math.round((alcVol / totalVol) * 100)});
+        });
+    }
+
+    componentDidMount = () => {
+        // Compute the total alc percentage of drink on load
+        this.calculateTotalAlc();
     }
 
     render() {
@@ -50,7 +69,7 @@ class Details extends React.Component {
                 <div className="p-d-flex p-flex-row amount">
                     <div className="p-mr-1 p-text-bold">{ingredient.amount}</div>
                     {/* Map the unit name to a more presentable format (DECILITRE -> dl) if possible */}
-                    <div className="p-mr-1 p-text-bold">{this.state.unitMap[ingredient.unit] ? this.state.unitMap[ingredient.unit] : ingredient.unit}</div>
+                    <div className="p-mr-1 p-text-bold">{this.state.unitMap[ingredient.unit] ? this.state.unitMap[ingredient.unit].unit : ingredient.unit}</div>
                 </div>
                 <div className="p-d-flex p-flex-row name">
                     <div className="p-mr-1">{ingredient.name}</div>
@@ -85,6 +104,18 @@ class Details extends React.Component {
                                 </div>
                             </Divider>
                             <div className="description">{this.props.description}</div>
+                            <div className="stats p-mt-3 p-d-flex">
+                                <div className="p-text-center p-text-bold">
+                                    <Knob
+                                        id="alcoholKnob" 
+                                        value={this.state.totalAlc}
+                                        size={75}
+                                        readOnly={true}
+                                    />
+                                    <span>ALC %</span>
+                                </div>
+                            </div>
+
                             <Divider align="left">
                                 <div className="p-d-inline-flex p-ai-center">
                                     <b>Ingredients</b>
