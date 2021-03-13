@@ -70,6 +70,7 @@ class DrinkCard extends Component {
                                 drinkName={data.name}
                                 ingredients={data.ingredients}
                                 description={data.description}
+                                creator={data.user.accountName}
                                 />
                             <Timestamp 
                                data={data}

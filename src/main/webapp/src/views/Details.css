@@ -1,20 +1,33 @@
-.mainDetails{
-
-}
-.mainImg{
-
-    float: left;
-    text-align: left;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: .1rem;
-    box-shadow: 0 0 .1rem;
-    margin: .5rem .75rem;
-}
-.header{
+.mainDetails .content{
     display: flex;
     text-align: center;
+    height: 100%;
+}
+
+.mainDetails .content .leftSide {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    background-size: cover;
+    background-position: center;
+    width: auto !important;
+    height: auto !important;
+    max-width: 66%;
+    flex: 1 1 0;
+}
+
+.mainDetails .content .leftSide .drinkName {
+    color: white;
+    font-size: 3.5rem;
+    margin: 0 0 1rem 1rem;
+    max-width: 75%;
+    text-align: left;
+}
+
+.mainDetails .content .desc {
+    flex: 1 1 0;
+    text-align: left;
+    padding-left: 1rem;
 }
 
 .header h3{
@@ -25,35 +38,56 @@
     text-align: center;
 
 }
-.p-dialog {
-
-    display: flex;
-
+.mainDetails .p-dialog {
+    height: 100%;
     flex-direction: column;
     pointer-events: auto;
-
-    max-height: 80%;
-
-
     max-width: 100%;
     width: 60%;
+    background-color: rgb(248, 248, 248) !important;
 }
 
-.description{
-    margin: 5px 5px 5px 5px;
-    padding: 5px 5px 5px 5px;
+.mainDetails .p-dialog-content {
+    height: 100%; 
 }
+
+.mainDetails .p-dialog-content, .p-dialog-header {
+    background-color: rgb(248, 248, 248) !important;
+}
+
+.mainDetails .p-divider-content {
+    background-color: rgb(248, 248, 248) !important;
+
+}
+
 
 .ingredients{
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
 }
 .ingredient{
     display: flex;
     flex-flow: row;
-    justify-content: space-between;
-}
-.mainForm{
+    align-items: center;
+    justify-content: flex-start;
     text-align: left;
+    border-radius: .2rem;
+    margin-bottom: .5rem;
+    padding: .75rem .2rem;
+    background-color: white;
+    box-shadow: 0 0.0625rem 0.125rem 0 rgb(0 0 0 / 6%);
+}
+
+.ingredient .amount {
+    width: 25%; /* Makes the names of all ingredients line up nicely. Can probably be done in a better way  ¯\_(ツ)_/¯  */
+}
+
+.ingredient .name {
+    flex: 1;
+    align-content: space-between;
+}
+
+.ingredient .name .tag {
+    flex: 1;
+    text-align: right;
 }
