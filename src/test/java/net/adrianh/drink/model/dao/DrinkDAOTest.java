@@ -16,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import net.adrianh.drink.model.entity.User;
 import net.adrianh.drink.model.entity.Vote;
 import java.util.Date;
@@ -119,11 +121,30 @@ public class DrinkDAOTest {
     }
     
     @Test
-    //True if drinks[0] is the 4th newest drink from all added drinks (drink name "d2")
-    //Due to it being impossible to predict in what order the drinks are created, this test WILL fail from time to time
+    //True if drinks[0] is the 4th newest drink from all added drinks
+    //Due to it being impossible to predict in what order the drinks are created, we have to compare 2 lists of results, instead of predetermined drink
     public void checkThatFindNewestFromOffset() {
-        List<Drink> drinks = drinkDAO.findNewestFromOffset(3).getResults();
-        Assert.assertEquals("d2", drinks.get(0).getName());
+        List<Drink> drinks = drinkDAO.findAll(); //get all drinks
+        Collections.sort(drinks, new Comparator<Drink>(){ //sort drinks by date using a comparator
+                @Override
+                public int compare(Drink d1, Drink d2) {
+                    return d1.getCreatedAt().compareTo(d2.getCreatedAt());
+                }
+        });
+        Assert.assertEquals(drinks.get(2).getName(), drinkDAO.findNewestFromOffset(2).getResults().get(0).getName()); //make sure findNewestFromOffset find the right one
+    }
+    
+    @Test
+    //True if drinks[0] is the 3rd newest drink from all added drinks 
+    public void checkThatFindDrinksMatchingNameFromOffsetByNewest() {
+        List<Drink> drinks = drinkDAO.findDrinksStartMatchingName("d4"); //get all drinks
+        Collections.sort(drinks, new Comparator<Drink>(){ //sort drinks by date using a comparator
+                @Override
+                public int compare(Drink d1, Drink d2) {
+                    return d1.getCreatedAt().compareTo(d2.getCreatedAt());
+                }
+        });
+        Assert.assertEquals(drinks.get(1).getName(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1).getResults().get(0).getName()); //make sure findNewestFromOffset find the right one
     }
    
     @After

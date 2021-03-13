@@ -58,7 +58,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
 	return drinks;
     }
     //find matching name from offset ordered by newest
-    public QueryResults findDrinksMatchingNameFromOffsetByNewest(String s, int offset) {
+    public QueryResults<Drink> findDrinksMatchingNameFromOffsetByNewest(String s, int offset) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;
 	QueryResults<Drink> drinks = queryFactory.selectFrom(drink)
