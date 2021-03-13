@@ -19,10 +19,10 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-				this.state = {
-					username: "User",
-                    token: null
-				}
+        this.state = {
+            username: "User",
+            token: null
+        }
     }
 
     navigate = (path) => {
@@ -71,22 +71,21 @@ class App extends React.Component {
 
 
         const renderEnd = () => {
-            if(localStorage.getItem("currentUser") === null){
+            if (localStorage.getItem("currentUser") === null) {
                 return(
-                    <div>
-                        <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
-                    </div>
-                )
-            }
-            else{
+                        <div>
+                            <Button label="Log in" onClick={() => this.navigate('/Login')} ></Button>
+                        </div>
+                        )
+            } else {
                 return(
-                    <div>
-                        <Button label="Log out" onClick={logOut} ></Button>
-                        <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
-                    </div>
-                ) 
+                        <div>
+                            <Button label="Log out" onClick={logOut} ></Button>
+                            <Button icon="pi pi-user" className="p-button-rounded p-button-plain p-ml-2" onClick={() => this.navigate('/profile')}></Button>
+                        </div>
+                        )
             }
-        }    
+        }
 
         return (
                 <div className="App">
