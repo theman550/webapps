@@ -25,6 +25,8 @@ if (window.location.hash) {
 this.setState({activeTab: this.state.tabHashes.indexOf(window.location.hash.substring(1))});
 }
 }
+
+render() {
 const getDrinks = () => {
 if (localStorage.getItem("currentUser") != null){
 const requestOptions = {
@@ -32,17 +34,15 @@ method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json', 'Authorization': Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}},
         body: JSON.stringify(e)
-};
+        };
         fetch(process.env.REACT_APP_API_URL + "/drinks/mydrinks/", requestOptions)
         .then(response => {
         console.log(response);
         })
-} else{
+        } else{
 console.log("Oi! reg or login!");
+        }
 }
-}
-render() {
-
 return (
         <div className="profile-page">
     <div className="p-d-flex p-m-2 p-ai-center">
@@ -58,7 +58,7 @@ return (
                 </div>
             </div>
         </TabPanel>
-        <TabPanel onClick={() => getDrinks ()} header="My Drinks">
+        <TabPanel onClick={() => getDrinks()} header="My Drinks">
             <DrinkList fetchType="/drinks/mydrinks/"></DrinkList>
         </TabPanel>
         <TabPanel onClick={() => window.location.hash = "upvoted"} header="Upvoted">
@@ -68,6 +68,5 @@ return (
 </div>
         )
 }
-
 
 }
