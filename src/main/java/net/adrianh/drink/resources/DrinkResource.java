@@ -156,13 +156,13 @@ public class DrinkResource {
             int total = 0;
             
             if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
-                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
                 for(int i = 0; i < o.getJSONArray("queries").length(); i++){
-                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
                     if(allDrinks.isEmpty()){
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
