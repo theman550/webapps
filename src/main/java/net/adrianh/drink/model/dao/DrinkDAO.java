@@ -27,6 +27,16 @@ public class DrinkDAO extends AbstractDAO<Drink> {
 	    .fetch();
 	return drinks;
     }
+    
+      public List<Drink> findDrinksByUser(String name) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        List<Drink> drinks = queryFactory.selectFrom(drink)
+                .where(drink.user.accountName.eq(name))
+                .fetch();
+        return drinks;
+    }
+      
     public List<Drink> findDrinkByID(Long id){
 	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;

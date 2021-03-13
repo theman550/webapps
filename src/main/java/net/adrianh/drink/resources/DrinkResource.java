@@ -37,158 +37,171 @@ import org.json.JSONObject;
 
 @Path("drinks")
 public class DrinkResource {
-        
+
     @Data
     @XmlRootElement
     public class AutoCompleteResponse {
+
         private String type;
         private String name;
         private int offset;
     }
-    
+
     @Data
     @XmlRootElement
     @AllArgsConstructor
     public class DrinkResponse {
+
         private int total;
         private List<Drink> drinks;
     }
-    
+
     @EJB
     DrinkDAO drinkDAO;
     @EJB
     IngredientDAO ingredientDAO;
     @EJB
     UserDAO userDAO;
-    
+
     @POST
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDrink(Drink d, @Context SecurityContext securityContext) {
         // Get the name of the authorized user (derived from a valid token)
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        
-        d.setUser(authorizedUser); 
-        for (Ingredient i: d.getIngredients()) {
+
+        d.setUser(authorizedUser);
+        for (Ingredient i : d.getIngredients()) {
             i.setDrink(d);
         }
         drinkDAO.create(d);
         return Response.status(Response.Status.OK).build();
     }
-    
+
+    @POST
+    @Secured
+    @Path("mydrinks")
+    @Consumes("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response  getUserCreatedDrinks(@Context SecurityContext securityContext) {
+        List<Drink> userDrinks = drinkDAO.findDrinksByUser(securityContext.getUserPrincipal().getName());
+        return Response.status(Response.Status.OK).entity(userDrinks).build();
+    }
+
     @POST
     @Path("popular")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listPopular(String acr) throws JSONException {
-        
+
         JSONObject o = new JSONObject(acr);
-        
-        if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
+
+        if ("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
-            
+
             QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("offset")));
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
-            
+
             return Response.status(Response.Status.OK).entity(drinks).build();
-            
+
         } else { //if there is a search term, BRING ME THE BEST OF THEM
-        
+
             Set<Drink> allDrinks = new HashSet<>();
             int total = 0;
-            
-            if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
+
+            if ("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
                 QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
-                for(int i = 0; i < o.getJSONArray("queries").length(); i++){
+                for (int i = 0; i < o.getJSONArray("queries").length(); i++) {
                     ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
-                    if(allDrinks.isEmpty()){
+                    if (allDrinks.isEmpty()) {
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
                     } else {
                         allDrinks.retainAll(ir.getResults());
                     }
-                    if(total > ir.getTotal())
-                        total = (int)ir.getTotal();
+                    if (total > ir.getTotal()) {
+                        total = (int) ir.getTotal();
+                    }
                     //this isn't a real solution, however due to time constraints this will have to suffice
                 }
             }
-            
+
             List<Drink> selectedDrinks = new ArrayList<>();
             selectedDrinks.addAll(allDrinks);
 
-            Collections.sort(selectedDrinks, new Comparator<Drink>(){
+            Collections.sort(selectedDrinks, new Comparator<Drink>() {
                 @Override
                 public int compare(Drink d1, Drink d2) {
                     return d2.getVoteCount() - d1.getVoteCount();
                 }
             });
-            
+
             DrinkResponse drinkResponse = new DrinkResponse(total, selectedDrinks);
             return Response.status(Response.Status.OK).entity(drinkResponse).build();
         }
     }
-    
+
     @POST
     @Path("newest")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
     public Response listNewest(String acr) throws JSONException {
-        
+
         JSONObject o = new JSONObject(acr);
-        
-        if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
+
+        if ("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
-            
+
             QueryResults qr = drinkDAO.findNewestFromOffset((o.getInt("offset")));
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
-            
+
             return Response.status(Response.Status.OK).entity(drinks).build();
-            
+
         } else { //if there is a search term, BRING ME THE BEST OF THEM
-        
+
             Set<Drink> allDrinks = new HashSet<>();
             int total = 0;
-            
-            if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
+
+            if ("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
                 QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
-                for(int i = 0; i < o.getJSONArray("queries").length(); i++){
+                for (int i = 0; i < o.getJSONArray("queries").length(); i++) {
                     ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
-                    if(allDrinks.isEmpty()){
+                    if (allDrinks.isEmpty()) {
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
                     } else {
                         allDrinks.retainAll(ir.getResults());
                     }
-                    if(total > ir.getTotal())
-                        total = (int)ir.getTotal();
+                    if (total > ir.getTotal()) {
+                        total = (int) ir.getTotal();
+                    }
                     //this isn't a real solution, however due to time constraints this will have to suffice
                 }
             }
-            
+
             List<Drink> selectedDrinks = new ArrayList<>();
             selectedDrinks.addAll(allDrinks);
 
-            Collections.sort(selectedDrinks, new Comparator<Drink>(){
+            Collections.sort(selectedDrinks, new Comparator<Drink>() {
                 @Override
                 public int compare(Drink d1, Drink d2) {
                     return d2.getCreatedAt().compareTo(d1.getCreatedAt());
                 }
             });
-            
+
             DrinkResponse drinkResponse = new DrinkResponse(total, selectedDrinks);
             return Response.status(Response.Status.OK).entity(drinkResponse).build();
         }
     }
-    
-    
+
 }
