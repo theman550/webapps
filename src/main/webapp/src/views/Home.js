@@ -3,16 +3,16 @@ import DrinkList from "../components/DrinkList.js";
 
 export default class Home extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    return (
-      <div>
-        <h1>Home</h1>
-				<DrinkList fetchType="/drinks/"></DrinkList>
-      </div>
-    );
-  }
+    render() {
+        return (
+                <div>
+                    <h1>Home</h1>
+                    <DrinkList fetchType="/drinks/"></DrinkList>
+                </div>
+                );
+    }
 }
