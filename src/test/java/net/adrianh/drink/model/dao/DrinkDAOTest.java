@@ -58,10 +58,12 @@ public class DrinkDAOTest {
         Drink d4 = new Drink();
         d4.setName("d4");
         d4.setVoteCount(4);
+        d4.setDescription("d4.1");
         
         Drink d5 = new Drink(); //DIFFERENT DRINK, SAME NAME
         d5.setName("d4");
         d5.setVoteCount(5);
+        d5.setDescription("d4.2");
 
 	d.setUser(usr);
 	usr.addDrink(d);
@@ -123,28 +125,30 @@ public class DrinkDAOTest {
     @Test
     //True if drinks[0] is the 4th newest drink from all added drinks
     //Due to it being impossible to predict in what order the drinks are created, we have to compare 2 lists of results, instead of predetermined drink
-    public void checkThatFindNewestFromOffset() {
+    //Seems as if it saves to the databse whenever it feels like it. The test will sometimes work and sometimes not. Welp, RIP[*]
+    public void checkThatFindNewestFromOffsetWorks() {
         List<Drink> drinks = drinkDAO.findAll(); //get all drinks
         Collections.sort(drinks, new Comparator<Drink>(){ //sort drinks by date using a comparator
                 @Override
                 public int compare(Drink d1, Drink d2) {
-                    return d1.getCreatedAt().compareTo(d2.getCreatedAt());
+                    return d2.getCreatedAt().compareTo(d1.getCreatedAt());
                 }
         });
-        Assert.assertEquals(drinks.get(2).getName(), drinkDAO.findNewestFromOffset(2).getResults().get(0).getName()); //make sure findNewestFromOffset find the right one
+        Assert.assertEquals(drinks.get(2).getId(), drinkDAO.findNewestFromOffset(2).getResults().get(0).getId()); //comapre by id, since name is the same
     }
     
     @Test
-    //True if drinks[0] is the 3rd newest drink from all added drinks 
+    //True if drinks[0] is the 2nd newest drink from all added drinks 
+    //Seems as if it saves to the databse whenever it feels like it. The test will sometimes work and sometimes not. Welp, RIP[*]
     public void checkThatFindDrinksMatchingNameFromOffsetByNewest() {
         List<Drink> drinks = drinkDAO.findDrinksStartMatchingName("d4"); //get all drinks
         Collections.sort(drinks, new Comparator<Drink>(){ //sort drinks by date using a comparator
                 @Override
                 public int compare(Drink d1, Drink d2) {
-                    return d1.getCreatedAt().compareTo(d2.getCreatedAt());
+                    return d2.getCreatedAt().compareTo(d1.getCreatedAt());
                 }
         });
-        Assert.assertEquals(drinks.get(1).getName(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1).getResults().get(0).getName()); //make sure findNewestFromOffset find the right one
+        Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1).getResults().get(0).getId()); //compare by Id, since name is the same
     }
    
     @After
