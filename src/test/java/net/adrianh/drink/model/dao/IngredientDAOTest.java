@@ -45,7 +45,7 @@ public class IngredientDAOTest {
     @Before
     public void init() {
 	
-	User usr = new User(null,"man","usr", "pw", "salt", null, null);
+	User usr = new User(null,"man","usr", "pw", "salt", null, null, null);
 	usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 
