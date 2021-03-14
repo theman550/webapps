@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import Search from '../components/Search';
 import DrinkCard from '../components/DrinkCard';
 import DrinkListItem from '../components/DrinkListItem';
+import { Button } from 'primereact/button';
 import Dashboard from "../components/Dashboard";
 
 import './DrinkList.css';
@@ -77,6 +78,18 @@ export default class DrinkList extends React.Component {
                 });
     }
 
+    fetchBrave = () => {
+        console.log("hello cvunt")
+        fetch(process.env.REACT_APP_API_URL + "/drinks/brave", {
+            method: "GET"
+        })
+                .then(response => response.ok ? response.json() : Promise.reject(response.status))
+                .then(data => this.setState({drinks: [data], totalRecords: 1}))
+                .catch((error) => {
+                    console.error(error);
+                });
+    }
+
     setURLParam = (param,value) => {
         const params = new URLSearchParams(window.location.search);
         if (!value || value?.length == 0) {
@@ -139,6 +152,13 @@ export default class DrinkList extends React.Component {
                             <Search
                                 searchQueries={this.state.searchQueries}
                                 onQueryChange={this.onQueryChange}
+                                />
+                        </div>
+                        <div className="brave-button">
+                            <Button
+                                label="I'm brave"
+                                tooltip="What does fate have in store for you?"
+                                onClick={() => this.fetchBrave()}
                                 />
                         </div>
                     </div>
