@@ -11,9 +11,11 @@ import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -75,7 +77,7 @@ public class DrinkResource {
         drinkDAO.create(d);
         return Response.status(Response.Status.OK).build();
     }
-    
+          
     @POST
     @Path("popular")
     @Secured // NOTE: The filter will still allow access to this particular endpoint even without proper auth header since auth is optional here
@@ -211,5 +213,36 @@ public class DrinkResource {
         }
     }
     
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response drinkFromId(@PathParam("id") Long Id) throws JSONException {
+        return Response.status(Response.Status.OK).entity(drinkDAO.findDrinkByID(Id)).build();
+    }
     
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    public Response removeDrink(@PathParam("id") Long Id, @Context SecurityContext securityContext) {
+        // Get the name of the authorized user (derived from a valid token)
+        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+        System.out.println("HELLO THERE" + authorizedUser.getAccountName());
+        if(drinkDAO.findDrinkByID(Id).getUser().equals(authorizedUser)){
+            drinkDAO.remove(drinkDAO.findDrinkByID(Id));
+            return Response.status(Response.Status.OK).entity("Succesfully deleted!").build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("Not your drink!").build(); 
+        }
+    }
+    
+    @GET
+    @Path("brave")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response iAmFeelingBrave(){
+        double total = drinkDAO.findMostPopularFromOffset(0).getTotal();
+        total = Math.floor(Math.random() * total);
+        Drink drink = drinkDAO.findMostPopularFromOffset((int) total).getResults().get(0);
+        return Response.status(Response.Status.OK).entity(drink).build();
+    }
 }

@@ -68,8 +68,8 @@ public class UserDAO extends AbstractDAO<User> {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-          .where(user.accountName.eq(name))
-          .fetch();
+            .where(user.accountName.eq(name))
+            .fetch();
 
       return users.get(0).getSalt();
     }

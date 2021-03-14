@@ -9,6 +9,8 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { Knob } from 'primereact/knob';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import reddrink from "../images/reddrink.png";
 
 class Details extends React.Component {
 
@@ -16,7 +18,6 @@ class Details extends React.Component {
 
         super(props);
         this.state = {
-            visible: false,
             unitMap: {
                 DECILITRE: {unit:'dl',inLitres: 0.1},
                 CENTILITRE: {unit: 'cl', inLitres: 0.01},
@@ -28,18 +29,11 @@ class Details extends React.Component {
             totalAlc: 0
         };
     }
-    openDialog = () => {
-        this.setState({visible: true});
-    }
-
-    closeDialog = () => {
-        this.setState({visible: false});
-    }
 
     calculateTotalAlc = () => {
         let alcVol = 0;
         let totalVol = 0;
-        this.props.ingredients.map((ingredient) => {
+        this.props.drink.ingredients.map((ingredient) => {
             // Only include ingredients measured in volume
             if (ingredient.unit != 'PIECES' && ingredient.unit != 'GRAMS') {
                 console.log(ingredient.name);
@@ -55,17 +49,58 @@ class Details extends React.Component {
     componentDidMount = () => {
         // Compute the total alc percentage of drink on load
         this.calculateTotalAlc();
+        // Add drink id to url
+        const params = new URLSearchParams(window.location.search);
+        params.set('drink',this.props.drink.id);
+        window.history.replaceState({},'', `${window.location.pathname}?${params}`);
+    }
+
+    onDelete = () => {
+        fetch(process.env.REACT_APP_API_URL + "/drinks/" + this.props.drink.id, {
+            method: "DELETE",
+            headers: {'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}
+        })
+                .then(response => response.ok ? "" : Promise.reject(response.status))
+                .then(() => {
+                                
+                                const params = new URLSearchParams(window.location.search)
+                                params.delete('drink')
+                                window.history.replaceState({},'', `${window.location.pathname}?${params}`);
+                                window.location.reload()
+                            })
+                .catch((error) => {
+                    console.error(error);
+                });
+    }
+
+    onHide = () => {
+        // Remove drink id from url when exiting details view
+        const params = new URLSearchParams(window.location.search);
+        params.delete('drink');
+        window.history.replaceState({},'', `${window.location.pathname}?${params}`);
+        // Close the dialog
+        this.props.closeDialog();
     }
 
     render() {
-        const data = this.props.data;
+        const renderFooter = () => {
+            return(
+                <div>
+                    {isCreator
+                        ? <Button label="Delete" icon="pi pi-trash" className="p-button-danger deleteButton" tooltip="Delete this drink" onClick={() => this.onDelete()}/>
+                        : ""
+                    }
+                </div>
+            );
+        }
+        const isCreator = JSON.parse(localStorage.getItem("currentUser"))?.username == this.props.drink.user.accountName
         const header = (
             <div>
-                {this.props.creator}
+                {this.props.drink.user.displayName}
             </div>
         );
-        const ingredients = this.props.ingredients.map((ingredient) => 
-            <div className="ingredient">
+        const ingredients = this.props.drink.ingredients.map((ingredient) => 
+            <div key={ingredient.name} className="ingredient">
                 <div className="p-d-flex p-flex-row amount">
                     <div className="p-mr-1 p-text-bold">{ingredient.amount}</div>
                     {/* Map the unit name to a more presentable format (DECILITRE -> dl) if possible */}
@@ -79,21 +114,21 @@ class Details extends React.Component {
             </div>); 
         return (
                 <div className="mainDetails">
-                    <Button label="Details" className="detailsButton p-button-text" onClick={this.openDialog}>
-                    </Button>
                     <Dialog 
                         className="detailsDialog"                         
-                        visible={this.state.visible}
+                        visible={this.props.visible}
+                        dismissableMask={true}
                         header={header}
                         width='350px'
+                        onHide={this.onHide}
                         modal={true}
-                        onHide={this.closeDialog}
                         maximizable={true}
                         closeOnEscape={true}
+                        footer={renderFooter}
                         >
-                        <div className="content p-jc-between">
-                            <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.src})`}}>
-                                <h3 className="drinkName">{this.props.drinkName}</h3>
+                        <div className="p-d-lg-flex content p-jc-between">
+                            <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.drink.image == "" ? reddrink : this.props.drink.image})`}}>
+                                <h3 className="drinkName">{this.props.drink.name}</h3>
                             </div>
                             <div className="desc">
                                          
@@ -103,7 +138,7 @@ class Details extends React.Component {
                                     <b>Description</b>
                                 </div>
                             </Divider>
-                            <div className="description">{this.props.description}</div>
+                            <div className="description">{this.props.drink.description}</div>
                             <div className="stats p-mt-3 p-d-flex">
                                 <div className="p-text-center p-text-bold">
                                     <Knob
@@ -121,9 +156,9 @@ class Details extends React.Component {
                                     <b>Ingredients</b>
                                 </div>
                             </Divider>
-                            <div className="ingredients">
-                                {ingredients}
-                            </div>
+                                <div className="ingredients">
+                                    {ingredients}
+                                </div>
                             </div>
                         </div>
                     </Dialog>

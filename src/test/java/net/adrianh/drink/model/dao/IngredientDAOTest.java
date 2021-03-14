@@ -94,6 +94,7 @@ public class IngredientDAOTest {
 	userDAO.create(usr);
     }
     
+    
     @Test
     public void testCreateIngredient(){
 	Assert.assertTrue("Ingredient was not created, so that's bad", !ingredientDAO.findAll().isEmpty());
@@ -154,5 +155,5 @@ public class IngredientDAOTest {
 	usrs.forEach(usr -> {
 	    userDAO.remove(usr);
 	});
-    }
+    };
 }

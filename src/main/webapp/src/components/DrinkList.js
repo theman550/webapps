@@ -5,6 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import Search from '../components/Search';
 import DrinkCard from '../components/DrinkCard';
 import DrinkListItem from '../components/DrinkListItem';
+import { Button } from 'primereact/button';
 import Dashboard from "../components/Dashboard";
 
 import './DrinkList.css';
@@ -31,19 +32,19 @@ export default class DrinkList extends React.Component {
                     [],
         };
     }
-    sendVote = (id, isUpvote) => {
+    sendVote = (id, isUpvote, response) => {
         // First update the state
-        if (isUpvote) {
+        if (isUpvote) { 
             this.setState((state, props) => (
-                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount + 1} : el))}
+                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: response} : el))}
                 ));
         } else {
             this.setState((state, props) => (
-                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount - 1} : el))}
+                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: response} : el))}
                 ));
         }
     }
-
+           
     componentDidMount() {
         // Use URL params to set up sorting and offset values, otherwise use defaults
         const params = new URLSearchParams(window.location.search);
@@ -75,6 +76,17 @@ export default class DrinkList extends React.Component {
         })
                 .then(response => response.ok ? response.json() : Promise.reject(response.status))
                 .then(data => this.setState({drinks: data.drinks, totalRecords: data.total}))
+                .catch((error) => {
+                    console.error(error);
+                });
+    }
+
+    fetchBrave = () => {
+        fetch(process.env.REACT_APP_API_URL + "/drinks/brave", {
+            method: "GET"
+        })
+                .then(response => response.ok ? response.json() : Promise.reject(response.status))
+                .then(data => this.setState({drinks: [data], totalRecords: 1}))
                 .catch((error) => {
                     console.error(error);
                 });
@@ -119,7 +131,6 @@ export default class DrinkList extends React.Component {
         const params = new URLSearchParams(window.location.search);
         params.set('offset',event.first);
         window.history.replaceState({},'',`${window.location.pathname}?${params}`);
-
         this.setState((state) => ({
                 first: event.first,
             }),
@@ -142,6 +153,13 @@ export default class DrinkList extends React.Component {
                             <Search
                                 searchQueries={this.state.searchQueries}
                                 onQueryChange={this.onQueryChange}
+                                />
+                        </div>
+                        <div className="brave-button">
+                            <Button
+                                label="I'm brave"
+                                tooltip="What does fate have in store for you?"
+                                onClick={() => this.fetchBrave()}
                                 />
                         </div>
                     </div>
@@ -188,4 +206,3 @@ export default class DrinkList extends React.Component {
 		);
 	}
 }
-

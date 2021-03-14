@@ -32,6 +32,14 @@ export default class Search extends Component {
     }
 
     render() {
+        const itemTemplate = (item) => {
+            return (
+                <div className="suggestion-item">
+                    <div>{item.name}</div>
+                    <div className="item-type">({item.type})</div>
+                </div>
+            );
+        }
         return (
             <div className="auto-complete-search">
                 <span className="p-fluid">
@@ -47,6 +55,7 @@ export default class Search extends Component {
                         completeMethod={(e) => this.autoComplete(e)}
                         onChange={(e) => this.props.onQueryChange(e)}
                         onUnSelect={(e) => this.props.onQueryChange(e)}
+                        itemTemplate={itemTemplate}
                     ></AutoComplete>
                 </span>
             </div>
