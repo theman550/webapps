@@ -86,8 +86,7 @@ public class DrinkResource {
      */
     @POST
     @Secured
-    @Path("mydrinks")
-    @Consumes("/")
+    @Path("/mydrinks") 
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserCreatedDrinks(@Context SecurityContext securityContext) {
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
@@ -102,8 +101,7 @@ public class DrinkResource {
      */
     @POST
     @Secured
-    @Path("upvoted")
-    @Consumes("/")
+    @Path("/upvoted")    
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserUpvotedDrinks(@Context SecurityContext securityContext) {
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
