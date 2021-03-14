@@ -65,11 +65,11 @@ export default class Profile extends React.Component {
                                 </div>
                             </div>
                         </TabPanel>
-                        <TabPanel onClick={(e) => this.jsonAuthHandler(e, "/drinks/mydrinks/")} header="My Drinks">
-                            <DrinkList fetchType="/drinks/mydrinks/"></DrinkList>
+                        <TabPanel onClick={() => window.location.hash = "mydrinks"} header="My Drinks">
+                            <DrinkList createdOnly></DrinkList>
                         </TabPanel>
-                        <TabPanel onClick={(e) => this.jsonAuthHandler(e, "/drinks/upvoted/")} header="Upvoted">
-                            <DrinkList fetchType="/drinks/upvoted/"></DrinkList>
+                        <TabPanel onClick={() => window.location.hash = "upvoted"} header="Upvoted">
+                            <DrinkList upvoted></DrinkList>
                         </TabPanel>
                     </TabView>
                 </div>
