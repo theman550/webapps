@@ -17,20 +17,16 @@
 .login-page .split {
     position: fixed;
 }
-/* Control the left side */
-.login-page .left {
-    height: 100%;
-}
+
 .login-page .split {
-    height: 100%;
+    height: auto;
     position: fixed;
 }
 /* Control the left side */
 .login-page .left {
 
-    left: 0;
-    width: 40%;
-    overflow: hidden; 
+    border: 3px solid black;
+    height: auto;
 }
 
 /* Control the right side */
@@ -79,7 +75,7 @@
     height: auto;
     /* position: absolute; */
     /* top: 50%; */
-     width: auto;
+    width: auto;
     /* left: 50%; */
     /* transform: translate(-50%, -50%); */
     text-align: left;
@@ -95,31 +91,24 @@
 
 .login-page .left-background {
 
-    top: 50%;
-    text-align: center;
+    height: auto;
 }
 /* Style the image inside the centered container, if needed */
 .login-page .centered img {
-    width: 150px;
-    border-radius: 50%;
+    height: auto;
 }
 
 .login-page .container {
-    filter: brightness(70%);
-    position:relative;
-    height:100%;
-    width:100%;
-    overflow: hidden;
-
-
+    filter: brightness(80%);
+    height: auto;
 }
 
 
 .login-page container img {
-    position:absolute;
-    left:0;
-
-
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    height: auto;
 }
 
 @keyframes imgFade {

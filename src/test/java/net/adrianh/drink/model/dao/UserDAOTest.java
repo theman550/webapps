@@ -30,6 +30,7 @@ import static java.lang.System.out;
  */
 @RunWith(Arquillian.class)
 public class UserDAOTest {
+
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class)
@@ -37,25 +38,27 @@ public class UserDAOTest {
                 .addAsResource("META-INF/persistence.xml")
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
-    
+
     @EJB
     private UserDAO userDAO;
-    
+
     @Before
     public void init() {
+
 	User usr = new User(null,"usr","CoolGuy", "pw", "salt", null, null, null);
 	usr.setCreatedDrinks(new ArrayList<>());
+
         usr.setVotes(new ArrayList<>());
-	userDAO.create(usr);
+        userDAO.create(usr);
     }
-    
-       
+
     // True if a user is created and the class is User (meh)
     @Test
-    public void addUser(){
-	List<User> usrs = userDAO.findAll();
-	Assert.assertTrue(usrs.size() > 0 && usrs.get(0).getClass().equals(User.class));
+    public void addUser() {
+        List<User> usrs = userDAO.findAll();
+        Assert.assertTrue(usrs.size() > 0 && usrs.get(0).getClass().equals(User.class));
     }
+
     
     @Test
     //True if the user is in the database with give password
@@ -100,26 +103,15 @@ public class UserDAOTest {
     }
     
     @After
-    public void clean(){
-        List <User> users = userDAO.findAll();
-	users.forEach(u -> {
-	    userDAO.remove(u);
-	});
+    public void clean() {
+        List<User> users = userDAO.findAll();
+        users.forEach(u -> {
+            userDAO.remove(u);
+        });
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-       /*
+/*
 	User adrian = new User(null,"adrian", null, null);
         
         Drink drink1 = new Drink();
@@ -143,5 +135,4 @@ public class UserDAOTest {
         adrian.addVote(new Vote(null,null,drink1,1));
         
         userDAO.create(adrian);
-        */
-   
+ */

@@ -66,7 +66,9 @@ export default class DrinkList extends React.Component {
         this.setState({sortKey: event.value}, this.fetchDrinks);
     }
 
-    fetchDrinks = () => {
+
+   fetchDrinks = () => {
+
         fetch(process.env.REACT_APP_API_URL + '/drinks/' + this.state.sortKey 
             + (this.props.createdOnly ? '?createdOnly=true' : '')
             + (this.props.upvoted ? '?upvoted=true' : ''), {
