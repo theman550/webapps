@@ -126,7 +126,7 @@ class Details extends React.Component {
                         closeOnEscape={true}
                         footer={renderFooter}
                         >
-                        <div className="content p-jc-between">
+                        <div className="p-d-lg-flex content p-jc-between">
                             <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.drink.image == "" ? reddrink : this.props.drink.image})`}}>
                                 <h3 className="drinkName">{this.props.drink.name}</h3>
                             </div>
