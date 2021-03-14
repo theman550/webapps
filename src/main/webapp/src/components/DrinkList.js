@@ -31,15 +31,15 @@ export default class DrinkList extends React.Component {
                     [],
         };
     }
-    sendVote = (id, isUpvote) => {
+    sendVote = (id, isUpvote, response) => {
         // First update the state
-        if (isUpvote) {    
+        if (isUpvote) { 
             this.setState((state, props) => (
-                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount+1} : el))}
+                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: response} : el))}
                 ));
         } else {
             this.setState((state, props) => (
-                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount-1} : el))}
+                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: response} : el))}
                 ));
         }
     }

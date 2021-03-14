@@ -4,6 +4,7 @@ import './Voter.css';
 export default function Voter(props) { 
               
     const upvote = (e) => {
+        
         if(localStorage.getItem("currentUser") != null){
             const requestOptions = {
                 method: 'POST',
@@ -13,15 +14,15 @@ export default function Voter(props) {
             };
 
             fetch(process.env.REACT_APP_API_URL+"/votes/upvote/", requestOptions)
-                    .then(response => {
-              console.log(response);          
-            })
+              .then(response => response.json())
+              .then(data => props.sendVote(props.data.id, true, data))                 
         } else{
-            console.log("Oi! reg or login!");
+            console.log("Login to vote!");
         }
     }
     
     const downvote = (e) => {
+        
         if(localStorage.getItem("currentUser") != null){
             const requestOptions = {
                 method: 'POST',
@@ -31,11 +32,10 @@ export default function Voter(props) {
             };
 
             fetch(process.env.REACT_APP_API_URL+"/votes/downvote/", requestOptions)
-                    .then(response => {
-              console.log(response);          
-            })
+              .then(response => response.json())
+              .then(data => props.sendVote(props.data.id, false, data))                  
         } else{
-            console.log("Oi! reg or logissn!");   
+            console.log("Login to vote!");   
         }
     }
     

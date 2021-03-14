@@ -42,7 +42,7 @@ public class VoteResource {
     @Secured
     @Path("upvote")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response upvote(Drink d, @Context SecurityContext securityContext) {
+    public int upvote(Drink d, @Context SecurityContext securityContext) {
          //Get the name of the authorized user (derived from a valid token)
        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
        long userID = authorizedUser.getId();
@@ -67,7 +67,7 @@ public class VoteResource {
       
        drink.setVoteCount(drinkDAO.findAllDrinkVotes(drinkID));
        drinkDAO.update(drink);
-       return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();
+       return drink.getVoteCount();
     }    
     
     
@@ -75,7 +75,7 @@ public class VoteResource {
     @Secured
     @Path("downvote")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response downvote(Drink d, @Context SecurityContext securityContext) {
+    public int downvote(Drink d, @Context SecurityContext securityContext) {
          //Get the name of the authorized user (derived from a valid token)
        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
        long userID = authorizedUser.getId();
@@ -100,7 +100,7 @@ public class VoteResource {
        
        drink.setVoteCount(drinkDAO.findAllDrinkVotes(drinkID));
        drinkDAO.update(drink);
-       return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();     
+       drink.getVoteCount();     
     }    
     
     
