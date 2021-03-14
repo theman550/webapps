@@ -128,7 +128,6 @@ export default class DrinkList extends React.Component {
         const params = new URLSearchParams(window.location.search);
         params.set('offset',event.first);
         window.history.replaceState({},'',`${window.location.pathname}?${params}`);
-
         this.setState((state) => ({
                 first: event.first,
             }),
