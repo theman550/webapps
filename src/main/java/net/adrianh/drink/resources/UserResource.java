@@ -20,8 +20,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.json.Json;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.SecurityContext;
+import net.adrianh.drink.Secured;
 import static net.adrianh.drink.TokenServices.createToken;
 
 import net.adrianh.drink.model.dao.UserDAO;
@@ -72,6 +76,15 @@ public class UserResource {
         }
   
     }  
+    
+    @GET
+    @Path("me")
+    @Secured
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@Context SecurityContext securityContext){
+        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+        return Response.status(Response.Status.OK).entity(userDAO.findUserByID(authorizedUser.getId()).get(0)).build();
+    }
     
     private String mockHash(String password){
         
