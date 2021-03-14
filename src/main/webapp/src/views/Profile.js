@@ -47,10 +47,10 @@ export default class Profile extends React.Component {
 						</div>
 					</TabPanel>
 					<TabPanel onClick={() => window.location.hash="mydrinks"} header="My Drinks">
-						<DrinkList fetchType="/user/mydrinks/"></DrinkList>
+						<DrinkList createdOnly></DrinkList>
 					</TabPanel>
 					<TabPanel onClick={() => window.location.hash="upvoted"} header="Upvoted">
-						<DrinkList fetchType="/user/upvoted/"></DrinkList>
+						<DrinkList upvoted></DrinkList>
 					</TabPanel>
 				</TabView>
 			</div>

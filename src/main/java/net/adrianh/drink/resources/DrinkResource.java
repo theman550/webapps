@@ -81,10 +81,13 @@ public class DrinkResource {
     @Secured // NOTE: The filter will still allow access to this particular endpoint even without proper auth header since auth is optional here
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
+    // TODO: Add query param for getting upvotes & implement it in resources and DAO
     public Response listPopular(String acr, @QueryParam("createdOnly") boolean getCreatedDrinks, @Context SecurityContext securityContext) throws JSONException {
         
         JSONObject o = new JSONObject(acr);
         String authorizedUserName = null;
+        // If the request is for a specific user's created drinks / upvotes, try to get the authorized user.
+        // Will return UNAUTHORIZED if no PrincipalUuser exists (i.e if no auth header was provided)
         if (getCreatedDrinks) {
             try {
                 authorizedUserName = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0).getAccountName();

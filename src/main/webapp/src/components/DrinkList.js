@@ -66,8 +66,11 @@ export default class DrinkList extends React.Component {
     }
 
     fetchDrinks = () => {
-        fetch(process.env.REACT_APP_API_URL + this.props.fetchType + this.state.sortKey, {
+        fetch(process.env.REACT_APP_API_URL + '/drinks/' + this.state.sortKey 
+            + (this.props.createdOnly ? '?createdOnly=true' : '')
+            + (this.props.upvoted ? '?upvoted=true' : ''), {
             method: "POST",
+            headers: (localStorage.getItem("currentUser") ? {'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`} : {}),
             body: "{\"offset\":" + this.state.first + ",\"queries\":" + JSON.stringify(this.state.searchQueries) + "}"
         })
                 .then(response => response.ok ? response.json() : Promise.reject(response.status))

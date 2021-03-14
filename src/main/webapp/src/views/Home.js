@@ -11,7 +11,7 @@ export default class Home extends React.Component {
         return (
                 <div>
                     <h1>Home</h1>
-                    <DrinkList fetchType="/drinks/"></DrinkList>
+                    <DrinkList></DrinkList>
                 </div>
                 );
     }
