@@ -31,7 +31,7 @@ class Details extends React.Component {
     calculateTotalAlc = () => {
         let alcVol = 0;
         let totalVol = 0;
-        this.props.ingredients.map((ingredient) => {
+        this.props.drink.ingredients.map((ingredient) => {
             // Only include ingredients measured in volume
             if (ingredient.unit != 'PIECES' && ingredient.unit != 'GRAMS') {
                 console.log(ingredient.name);
@@ -47,16 +47,28 @@ class Details extends React.Component {
     componentDidMount = () => {
         // Compute the total alc percentage of drink on load
         this.calculateTotalAlc();
+        // Add drink id to url
+        const params = new URLSearchParams(window.location.search);
+        params.set('drink',this.props.drink.id);
+        window.history.replaceState({},'', `${window.location.pathname}?${params}`);
+    }
+
+    onHide = () => {
+        // Remove drink id from url when exiting details view
+        const params = new URLSearchParams(window.location.search);
+        params.delete('drink');
+        window.history.replaceState({},'', `${window.location.pathname}?${params}`);
+        // Close the dialog
+        this.props.closeDialog();
     }
 
     render() {
-        const data = this.props.data;
         const header = (
             <div>
-                {this.props.creator}
+                {this.props.drink.user.displayName}
             </div>
         );
-        const ingredients = this.props.ingredients.map((ingredient) => 
+        const ingredients = this.props.drink.ingredients.map((ingredient) => 
             <div key={ingredient.name} className="ingredient">
                 <div className="p-d-flex p-flex-row amount">
                     <div className="p-mr-1 p-text-bold">{ingredient.amount}</div>
@@ -77,14 +89,14 @@ class Details extends React.Component {
                         dismissableMask={true}
                         header={header}
                         width='350px'
+                        onHide={this.onHide}
                         modal={true}
-                        onHide={this.props.closeDialog}
                         maximizable={true}
                         closeOnEscape={true}
                         >
                         <div className="content p-jc-between">
-                            <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.src})`}}>
-                                <h3 className="drinkName">{this.props.drinkName}</h3>
+                            <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.drink.image})`}}>
+                                <h3 className="drinkName">{this.props.drink.name}</h3>
                             </div>
                             <div className="desc">
                                          
@@ -94,7 +106,7 @@ class Details extends React.Component {
                                     <b>Description</b>
                                 </div>
                             </Divider>
-                            <div className="description">{this.props.description}</div>
+                            <div className="description">{this.props.drink.description}</div>
                             <div className="stats p-mt-3 p-d-flex">
                                 <div className="p-text-center p-text-bold">
                                     <Knob

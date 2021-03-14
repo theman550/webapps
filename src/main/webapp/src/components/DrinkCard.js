@@ -72,18 +72,18 @@ class DrinkCard extends Component {
                         </div>
                         <div className="product-grid-item-bottom">
                             <Button label="Details" className="p-button-text" onClick={this.openDetailsDialog}></Button>
-                            <Details
-                                style="display: none"
-                                src={data.image}
-                                alt={data.name}
-                                visible={this.state.detailsVisible}
-                                drinkName={data.name}
-                                openDialog={this.openDetailsDialog}
-                                closeDialog={this.closeDetailsDialog}
-                                ingredients={data.ingredients}
-                                description={data.description}
-                                creator={data.user.accountName}
-                                />
+                            
+                            {/* Only render details when button is clicked */}
+                            {this.state.detailsVisible
+                                ? <Details
+                                    visible={this.state.detailsVisible}
+                                    drink={data}
+                                    openDialog={this.openDetailsDialog}
+                                    closeDialog={this.closeDetailsDialog}
+                                    />
+                                : ''
+                                }
+
                             <Timestamp 
                                data={data}
                                 />
