@@ -16,7 +16,6 @@ class Details extends React.Component {
 
         super(props);
         this.state = {
-            visible: false,
             unitMap: {
                 DECILITRE: {unit:'dl',inLitres: 0.1},
                 CENTILITRE: {unit: 'cl', inLitres: 0.01},
@@ -27,13 +26,6 @@ class Details extends React.Component {
             },
             totalAlc: 0
         };
-    }
-    openDialog = () => {
-        this.setState({visible: true});
-    }
-
-    closeDialog = () => {
-        this.setState({visible: false});
     }
 
     calculateTotalAlc = () => {
@@ -65,7 +57,7 @@ class Details extends React.Component {
             </div>
         );
         const ingredients = this.props.ingredients.map((ingredient) => 
-            <div className="ingredient">
+            <div key={ingredient.name} className="ingredient">
                 <div className="p-d-flex p-flex-row amount">
                     <div className="p-mr-1 p-text-bold">{ingredient.amount}</div>
                     {/* Map the unit name to a more presentable format (DECILITRE -> dl) if possible */}
@@ -79,15 +71,14 @@ class Details extends React.Component {
             </div>); 
         return (
                 <div className="mainDetails">
-                    <Button label="Details" className="detailsButton p-button-text" onClick={this.openDialog}>
-                    </Button>
                     <Dialog 
                         className="detailsDialog"                         
-                        visible={this.state.visible}
+                        visible={this.props.visible}
+                        dismissableMask={true}
                         header={header}
                         width='350px'
                         modal={true}
-                        onHide={this.closeDialog}
+                        onHide={this.props.closeDialog}
                         maximizable={true}
                         closeOnEscape={true}
                         >

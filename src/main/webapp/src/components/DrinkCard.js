@@ -17,6 +17,9 @@ class DrinkCard extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            detailsVisible: false
+        }
 
     }
 
@@ -24,9 +27,13 @@ class DrinkCard extends Component {
         this.props.history.push(path);
     }
 
-    showDetailsDialog() {
-        console.log('Click happened');
+    openDetailsDialog = () => {
+        this.setState({detailsVisible: true});
 
+    }
+
+    closeDetailsDialog = () => {
+        this.setState({detailsVisible :false});
     }
 
     render() {
@@ -64,10 +71,15 @@ class DrinkCard extends Component {
                             </div>
                         </div>
                         <div className="product-grid-item-bottom">
-                            <Details 
+                            <Button label="Details" className="p-button-text" onClick={this.openDetailsDialog}></Button>
+                            <Details
+                                style="display: none"
                                 src={data.image}
                                 alt={data.name}
+                                visible={this.state.detailsVisible}
                                 drinkName={data.name}
+                                openDialog={this.openDetailsDialog}
+                                closeDialog={this.closeDetailsDialog}
                                 ingredients={data.ingredients}
                                 description={data.description}
                                 creator={data.user.accountName}
