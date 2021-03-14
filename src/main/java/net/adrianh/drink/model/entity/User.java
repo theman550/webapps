@@ -57,20 +57,4 @@ public class User implements Serializable {
         drink.setUser(this);
     }
 
-    public List<Drink> getDrinks() {
-        return createdDrinks;
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public Long getUserID() {
-        return id;
-    }
-
-    public String getUserName() {
-        return accountName;
-    }
-
 }
