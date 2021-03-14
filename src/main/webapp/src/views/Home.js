@@ -19,7 +19,7 @@ export default class Home extends React.Component {
         method: "GET"
       })
       .then(response => response.ok ? response.json() : Promise.reject(response.status))
-      .then(data => this.setState({selectedDrink: data}))
+      .then(data => this.setState({selectedDrink: data[0]}))
       .catch((error) => {
         console.error(error);
       })
@@ -35,7 +35,7 @@ export default class Home extends React.Component {
       <div>
         <h1>Home</h1>
 				<DrinkList fetchType="/drinks/"></DrinkList>
-                {this.state.showDrinkDialog
+                {this.state.selectedDrink
                 ? <Details
                     visible={this.state.selectedDrink}
                     drink={this.state.selectedDrink}
