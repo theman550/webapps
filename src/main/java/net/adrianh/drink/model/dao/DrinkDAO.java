@@ -79,7 +79,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         return drinks;
     }
     
-    public int updateVoteCount(Long id){
+    public int findAllDrinkVotes(Long id){
 	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
             
         QVote vote = QVote.vote;

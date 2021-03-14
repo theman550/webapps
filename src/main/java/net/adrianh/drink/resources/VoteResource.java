@@ -5,29 +5,19 @@
  */
 package net.adrianh.drink.resources;
 
-import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import net.adrianh.drink.Secured;
 import net.adrianh.drink.model.dao.DrinkDAO;
-import net.adrianh.drink.model.dao.IngredientDAO;
 import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.dao.VoteDAO;
 import net.adrianh.drink.model.entity.Drink;
-import net.adrianh.drink.model.entity.Ingredient;
 import net.adrianh.drink.model.entity.User;
 import net.adrianh.drink.model.entity.Vote;
 
@@ -75,7 +65,7 @@ public class VoteResource {
             voteDAO.create(v);                
        }
       
-       drink.setVoteCount(drinkDAO.updateVoteCount(drinkID));
+       drink.setVoteCount(drinkDAO.findAllDrinkVotes(drinkID));
        drinkDAO.update(drink);
        return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();
     }    
@@ -108,7 +98,7 @@ public class VoteResource {
             voteDAO.create(v);
        }
        
-       drink.setVoteCount(drinkDAO.updateVoteCount(drinkID));
+       drink.setVoteCount(drinkDAO.findAllDrinkVotes(drinkID));
        drinkDAO.update(drink);
        return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();     
     }    
