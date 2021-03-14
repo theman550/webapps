@@ -60,12 +60,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .limit(20)
                 .offset(offset)
                 .orderBy(drink.voteCount.desc());
-        if (user != null && getUpvotedDrinks == false) {
-            jpaQuery.where(drink.user.accountName.eq(user));
-        }
-        if (user != null && getUpvotedDrinks == true) {
-            jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
-        }
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
@@ -79,12 +74,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .limit(20)
                 .offset(offset)
                 .orderBy(drink.createdAt.desc());
-        if (user != null && getUpvotedDrinks == false) {
-            jpaQuery.where(drink.user.accountName.eq(user));
-        }
-        if (user != null && getUpvotedDrinks == true) {
-            jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
-        }
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
@@ -97,12 +87,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .limit(20)
                 .orderBy(drink.voteCount.desc());
         // Add where clause if fetching a specific user's drinks
-        if (user != null && getUpvotedDrinks == false) {
-            jpaQuery.where(drink.user.accountName.eq(user));
-        }
-        if (user != null && getUpvotedDrinks == true) {
-            jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
-        }
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
@@ -114,13 +99,17 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .offset(offset)
                 .limit(20)
                 .orderBy(drink.createdAt.desc());
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
+        QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
+        return drinks;
+    }
+
+    public void checkUserAuthToFetchCreatedOrUpvotedDrinks(JPAQuery jpaQuery, QDrink drink, String user, boolean getUpvotedDrinks) {
         if (user != null && getUpvotedDrinks == false) {
             jpaQuery.where(drink.user.accountName.eq(user));
         }
         if (user != null && getUpvotedDrinks == true) {
             jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
         }
-        QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
-        return drinks;
     }
 }

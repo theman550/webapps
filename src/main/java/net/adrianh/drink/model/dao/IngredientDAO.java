@@ -63,12 +63,7 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
                 .limit(20)
                 .offset(offset)
                 .orderBy(drink.voteCount.desc());
-        if (user != null && getUpvotedDrinks == false) {
-            jpaQuery.where(drink.user.accountName.eq(user));
-        }
-        if (user != null && getUpvotedDrinks == true) {
-            jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
-        }
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
@@ -82,13 +77,17 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
                 .limit(20)
                 .offset(offset)
                 .orderBy(drink.createdAt.desc());
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
+        QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
+        return drinks;
+    }
+
+    public void checkUserAuthToFetchCreatedOrUpvotedDrinks(JPAQuery jpaQuery, QDrink drink, String user, boolean getUpvotedDrinks) {
         if (user != null && getUpvotedDrinks == false) {
             jpaQuery.where(drink.user.accountName.eq(user));
         }
         if (user != null && getUpvotedDrinks == true) {
             jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
         }
-        QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
-        return drinks;
     }
 }
