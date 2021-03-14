@@ -43,31 +43,69 @@ public class UserDAOTest {
     
     @Before
     public void init() {
-	User usr = new User(null,"usr", "dname", "pw", "salt", null, null);
+	User usr = new User(null,"usr","CoolGuy", "pw", "salt", null, null);
 	usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 	userDAO.create(usr);
     }
     
-    @Test
-    public void addUser(){
-	List<User> usrs = userDAO.findAll();
-	Assert.assertTrue(1==1);
-    }
        
     // True if a user is created and the class is User (meh)
-    /*@Test
+    @Test
     public void addUser(){
 	List<User> usrs = userDAO.findAll();
 	Assert.assertTrue(usrs.size() > 0 && usrs.get(0).getClass().equals(User.class));
     }
+    
+    @Test
+    //True if the user is in the database with give password
+    public void checkThatLoginWorks() {
+        List<User> usrs = userDAO.findAll();
+        Assert.assertEquals(usrs.get(0), userDAO.login("usr", "pw"));
+    }
+    
+    @Test
+    //Should return true if a given user exists and return false for one that doesn't exist
+    public void checkThatAreCredentialsMatchingWorks() {
+        Assert.assertTrue(userDAO.areCredentialsMatching("usr", "pw"));
+        Assert.assertFalse(userDAO.areCredentialsMatching("idontexist", "andneitherdoi"));
+    }
+    
+    @Test
+    //Should return true if said account name is unique, otherwise return false
+    public void checkThatIsAccNameUniquieWorks() {
+        Assert.assertTrue(userDAO.isAccNameUnique("hello there"));
+        Assert.assertFalse(userDAO.isAccNameUnique("usr"));
+    }
+    
+    @Test
+    //True if user "usr"'s id is the same
+    public void checkThatFindUserByIDWorks() {
+        List<User> usrs = userDAO.findAll();
+        Assert.assertEquals(usrs.get(0).getAccountName(), userDAO.findUserByID(usrs.get(0).getId()).get(0).getAccountName());
+    }
+    
+    @Test
+    //True if the found salt is the same as "usr"'s
+    public void checkThatFindSaltByNameWorks() {
+        Assert.assertEquals("salt", userDAO.findSaltByName("usr"));
+    }
+    
+    @Test
+    //Should return a User if it exists and return nothing if a User doesn't exist
+    public void checkThatFindUserByNameWorks() {
+        List<User> usrs = userDAO.findAll();
+        Assert.assertEquals(usrs.get(0), userDAO.findUserByName("usr").get(0));
+        Assert.assertEquals(0, userDAO.findUserByName("idontexist").size());
+    }
+    
     @After
     public void clean(){
         List <User> users = userDAO.findAll();
 	users.forEach(u -> {
 	    userDAO.remove(u);
 	});
-    }*/
+    }
 }
 
 

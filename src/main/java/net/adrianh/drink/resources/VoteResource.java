@@ -101,6 +101,7 @@ public class VoteResource {
        drink.setVoteCount(drinkDAO.findAllDrinkVotes(drinkID));
        drinkDAO.update(drink);
        drink.getVoteCount();     
+       return drink.getVoteCount();
     }    
     
     

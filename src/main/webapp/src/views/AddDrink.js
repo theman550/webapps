@@ -9,7 +9,7 @@ import { Messages } from 'primereact/messages';
 
 const ingredientItem = {
       name: '',
-      percentage: '',
+      abv: '',
       amount: '',
       unit: '',
 };
@@ -21,7 +21,7 @@ const initialValues = {
     ingredients: [
       {
       name: '',
-      percentage: '',
+      abv: '',
       amount: '',
       unit: '',
       }
@@ -38,7 +38,7 @@ const validationSchema=Yup.object({
       Yup.object().shape({
         name: Yup.string()
         .required('A name is required'),
-        percentage: Yup.number()
+        abv: Yup.number()
         .required('Required')
         .min(0, "Must be at least 0%")
         .max(100, "Must be less than 100%"),
@@ -113,9 +113,9 @@ function AddDrink () {
                     <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
                     <Field name={`ingredients[${index}].name`}  />
                     <ErrorMessage name={`ingredients.${index}.name`} />
-                  <label htmlFor={`ingredients.${index}.percentage`}>&emsp;Percentage:&ensp;</label>
-                    <Field name={`ingredients.${index}.percentage`} />                    
-                    <ErrorMessage name={`ingredients.${index}.percentage`} />
+                  <label htmlFor={`ingredients.${index}.abv`}>&emsp;Percentage:&ensp;</label>
+                    <Field name={`ingredients.${index}.abv`} />                    
+                    <ErrorMessage name={`ingredients.${index}.abv`} />
                   <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
                     <Field name={`ingredients.${index}.amount`} />
                     <ErrorMessage name={`ingredients.${index}.amount`} />

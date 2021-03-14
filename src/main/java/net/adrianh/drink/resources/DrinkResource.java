@@ -11,9 +11,11 @@ import javax.ejb.EJB;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -156,13 +158,13 @@ public class DrinkResource {
             int total = 0;
             
             if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
-                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
                 for(int i = 0; i < o.getJSONArray("queries").length(); i++){
-                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
                     if(allDrinks.isEmpty()){
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
@@ -190,5 +192,36 @@ public class DrinkResource {
         }
     }
     
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response drinkFromId(@PathParam("id") Long Id) throws JSONException {
+        return Response.status(Response.Status.OK).entity(drinkDAO.findDrinkByID(Id)).build();
+    }
     
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Secured
+    public Response removeDrink(@PathParam("id") Long Id, @Context SecurityContext securityContext) {
+        // Get the name of the authorized user (derived from a valid token)
+        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
+        System.out.println("HELLO THERE" + authorizedUser.getAccountName());
+        if(drinkDAO.findDrinkByID(Id).getUser().equals(authorizedUser)){
+            drinkDAO.remove(drinkDAO.findDrinkByID(Id));
+            return Response.status(Response.Status.OK).entity("Succesfully deleted!").build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("Not your drink!").build(); 
+        }
+    }
+    
+    @GET
+    @Path("brave")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response iAmFeelingBrave(){
+        double total = drinkDAO.findMostPopularFromOffset(0).getTotal();
+        total = Math.floor(Math.random() * total);
+        Drink drink = drinkDAO.findMostPopularFromOffset((int) total).getResults().get(0);
+        return Response.status(Response.Status.OK).entity(drink).build();
+    }
 }
