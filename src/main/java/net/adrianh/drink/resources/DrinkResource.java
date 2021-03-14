@@ -240,9 +240,9 @@ public class DrinkResource {
     @Path("brave")
     @Produces(MediaType.APPLICATION_JSON)
     public Response iAmFeelingBrave(){
-        double total = drinkDAO.findMostPopularFromOffset(0).getTotal();
+        double total = drinkDAO.findMostPopularFromOffset(0,null).getTotal();
         total = Math.floor(Math.random() * total);
-        Drink drink = drinkDAO.findMostPopularFromOffset((int) total).getResults().get(0);
+        Drink drink = drinkDAO.findMostPopularFromOffset((int) total,null).getResults().get(0);
         return Response.status(Response.Status.OK).entity(drink).build();
     }
 }

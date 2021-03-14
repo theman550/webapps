@@ -82,12 +82,6 @@ public class DrinkDAOTest {
     @Test
     // True om det finns någon drink alls
     public void checkThatAddWorks(){
-        Assert.assertTrue(1 == 1); 
-    }
-    
-  /*  @Test
-    // True om det finns någon drink alls
-    public void checkThatAddWorks(){
         Assert.assertTrue(drinkDAO.findAll().size() > 0); 
     }
     
@@ -143,7 +137,6 @@ public class DrinkDAOTest {
         Assert.assertEquals(drinks.get(2).getId(), drinkDAO.findNewestFromOffset(2,null).getResults().get(0).getId()); //comapre by id, since name is the same
     }
     
-    /*
     @Test
     //True if drinks[0] is the 2nd newest drink from all added drinks 
     //Seems as if it saves to the databse whenever it feels like it. The test will sometimes work and sometimes not. Welp, RIP[*]
@@ -158,12 +151,12 @@ public class DrinkDAOTest {
         });
         Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1,null).getResults().get(0).getId()); //compare by Id, since name is the same
     }
-   */
+ 
     @After
     public void clean(){
         List <User> users = userDAO.findAll();
         for (User u : users) {
             userDAO.remove(u);
         }
-    }*/
+    }
 }
