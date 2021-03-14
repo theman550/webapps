@@ -123,7 +123,7 @@ public class DrinkResource {
         if ("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
 
-            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("offset")), authorizedUserName);
+            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("offset")), authorizedUserName, getUpvotedDrinks);
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
 
@@ -135,13 +135,13 @@ public class DrinkResource {
             int total = 0;
 
             if ("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
-                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"), authorizedUserName);
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"), authorizedUserName, getUpvotedDrinks);
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
                 for (int i = 0; i < o.getJSONArray("queries").length(); i++) {
-                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"), authorizedUserName);
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"), authorizedUserName, getUpvotedDrinks);
                     if (allDrinks.isEmpty()) {
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
@@ -191,7 +191,7 @@ public class DrinkResource {
         if ("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
 
-            QueryResults qr = drinkDAO.findNewestFromOffset((o.getInt("offset")), authorizedUserName);
+            QueryResults qr = drinkDAO.findNewestFromOffset((o.getInt("offset")), authorizedUserName, getUpvotedDrinks);
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
 
@@ -203,13 +203,13 @@ public class DrinkResource {
             int total = 0;
 
             if ("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
-                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"), authorizedUserName);
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"), authorizedUserName, getUpvotedDrinks);
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
                 for (int i = 0; i < o.getJSONArray("queries").length(); i++) {
-                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"), authorizedUserName);
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"), authorizedUserName, getUpvotedDrinks);
                     if (allDrinks.isEmpty()) {
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
