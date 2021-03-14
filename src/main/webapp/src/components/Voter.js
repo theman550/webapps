@@ -2,7 +2,7 @@ import { Button } from 'primereact/button';
 import './Voter.css';
 
 export default function Voter(props) { 
-        
+              
     const upvote = (e) => {
         if(localStorage.getItem("currentUser") != null){
             const requestOptions = {
@@ -38,16 +38,6 @@ export default function Voter(props) {
             console.log("Oi! reg or logissn!");   
         }
     }
-        
-    var votes = (e) => {
-        const fetchedData = fetch(process.env.REACT_APP_API_URL+"/votes/getvotes/"+e)
-            .then(result => result.ok ? result.json() : Promise.reject(result.status))
-            .then(data => {
-            console.log("data",data);
-    
-            return data;
-        });
-    }  
     
     return (
       <div className="votes">

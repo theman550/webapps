@@ -5,6 +5,7 @@
  */
 package net.adrianh.drink.resources;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,6 +18,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import net.adrianh.drink.Secured;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.IngredientDAO;
@@ -34,24 +38,16 @@ import net.adrianh.drink.model.entity.Vote;
 
 @Path("votes")
 public class VoteResource {
-    
+      
     @EJB
     DrinkDAO drinkDAO;
-    @EJB
-    IngredientDAO ingredientDAO;
     @EJB
     UserDAO userDAO;
     @EJB
     VoteDAO voteDAO;
     
-    @GET
-    @Path("getvotes/{drinkID}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public int getvotes(@PathParam("drinkID") long drinkID) {
-       
-        return drinkDAO.updateVoteCount(drinkID); 
-    }
-
+    
+    
     @POST
     @Secured
     @Path("upvote")
@@ -72,12 +68,11 @@ public class VoteResource {
        } else if(voteDAO.hasUserUpvotedDrink(userID,drinkID)){
            voteDAO.remove(voteDAO.selectVote(userID, drinkID));
 
-      
+         //already downvoted? swap vote
        } else if(voteDAO.hasUserDownvotedDrink(userID,drinkID)){
             voteDAO.remove(voteDAO.selectVote(userID, drinkID));
             Vote v = new Vote(null, authorizedUser, d, 1);            
-            voteDAO.create(v);  
-                   
+            voteDAO.create(v);                
        }
       
        drink.setVoteCount(drinkDAO.updateVoteCount(drinkID));
@@ -106,16 +101,16 @@ public class VoteResource {
        } else if(voteDAO.hasUserDownvotedDrink(userID,drinkID)){
            voteDAO.remove(voteDAO.selectVote(userID, drinkID));
         
+            //already upvoted? swap vote
        } else if(voteDAO.hasUserUpvotedDrink(userID,drinkID)){
             voteDAO.remove(voteDAO.selectVote(userID, drinkID));
             Vote v = new Vote(null, authorizedUser, d, (-1)); 
             voteDAO.create(v);
        }
        
-       drink.setVoteCount(drinkDAO.updateVoteCount(drinkID)-2);
+       drink.setVoteCount(drinkDAO.updateVoteCount(drinkID));
        drinkDAO.update(drink);
-       return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();
-      
+       return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();     
     }    
     
     

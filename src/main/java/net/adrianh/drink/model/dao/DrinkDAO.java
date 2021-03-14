@@ -80,25 +80,18 @@ public class DrinkDAO extends AbstractDAO<Drink> {
     }
     
     public int updateVoteCount(Long id){
-	/*JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-	QDrink drink = QDrink.drink;
-	List<Drink> drinks = queryFactory.selectFrom(drink)
-	    .where(drink.id.eq(id))
-	    .fetch();
-        
-        Drink d = drinks.get(0);
-        
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+            
         QVote vote = QVote.vote;
 	List<Vote> votes = queryFactory.selectFrom(vote)
-	    .where(drink.id.eq(vote.drink.id))
+	    .where(vote.drink.id.eq(id))
 	    .fetch();
         
-        d.setVoteCount(0);
-        
+        int i = 0;
         for (Vote v : votes) {
-           d.setVoteCount(d.getVoteCount()+v.getVal());
-        }*/
+           i += v.getVal();
+        }
 	
-        return 5;
+        return i;
     }
 }

@@ -33,7 +33,7 @@ export default class DrinkList extends React.Component {
     }
     sendVote = (id, isUpvote) => {
         // First update the state
-        if (isUpvote) {
+        if (isUpvote) {    
             this.setState((state, props) => (
                         {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount+1} : el))}
                 ));
@@ -43,7 +43,7 @@ export default class DrinkList extends React.Component {
                 ));
         }
     }
-    
+           
     componentDidMount() {
         // Set default sorting choice (and call fetchDrinks)
         this.setState((state) => ({sortKey: state.sortOptions[0].value}), this.fetchDrinks);
@@ -118,7 +118,6 @@ export default class DrinkList extends React.Component {
                 );
 
     const itemTemplate = (data, layout) => {
-        console.log(data);
       if (!data) {
         return null;
       }
