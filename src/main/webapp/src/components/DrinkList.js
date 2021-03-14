@@ -35,15 +35,15 @@ export default class DrinkList extends React.Component {
         // First update the state
         if (isUpvote) {
             this.setState((state, props) => (
-                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount + 1} : el))}
+                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount+1} : el))}
                 ));
         } else {
             this.setState((state, props) => (
-                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount - 1} : el))}
+                        {drinks: state.drinks.map(el => (el.id === id ? {...el, voteCount: el.voteCount-1} : el))}
                 ));
         }
     }
-
+    
     componentDidMount() {
         // Set default sorting choice (and call fetchDrinks)
         this.setState((state) => ({sortKey: state.sortOptions[0].value}), this.fetchDrinks);
@@ -65,7 +65,7 @@ export default class DrinkList extends React.Component {
                     console.error(error);
                 });
     }
-
+   
     // When the user enters a new search tag
     onQueryChange = (event) => {
         this.setState({searchQueries: event.value}, this.fetchDrinks);
@@ -118,6 +118,7 @@ export default class DrinkList extends React.Component {
                 );
 
     const itemTemplate = (data, layout) => {
+        console.log(data);
       if (!data) {
         return null;
       }
@@ -151,4 +152,3 @@ export default class DrinkList extends React.Component {
 		);
 	}
 }
-

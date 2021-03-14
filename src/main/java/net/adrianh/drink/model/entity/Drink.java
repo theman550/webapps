@@ -59,13 +59,13 @@ public class Drink implements Serializable {
         createdAt = new Date();
     }
     
-    @PostLoad
+    /*@PostLoad
     private void voteCount() { //TODO change to a query that fixes the counts of the votes
         voteCount = 0;
         for (Vote v : this.votes) {
             this.voteCount += v.getVal();
         }
-    }
+    }*/
 
     //drink belongs to user as liked element
     @ManyToOne(optional = false)

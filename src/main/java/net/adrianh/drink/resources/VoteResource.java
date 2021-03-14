@@ -9,8 +9,10 @@ import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -41,6 +43,14 @@ public class VoteResource {
     UserDAO userDAO;
     @EJB
     VoteDAO voteDAO;
+    
+    @GET
+    @Path("getvotes/{drinkID}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public int getvotes(@PathParam("drinkID") long drinkID) {
+       
+        return drinkDAO.updateVoteCount(drinkID); 
+    }
 
     @POST
     @Secured
@@ -51,20 +61,28 @@ public class VoteResource {
        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
        long userID = authorizedUser.getId();
        long drinkID = d.getId();
+       Drink drink = drinkDAO.findDrinkByID(drinkID);
        
             //upvote drink
        if(!voteDAO.hasUserVotedDrink(userID, drinkID)){
             Vote v = new Vote(null, authorizedUser, d, 1);          
             voteDAO.create(v);
-            return Response.status(Response.Status.OK).entity("added").build();
-            
+                         
             //already upvoted? remove upvote
        } else if(voteDAO.hasUserUpvotedDrink(userID,drinkID)){
            voteDAO.remove(voteDAO.selectVote(userID, drinkID));
-           return Response.status(Response.Status.OK).entity("removed").build();
+
+      
+       } else if(voteDAO.hasUserDownvotedDrink(userID,drinkID)){
+            voteDAO.remove(voteDAO.selectVote(userID, drinkID));
+            Vote v = new Vote(null, authorizedUser, d, 1);            
+            voteDAO.create(v);  
+                   
        }
-       
-       return Response.status(Response.Status.CONFLICT).build(); 
+      
+       drink.setVoteCount(drinkDAO.updateVoteCount(drinkID));
+       drinkDAO.update(drink);
+       return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();
     }    
     
     
@@ -77,20 +95,27 @@ public class VoteResource {
        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
        long userID = authorizedUser.getId();
        long drinkID = d.getId();
+       Drink drink = drinkDAO.findDrinkByID(drinkID);
        
             //downvote drink
        if(!voteDAO.hasUserVotedDrink(userID, drinkID)){
             Vote v = new Vote(null, authorizedUser, d, (-1));          
             voteDAO.create(v);
-            return Response.status(Response.Status.OK).entity("added").build();
             
             //already downvoted? remove downvote
        } else if(voteDAO.hasUserDownvotedDrink(userID,drinkID)){
            voteDAO.remove(voteDAO.selectVote(userID, drinkID));
-           return Response.status(Response.Status.OK).entity("removed").build();
+        
+       } else if(voteDAO.hasUserUpvotedDrink(userID,drinkID)){
+            voteDAO.remove(voteDAO.selectVote(userID, drinkID));
+            Vote v = new Vote(null, authorizedUser, d, (-1)); 
+            voteDAO.create(v);
        }
        
-       return Response.status(Response.Status.CONFLICT).build(); 
+       drink.setVoteCount(drinkDAO.updateVoteCount(drinkID)-2);
+       drinkDAO.update(drink);
+       return Response.status(Response.Status.OK).entity(drink.getVoteCount()).build();
+      
     }    
     
     

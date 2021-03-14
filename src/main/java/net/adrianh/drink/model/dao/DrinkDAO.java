@@ -9,6 +9,8 @@ import javax.persistence.PersistenceContext;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.QDrink;
+import net.adrianh.drink.model.entity.QVote;
+import net.adrianh.drink.model.entity.Vote;
 
 @Stateless
 public class DrinkDAO extends AbstractDAO<Drink> {
@@ -75,5 +77,28 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .orderBy(drink.createdAt.desc())
             .fetchResults();
         return drinks;
+    }
+    
+    public int updateVoteCount(Long id){
+	/*JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+	QDrink drink = QDrink.drink;
+	List<Drink> drinks = queryFactory.selectFrom(drink)
+	    .where(drink.id.eq(id))
+	    .fetch();
+        
+        Drink d = drinks.get(0);
+        
+        QVote vote = QVote.vote;
+	List<Vote> votes = queryFactory.selectFrom(vote)
+	    .where(drink.id.eq(vote.drink.id))
+	    .fetch();
+        
+        d.setVoteCount(0);
+        
+        for (Vote v : votes) {
+           d.setVoteCount(d.getVoteCount()+v.getVal());
+        }*/
+	
+        return 5;
     }
 }

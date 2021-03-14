@@ -75,7 +75,7 @@ public class DrinkResource {
         drinkDAO.create(d);
         return Response.status(Response.Status.OK).build();
     }
-    
+          
     @POST
     @Path("popular")
     @Consumes("*/*")

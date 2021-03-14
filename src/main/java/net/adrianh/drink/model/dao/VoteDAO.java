@@ -20,6 +20,16 @@ public class VoteDAO extends AbstractDAO<Vote> {
         super(Vote.class);
     }
     
+    public int allDrinkVotes(long drinkID){
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QVote vote = QVote.vote;
+        List<Vote> votes = queryFactory.selectFrom(vote)
+            .where(vote.drink.id.eq(drinkID))
+            .fetch();
+       
+        return votes.size();
+    }
+    
     public Vote selectVote(long userID, long drinkID){
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QVote vote = QVote.vote;

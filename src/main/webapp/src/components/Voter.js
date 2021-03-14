@@ -2,7 +2,7 @@ import { Button } from 'primereact/button';
 import './Voter.css';
 
 export default function Voter(props) { 
-                   
+        
     const upvote = (e) => {
         if(localStorage.getItem("currentUser") != null){
             const requestOptions = {
@@ -18,7 +18,6 @@ export default function Voter(props) {
             })
         } else{
             console.log("Oi! reg or login!");
-            
         }
     }
     
@@ -36,21 +35,30 @@ export default function Voter(props) {
               console.log(response);          
             })
         } else{
-            console.log("Oi! reg or logissn!");
-            
+            console.log("Oi! reg or logissn!");   
         }
     }
-             
+        
+    var votes = (e) => {
+        const fetchedData = fetch(process.env.REACT_APP_API_URL+"/votes/getvotes/"+e)
+            .then(result => result.ok ? result.json() : Promise.reject(result.status))
+            .then(data => {
+            console.log("data",data);
+    
+            return data;
+        });
+    }  
+    
     return (
       <div className="votes">
         <Button
-          onClick={() => upvote(props.data)}
+          onClick={() => {upvote(props.data)}}
           icon="pi pi-angle-up"
           className="p-button-text p-button-plain"
         ></Button>
         <span className="voteCount">{props.data.voteCount}</span>
         <Button
-          onClick={() => downvote(props.data)}
+          onClick={() => {downvote(props.data)}}
           icon="pi pi-angle-down"
           className="p-button-text p-button-plain"
         ></Button>
