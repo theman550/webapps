@@ -67,7 +67,7 @@ class App extends React.Component {
             window.location.reload();
         }
 
-        const navbrand = <img alt="logo" src="./logo512.png" height="40" className="pmr"></img>
+        const navbrand = <img alt="logo" src="./reddrink512.png" height="40" className="pmr"></img>
 
 
         const renderEnd = () => {
