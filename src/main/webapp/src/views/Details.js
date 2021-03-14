@@ -9,6 +9,7 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { Knob } from 'primereact/knob';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 class Details extends React.Component {
 
@@ -53,6 +54,24 @@ class Details extends React.Component {
         window.history.replaceState({},'', `${window.location.pathname}?${params}`);
     }
 
+    onDelete = () => {
+        fetch(process.env.REACT_APP_API_URL + "/drinks/" + this.props.drink.id, {
+            method: "DELETE",
+            headers: {'Authorization': `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}
+        })
+                .then(response => response.ok ? "" : Promise.reject(response.status))
+                .then(() => {
+                                
+                                const params = new URLSearchParams(window.location.search)
+                                params.delete('drink')
+                                window.history.replaceState({},'', `${window.location.pathname}?${params}`);
+                                window.location.reload()
+                            })
+                .catch((error) => {
+                    console.error(error);
+                });
+    }
+
     onHide = () => {
         // Remove drink id from url when exiting details view
         const params = new URLSearchParams(window.location.search);
@@ -63,6 +82,17 @@ class Details extends React.Component {
     }
 
     render() {
+        const renderFooter = () => {
+            return(
+                <div>
+                    {isCreator
+                        ? <Button label="Delete" icon="pi pi-trash" className="p-button-danger deleteButton" tooltip="Delete this drink" onClick={() => this.onDelete()}/>
+                        : ""
+                    }
+                </div>
+            );
+        }
+        const isCreator = JSON.parse(localStorage.getItem("currentUser"))?.username == this.props.drink.user.accountName
         const header = (
             <div>
                 {this.props.drink.user.displayName}
@@ -93,6 +123,7 @@ class Details extends React.Component {
                         modal={true}
                         maximizable={true}
                         closeOnEscape={true}
+                        footer={renderFooter}
                         >
                         <div className="content p-jc-between">
                             <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.drink.image})`}}>
@@ -124,9 +155,9 @@ class Details extends React.Component {
                                     <b>Ingredients</b>
                                 </div>
                             </Divider>
-                            <div className="ingredients">
-                                {ingredients}
-                            </div>
+                                <div className="ingredients">
+                                    {ingredients}
+                                </div>
                             </div>
                         </div>
                     </Dialog>

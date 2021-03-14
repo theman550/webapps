@@ -201,14 +201,15 @@ public class DrinkResource {
     
     @DELETE
     @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
     @Secured
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response removeDrink(Drink d, @Context SecurityContext securityContext) {
+    public Response removeDrink(@PathParam("id") Long Id, @Context SecurityContext securityContext) {
         // Get the name of the authorized user (derived from a valid token)
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        if(d.getUser().equals(authorizedUser)){
-            drinkDAO.remove(d);
-            return Response.status(Response.Status.OK).build();
+        System.out.println("HELLO THERE" + authorizedUser.getAccountName());
+        if(drinkDAO.findDrinkByID(Id).get(0).getUser().equals(authorizedUser)){
+            drinkDAO.remove(drinkDAO.findDrinkByID(Id).get(0));
+            return Response.status(Response.Status.OK).entity("Succesfully deleted!").build();
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("Not your drink!").build(); 
         }

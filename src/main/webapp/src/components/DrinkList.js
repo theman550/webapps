@@ -79,7 +79,6 @@ export default class DrinkList extends React.Component {
     }
 
     fetchBrave = () => {
-        console.log("hello cvunt")
         fetch(process.env.REACT_APP_API_URL + "/drinks/brave", {
             method: "GET"
         })
