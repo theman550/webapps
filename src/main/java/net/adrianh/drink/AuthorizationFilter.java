@@ -26,10 +26,14 @@ public class AuthorizationFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
         
-
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            // Allow requests to query popular and newest drinks even without auth header
+            if (requestContext.getUriInfo().getPath().contains("drinks/popular") || requestContext.getUriInfo().getPath().contains("drinks/newest")) {
+                return;
+            }
             throw new NotAuthorizedException("Authorization header must be provided");
         }
+
         String token = authorizationHeader.substring("Bearer".length()).trim();
         
         try {

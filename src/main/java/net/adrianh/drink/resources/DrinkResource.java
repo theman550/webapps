@@ -80,16 +80,27 @@ public class DrinkResource {
           
     @POST
     @Path("popular")
+    @Secured // NOTE: The filter will still allow access to this particular endpoint even without proper auth header since auth is optional here
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listPopular(String acr) throws JSONException {
+    // TODO: Add query param for getting upvotes & implement it in resources and DAO
+    public Response listPopular(String acr, @QueryParam("createdOnly") boolean getCreatedDrinks, @Context SecurityContext securityContext) throws JSONException {
         
         JSONObject o = new JSONObject(acr);
-        
+        String authorizedUserName = null;
+        // If the request is for a specific user's created drinks / upvotes, try to get the authorized user.
+        // Will return UNAUTHORIZED if no PrincipalUuser exists (i.e if no auth header was provided)
+        if (getCreatedDrinks) {
+            try {
+                authorizedUserName = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0).getAccountName();
+            } catch(NullPointerException e) {
+                return Response.status(Response.Status.fromStatusCode(401)).build();
+            }
+        }
         if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
             
-            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("offset")));
+            QueryResults qr = drinkDAO.findMostPopularFromOffset((o.getInt("offset")),authorizedUserName);
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
             
@@ -101,13 +112,13 @@ public class DrinkResource {
             int total = 0;
             
             if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
-                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"), authorizedUserName);
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
                 for(int i = 0; i < o.getJSONArray("queries").length(); i++){
-                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"), authorizedUserName);
                     if(allDrinks.isEmpty()){
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
@@ -136,17 +147,27 @@ public class DrinkResource {
     }
     
     @POST
+    @Secured // NOTE: The filter will still allow access to this particular endpoint even without proper auth header since auth is optional here
     @Path("newest")
     @Consumes("*/*")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response listNewest(String acr) throws JSONException {
+    public Response listNewest(String acr, @QueryParam("createdOnly") boolean getCreatedDrinks, @Context SecurityContext securityContext) throws JSONException {
         
         JSONObject o = new JSONObject(acr);
+        
+        String authorizedUserName = null;
+        if (getCreatedDrinks) {
+            try {
+                authorizedUserName = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0).getAccountName();
+            } catch(NullPointerException e) {
+                return Response.status(Response.Status.fromStatusCode(401)).build();
+            }
+        }
         
         if("[]".equals(o.getString("queries"))) { //if no search, BRING ME THE BEST YOU HAVE
             List<Drink> allDrinks = new ArrayList<>();
             
-            QueryResults qr = drinkDAO.findNewestFromOffset((o.getInt("offset")));
+            QueryResults qr = drinkDAO.findNewestFromOffset((o.getInt("offset")), authorizedUserName);
             allDrinks.addAll(qr.getResults());
             DrinkResponse drinks = new DrinkResponse((int) qr.getTotal(), allDrinks);
             
@@ -158,13 +179,13 @@ public class DrinkResource {
             int total = 0;
             
             if("drink".equals(o.getJSONArray("queries").getJSONObject(0).getString("type"))) {
-                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"));
+                QueryResults dr = drinkDAO.findDrinksMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(0).getString("name"), o.getInt("offset"),authorizedUserName);
                 allDrinks.addAll(dr.getResults());
                 total = (int) dr.getTotal();
             } else {
                 QueryResults ir = null;
                 for(int i = 0; i < o.getJSONArray("queries").length(); i++){
-                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"));
+                    ir = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest(o.getJSONArray("queries").getJSONObject(i).getString("name"), o.getInt("offset"),authorizedUserName);
                     if(allDrinks.isEmpty()){
                         allDrinks.addAll(ir.getResults());
                         total = (int) ir.getTotal();
