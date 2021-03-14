@@ -2,6 +2,7 @@ package net.adrianh.drink.model.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
@@ -11,7 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,6 +40,14 @@ public class User implements Serializable {
     private String password;
     @JsonbTransient
     private String salt;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    
+    @PrePersist
+    private void prePersist() {
+        createdAt = new Date();
+    }
 
     //a user has many created drinks
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

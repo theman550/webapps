@@ -54,6 +54,7 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
         return ingredients;
     }
 
+
     //find matching name from offset ordered by popular
     public QueryResults<Drink> findDrinksFromIngredientsMatchingNameFromOffset(String s, int offset, String user, boolean getUpvotedDrinks) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
@@ -89,5 +90,6 @@ public class IngredientDAO extends AbstractDAO<Ingredient> {
         if (user != null && getUpvotedDrinks == true) {
             jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
         }
+
     }
 }

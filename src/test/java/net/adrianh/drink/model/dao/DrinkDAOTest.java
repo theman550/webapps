@@ -39,8 +39,7 @@ public class DrinkDAOTest {
 
     @Before
     public void init() {
-        User usr = new User(1L, "man", "usr", "pw", "salt", null, null);
-
+        User usr = new User(1L,"man","usr", "pw", "salt", null, null, null); 
         usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
         Drink d = new Drink();
@@ -59,7 +58,6 @@ public class DrinkDAOTest {
         d4.setName("d4");
         d4.setVoteCount(4);
         d4.setDescription("d4.1");
-
         Drink d5 = new Drink(); //DIFFERENT DRINK, SAME NAME
         d5.setName("d4");
         d5.setVoteCount(5);
@@ -137,7 +135,7 @@ public class DrinkDAOTest {
         Assert.assertEquals(drinks.get(2).getId(), drinkDAO.findNewestFromOffset(2, null, false).getResults().get(0).getId()); //comapre by id, since name is the same
     }
 
-    /*
+
     @Test
     //True if drinks[0] is the 2nd newest drink from all added drinks 
     //Seems as if it saves to the databse whenever it feels like it. The test will sometimes work and sometimes not. Welp, RIP[*]
@@ -152,7 +150,7 @@ public class DrinkDAOTest {
         });
         Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1,null).getResults().get(0).getId()); //compare by Id, since name is the same
     }
-     */
+ 
     @After
     public void clean() {
         List<User> users = userDAO.findAll();

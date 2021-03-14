@@ -13,7 +13,7 @@ import About from '../views/About.js';
 import App from '../App.js';
 import TextInput from '../components/TextInput';
 
-import { Switch, Route, withRouter }
+import { Switch, Route, withRouter, Redirect, useHistory }
 from 'react-router-dom';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
@@ -47,12 +47,7 @@ class Login extends Component {
             showRegFields: false,
         };
 
-        //todo: fix this 
         this.state = {
-            tempSolutionFix: '',
-        };
-
-      this.state = {
             input: [],
             regMessages: [],
             loginMessage: ''
@@ -87,7 +82,7 @@ class Login extends Component {
         })
         .then(response => {
             if(response.ok){
-                this.setState({tempSolutionFix: ["Login worked!"]});
+                this.setState({loginMessage: ["Login worked!"]});
                 return response.json(); 
             } else if(response.status === 401){
                 this.setState({loginMessage: ["No such account!"]});
@@ -100,6 +95,7 @@ class Login extends Component {
                 console.log(UserAsJson);
                 this.props.onLogin(UserAsJson);
                 localStorage.setItem('currentUser', JSON.stringify(UserAsJson));
+                this.props.history.push('/');
             }
         })
     }
@@ -128,7 +124,6 @@ class Login extends Component {
         let input = this.state.input;
         let newErrors = [];
         let isValid = true;
-  
         
         if (!input.regname) {
             isValid = false;

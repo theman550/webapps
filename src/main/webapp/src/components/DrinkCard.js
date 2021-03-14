@@ -13,10 +13,14 @@ import Home from '../views/Home.js';
 import Details from '../views/Details.js';
 import "./DrinkCard.css";
 import Timestamp from "../components/Timestamp.js";
+import reddrink from "../images/reddrink.png"
 class DrinkCard extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            detailsVisible: false
+        }
 
     }
 
@@ -24,9 +28,20 @@ class DrinkCard extends Component {
         this.props.history.push(path);
     }
 
-    showDetailsDialog() {
-        console.log('Click happened');
+    openDetailsDialog = () => {
+        this.setState({detailsVisible: true});
 
+    }
+
+    closeDetailsDialog = () => {
+        this.setState({detailsVisible :false});
+    }
+
+    getImgUrl (image) {
+        if (image === "") {
+            return reddrink;
+        }
+        return image;
     }
 
     render() {
@@ -55,7 +70,7 @@ class DrinkCard extends Component {
                         <div className="product-grid-item-content">
                             <Voter data={data} sendVote={this.props.sendVote}></Voter>
                             <img
-                                src={data.image}
+                                src={this.getImgUrl(data.image)}
                                 alt={data.name}
                                 />
                             <div>
@@ -64,13 +79,19 @@ class DrinkCard extends Component {
                             </div>
                         </div>
                         <div className="product-grid-item-bottom">
-                            <Details 
-                                src={data.image}
-                                alt={data.name}
-                                drinkName={data.name}
-                                ingredients={data.ingredients}
-                                description={data.description}
-                                />
+                            <Button label="Details" className="p-button-text" onClick={this.openDetailsDialog}></Button>
+                            
+                            {/* Only render details when button is clicked */}
+                            {this.state.detailsVisible
+                                ? <Details
+                                    visible={this.state.detailsVisible}
+                                    drink={data}
+                                    openDialog={this.openDetailsDialog}
+                                    closeDialog={this.closeDetailsDialog}
+                                    />
+                                : ''
+                                }
+
                             <Timestamp 
                                data={data}
                                 />

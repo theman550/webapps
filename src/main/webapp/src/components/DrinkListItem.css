@@ -22,3 +22,9 @@
 .product-list-item .product-list-end {
     align-self: flex-start;
 }
+
+.list-footer {
+    display:flex;
+    text-align: right;
+    justify-content: flex-end;
+}
