@@ -13,6 +13,7 @@ import Home from '../views/Home.js';
 import Details from '../views/Details.js';
 import "./DrinkCard.css";
 import Timestamp from "../components/Timestamp.js";
+import reddrink from "../images/reddrink.png"
 class DrinkCard extends Component {
 
     constructor(props) {
@@ -34,6 +35,13 @@ class DrinkCard extends Component {
 
     closeDetailsDialog = () => {
         this.setState({detailsVisible :false});
+    }
+
+    getImgUrl (image) {
+        if (image === "") {
+            return reddrink;
+        }
+        return image;
     }
 
     render() {
@@ -62,7 +70,7 @@ class DrinkCard extends Component {
                         <div className="product-grid-item-content">
                             <Voter data={data} sendVote={this.props.sendVote}></Voter>
                             <img
-                                src={data.image}
+                                src={this.getImgUrl(data.image)}
                                 alt={data.name}
                                 />
                             <div>

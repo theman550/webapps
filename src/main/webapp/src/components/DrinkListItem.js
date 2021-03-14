@@ -6,6 +6,7 @@ import './DrinkListItem.css';
 import React, { Component } from 'react';
 import { Button } from 'primereact/button';
 import Timestamp from "../components/Timestamp.js";
+import reddrink from "../images/reddrink.png";
 export default class DrinkListItem extends Component {
 
     constructor(props) {
@@ -29,6 +30,13 @@ export default class DrinkListItem extends Component {
         this.setState({detailsVisible :false});
     }
 
+    getImgUrl (image) {
+        if (image === "") {
+            return reddrink;
+        }
+        return image;
+    }
+
     render(){
         const data = this.props.data;
 
@@ -45,7 +53,7 @@ export default class DrinkListItem extends Component {
                     <div className="product-list-item">
                         <Voter data={data} sendVote={this.props.sendVote}></Voter>
                         <img
-                            src={data.image}
+                            src={this.getImgUrl(data.image)}
                             alt={data.name}
                             />
                         <div className="product-list-detail">

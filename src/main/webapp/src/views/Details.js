@@ -10,6 +10,7 @@ import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { Knob } from 'primereact/knob';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import reddrink from "../images/reddrink.png";
 
 class Details extends React.Component {
 
@@ -126,7 +127,7 @@ class Details extends React.Component {
                         footer={renderFooter}
                         >
                         <div className="content p-jc-between">
-                            <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.drink.image})`}}>
+                            <div className="leftSide" style={{backgroundImage: `linear-gradient(0deg,#00000088 30%, #ffffff44 100%), url(${this.props.drink.image == "" ? reddrink : this.props.drink.image})`}}>
                                 <h3 className="drinkName">{this.props.drink.name}</h3>
                             </div>
                             <div className="desc">
