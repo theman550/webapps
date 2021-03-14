@@ -27,10 +27,6 @@ import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.User;
 
 
-/**
- * @author andra
- */
-
 @Path("user")
 public class UserResource {
     

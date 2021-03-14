@@ -48,6 +48,7 @@ public class UserDAOTest {
         usr.setVotes(new ArrayList<>());
 	userDAO.create(usr);
     }
+    
        
     // True if a user is created and the class is User (meh)
     @Test

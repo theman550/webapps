@@ -47,12 +47,7 @@ class Login extends Component {
             showRegFields: false,
         };
 
-        //todo: fix this 
         this.state = {
-            tempSolutionFix: '',
-        };
-
-      this.state = {
             input: [],
             regMessages: [],
             loginMessage: ''
@@ -87,8 +82,8 @@ class Login extends Component {
         })
         .then(response => {
             if(response.ok){
-                this.setState({tempSolutionFix: ["Login worked!"]});
-                return response.json();
+                this.setState({loginMessage: ["Login worked!"]});
+                return response.json(); 
             } else if(response.status === 401){
                 this.setState({loginMessage: ["No such account!"]});
             } else{
@@ -129,7 +124,6 @@ class Login extends Component {
         let input = this.state.input;
         let newErrors = [];
         let isValid = true;
-  
         
         if (!input.regname) {
             isValid = false;

@@ -9,6 +9,8 @@ import javax.persistence.PersistenceContext;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.QDrink;
+import net.adrianh.drink.model.entity.QVote;
+import net.adrianh.drink.model.entity.Vote;
 
 @Stateless
 public class DrinkDAO extends AbstractDAO<Drink> {
@@ -27,13 +29,13 @@ public class DrinkDAO extends AbstractDAO<Drink> {
 	    .fetch();
 	return drinks;
     }
-    public List<Drink> findDrinkByID(Long id){
+    public Drink findDrinkByID(Long id){
 	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
 	QDrink drink = QDrink.drink;
 	List<Drink> drinks = queryFactory.selectFrom(drink)
 	    .where(drink.id.eq(id))
 	    .fetch();
-	return drinks;
+	return drinks.get(0);
     }
     public List<Drink> findDrinksStartMatchingName(String s){
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
@@ -88,5 +90,21 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             .orderBy(drink.createdAt.desc())
             .fetchResults();
         return drinks;
+    }
+    
+    public int findAllDrinkVotes(Long id){
+	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+            
+        QVote vote = QVote.vote;
+	List<Vote> votes = queryFactory.selectFrom(vote)
+	    .where(vote.drink.id.eq(id))
+	    .fetch();
+        
+        int i = 0;
+        for (Vote v : votes) {
+           i += v.getVal();
+        }
+	
+        return i;
     }
 }

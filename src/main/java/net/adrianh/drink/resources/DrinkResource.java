@@ -77,7 +77,7 @@ public class DrinkResource {
         drinkDAO.create(d);
         return Response.status(Response.Status.OK).build();
     }
-    
+          
     @POST
     @Path("popular")
     @Consumes("*/*")
@@ -207,8 +207,8 @@ public class DrinkResource {
         // Get the name of the authorized user (derived from a valid token)
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
         System.out.println("HELLO THERE" + authorizedUser.getAccountName());
-        if(drinkDAO.findDrinkByID(Id).get(0).getUser().equals(authorizedUser)){
-            drinkDAO.remove(drinkDAO.findDrinkByID(Id).get(0));
+        if(drinkDAO.findDrinkByID(Id).getUser().equals(authorizedUser)){
+            drinkDAO.remove(drinkDAO.findDrinkByID(Id));
             return Response.status(Response.Status.OK).entity("Succesfully deleted!").build();
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("Not your drink!").build(); 
