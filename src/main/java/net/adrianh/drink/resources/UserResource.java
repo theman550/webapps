@@ -103,26 +103,4 @@ public class UserResource {
 
         return new String(array, Charset.forName("UTF-8"));
     }
-
-    @POST
-    @Secured
-    @Path("mydrinks/{sortOption}")
-    @Consumes("*/*")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Drink> getDrinks(@PathParam("sortOption") String sortOption, String queryObject, @Context SecurityContext securityContext, @Context ResourceContext resourceContext) throws JSONException {
-        DrinkResource r = resourceContext.getResource(DrinkResource.class);
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        return authorizedUser.getCreatedDrinks();
-    }
-
-    @POST
-    @Secured
-    @Path("upvoted")
-    @Consumes("*/*")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Vote> getVotes(@Context SecurityContext securityContext) {
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        return authorizedUser.getVotes();
-    }
-
 }
