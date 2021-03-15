@@ -264,7 +264,7 @@ public class DrinkResource {
     public Response removeDrink(@PathParam("id") Long Id, @Context SecurityContext securityContext) {
         // Get the name of the authorized user (derived from a valid token)
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        if(drinkDAO.findDrinkByID(Id).getUser().equals(authorizedUser)){
+        if(drinkDAO.findDrinkByID(Id).getUser().getId().equals(authorizedUser.getId())){
             drinkDAO.remove(drinkDAO.findDrinkByID(Id));
             return Response.status(Response.Status.OK).entity("Succesfully deleted!").build();
         } else {
