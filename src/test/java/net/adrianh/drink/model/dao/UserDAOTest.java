@@ -48,7 +48,7 @@ public class UserDAOTest {
 	User usr = new User(null,"usr","CoolGuy", "pw", "salt", null, null, null);
 	usr.setCreatedDrinks(new ArrayList<>());
 
-        usr.setVotes(new ArrayList<>());
+        usr.setUpvotedDrinks(new ArrayList<>());
         userDAO.create(usr);
     }
 
