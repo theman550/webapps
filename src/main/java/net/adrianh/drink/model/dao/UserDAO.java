@@ -1,5 +1,6 @@
 package net.adrianh.drink.model.dao;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -12,68 +13,68 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.Getter;
+import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.QUser;
 import net.adrianh.drink.model.entity.User;
 
 @Stateless
 public class UserDAO extends AbstractDAO<User> {
-    @Getter @PersistenceContext(unitName = "drinkdb")
+
+    @Getter
+    @PersistenceContext(unitName = "drinkdb")
     private EntityManager entityManager;
 
     public UserDAO() {
         super(User.class);
-    }   
-       
-    public User login(String name, String pw){
+    }
+
+    public User login(String name, String pw) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.accountName.eq(name).and(user.password.eq(pw)))
-            .fetch();
+                .where(user.accountName.eq(name).and(user.password.eq(pw)))
+                .fetch();
         return users.get(0);
     }
-    
 
-    public boolean areCredentialsMatching(String name, String pw){        
+    public boolean areCredentialsMatching(String name, String pw) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.accountName.eq(name).and(user.password.eq(pw)))
-            .fetch();
-                
+                .where(user.accountName.eq(name).and(user.password.eq(pw)))
+                .fetch();
+
         return !users.isEmpty();
     }
-    
-    public boolean isAccNameUnique(String name){        
+
+    public boolean isAccNameUnique(String name) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.accountName.eq(name))
-            .fetch();
-        
+                .where(user.accountName.eq(name))
+                .fetch();
+
         return users.isEmpty();
     }
-    
 
-    public List<User> findUserByID(Long id){
+    public List<User> findUserByID(Long id) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.id.eq(id))
-            .fetch();
+                .where(user.id.eq(id))
+                .fetch();
         return users;
     }
-  
-   public String findSaltByName(String name){
+
+    public String findSaltByName(String name) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
         List<User> users = queryFactory.selectFrom(user)
-            .where(user.accountName.eq(name))
-            .fetch();
-
-      return users.get(0).getSalt();
+                .where(user.accountName.eq(name))
+                .fetch();
+        return users.get(0).getSalt();
     }
-  
+
     public List<User> findUserByName(String name) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QUser user = QUser.user;
@@ -82,4 +83,25 @@ public class UserDAO extends AbstractDAO<User> {
                 .fetch();
         return users;
     }
+    /*
+    public List<Drink> getUserDrinks(String name) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        List<User> users = queryFactory.selectFrom(user)
+                .where(user.accountName.eq(name))
+                .fetch();
+
+        return users.get(0).getDrinks();
+    }
+     */
+ /*
+     public QueryResults<User> queryFindUserByID(String name) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QUser user = QUser.user;
+        QueryResults<User> users = queryFactory.selectFrom(user)
+                .where(user.accountName.eq(name))
+                .fetchResults();
+        return users;
+    }
+     */
 }

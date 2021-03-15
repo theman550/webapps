@@ -8,6 +8,7 @@ import "./Profile.css";
 
 export default class Profile extends React.Component {
 
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -70,6 +71,4 @@ export default class Profile extends React.Component {
 			</div>
 		)
 	}
-
-
 }
