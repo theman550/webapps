@@ -33,13 +33,13 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         return drinks;
     }
 
-    public Drink findDrinkByID(Long id){
-	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-	QDrink drink = QDrink.drink;
-	List<Drink> drinks = queryFactory.selectFrom(drink)
-	    .where(drink.id.eq(id))
-	    .fetch();
-	return drinks.get(0);
+    public Drink findDrinkByID(Long id) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        List<Drink> drinks = queryFactory.selectFrom(drink)
+                .where(drink.id.eq(id))
+                .fetch();
+        return drinks.get(0);
     }
 
     public List<Drink> findDrinksStartMatchingName(String s) {
@@ -114,5 +114,21 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
         }
 
+    }
+
+    public int findAllDrinkVotes(Long id) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+
+        QVote vote = QVote.vote;
+        List<Vote> votes = queryFactory.selectFrom(vote)
+                .where(vote.drink.id.eq(id))
+                .fetch();
+
+        int i = 0;
+        for (Vote v : votes) {
+            i += v.getVal();
+        }
+
+        return i;
     }
 }

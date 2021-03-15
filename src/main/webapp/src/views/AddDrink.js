@@ -68,8 +68,10 @@ function AddDrink () {
     <Form>
       <center>
       <div>
+      <h1>Add a drink</h1>
       <View style={styles.container}>
       <Messages ref={msg}></Messages>
+      <br/>
         <TextInput
             type="text"
             onChange={handleChange('name')}
@@ -81,6 +83,7 @@ function AddDrink () {
             style={styles.input}
         />
         <ErrorMessage name={`name`} />
+        <br/>
         <TextInput
             type="text"
             multiline={true}
@@ -93,6 +96,7 @@ function AddDrink () {
             style={styles.descriptionInput}
         />
         <ErrorMessage name={`description`} />
+        <br/>
         <TextInput
             type="text"
             onChange={handleChange('image')}
@@ -106,18 +110,19 @@ function AddDrink () {
         <FieldArray name="ingredients">
           {({ remove, push }) => (
             <div>
+              <h2>Ingredients</h2>
               {values.ingredients.length > 0 &&
                 values.ingredients.map((ingredient, index) => (
-                <div className="row" key={index}>
+                  <div className="row" key={index}>
                   <div className="col">
                     <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
                     <Field name={`ingredients[${index}].name`}  />
                     <ErrorMessage name={`ingredients.${index}.name`} />
-                  <label htmlFor={`ingredients.${index}.abv`}>&emsp;Percentage:&ensp;</label>
-                    <Field name={`ingredients.${index}.abv`} />                    
-                    <ErrorMessage name={`ingredients.${index}.abv`} />
+                  <label htmlFor={`ingredients.${index}.abv`}>&emsp;Alcohol:&ensp;</label>
+                    <Field name={`ingredients.${index}.abv`} style={{width: '20px'}}/> %              
+                    <ErrorMessage name={`ingredients.${index}.abv`} /> 
                   <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
-                    <Field name={`ingredients.${index}.amount`} />
+                    <Field name={`ingredients.${index}.amount`}  style={{width: '40px'}} />
                     <ErrorMessage name={`ingredients.${index}.amount`} />
                   <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
                     <Field as="select" name={`ingredients.${index}.unit`}>
@@ -172,10 +177,8 @@ function AddDrink () {
       validateOnBlur={false}
       onSubmit = {(values, formikActions) => {
         setTimeout(() => {      
-            //var User = JSON.parse(localStorage.getItem("currentUser"));
             console.log("Transmitting drink data to database...");
             console.log(JSON.stringify(values));
-            //console.log(User.id);
             const requestOptions = {
                 method: 'POST',
                 credentials: 'include',

@@ -99,8 +99,7 @@ public class VoteResource {
        }
        
        drink.setVoteCount(drinkDAO.findAllDrinkVotes(drinkID));
-       drinkDAO.update(drink);
-       drink.getVoteCount();     
+       drinkDAO.update(drink);  
        return drink.getVoteCount();
     }    
     
