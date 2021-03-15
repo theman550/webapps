@@ -1,5 +1,6 @@
 package net.adrianh.drink.model.entity;
 
+import net.adrianh.drink.model.dao.keyPackage.IngredientPK;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,13 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-
-@Data
-class IngredientPK implements Serializable {
-    private Long drink;
-    private String name;
-}
-
 @Data
 @Entity
 @IdClass(IngredientPK.class)
@@ -31,26 +25,25 @@ class IngredientPK implements Serializable {
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ingredient implements Serializable {
-    
-    
+
     public enum Unit {
-        MILLILITRE, CENTILITRE, DECILITRE, LITRE, GRAMS, PIECES 
+        MILLILITRE, CENTILITRE, DECILITRE, LITRE, GRAMS, PIECES
     }
-    
+
     @Id
-    private String name; 
-    
+    private String name;
+
     @Enumerated(EnumType.STRING)
     private Unit unit;
     private double amount;
-    
+
     //alcohol percentage
     private double abv;
-    
+
     //ingredient belongs to drink as element of list
     @Id
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JsonbTransient
-    @JoinColumn(name="drink_id")
+    @JoinColumn(name = "drink_id")
     private Drink drink;
 }
