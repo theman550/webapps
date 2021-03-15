@@ -148,7 +148,7 @@ public class DrinkDAOTest {
                     return d2.getCreatedAt().compareTo(d1.getCreatedAt());
                 }
         });
-        Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1,null).getResults().get(0).getId()); //compare by Id, since name is the same
+        Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1,null,false).getResults().get(0).getId()); //compare by Id, since name is the same
     }
  
     @After
