@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -22,18 +21,20 @@ import javax.ws.rs.core.Response;
 import javax.json.Json;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
-import net.adrianh.drink.Secured;
 import static net.adrianh.drink.TokenServices.createToken;
+
 import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.User;
 import net.adrianh.drink.model.entity.Vote;
 
+/**
+ * @author andra
+ */
 @Path("user")
 public class UserResource {
 
@@ -76,20 +77,11 @@ public class UserResource {
         } else {
             return Response.status(Response.Status.CONFLICT).entity("Account name not unique!").build();
         }
-  
-    }  
-    
-    @GET
-    @Path("me")
-    @Secured
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@Context SecurityContext securityContext){
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        return Response.status(Response.Status.OK).entity(userDAO.findUserByID(authorizedUser.getId()).get(0)).build();
+
     }
-    
-    private String mockHash(String password){
-       
+
+    private String mockHash(String password) {
+
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-512");

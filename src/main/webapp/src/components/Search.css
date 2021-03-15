@@ -1,12 +1,3 @@
 .auto-complete-search .p-autocomplete-item {
     text-align: left;
 }
-
-.suggestion-item {
-    display: flex;
-    justify-content: space-between;
-}
-
-.suggestion-item .item-type {
-    color:slategray;
-}

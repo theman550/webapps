@@ -14,8 +14,9 @@ export default function Timestamp(props) {
     //let date = new Date().toLocaleString();
 
     return (
-            <div>
+            <div className="p-col-12">
                 <a>{timestamp}</a>
+            
             </div>
             );
 }

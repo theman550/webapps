@@ -45,56 +45,55 @@ public class IngredientDAOTest {
     @Before
     public void init() {
 
-	
-	User usr = new User(null,"man","usr", "pw", "salt", null, null, null);
-	usr.setCreatedDrinks(new ArrayList<>());
+        User usr = new User(null, "man", "usr", "pw", "salt", null, null);
+        usr.setCreatedDrinks(new ArrayList<>());
         usr.setVotes(new ArrayList<>());
 
-	Ingredient ing = new Ingredient("Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,null);
-	Ingredient ing2 = new Ingredient("Coke", Ingredient.Unit.CENTILITRE,12.0,0.0,null);
-        Ingredient ing3 = new Ingredient("Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,null);
-        Ingredient ing4 = new Ingredient("Rum", Ingredient.Unit.CENTILITRE,6.0,42.0,null);
-	Drink d = new Drink();
+        Ingredient ing = new Ingredient("Rum", Ingredient.Unit.CENTILITRE, 6.0, 42.0, null);
+        Ingredient ing2 = new Ingredient("Coke", Ingredient.Unit.CENTILITRE, 12.0, 0.0, null);
+        Ingredient ing3 = new Ingredient("Rum", Ingredient.Unit.CENTILITRE, 6.0, 42.0, null);
+        Ingredient ing4 = new Ingredient("Rum", Ingredient.Unit.CENTILITRE, 6.0, 42.0, null);
+        Drink d = new Drink();
         d.setIngredients(new ArrayList<>());
-	d.setName("Margarita");
-	d.setDescription("Mums");
-	d.setUser(usr);
-	d.addIngredient(ing);
-	d.addIngredient(ing2);
-	usr.addDrink(d);
-        
+        d.setName("Margarita");
+        d.setDescription("Mums");
+        d.setUser(usr);
+        d.addIngredient(ing);
+        d.addIngredient(ing2);
+        usr.addDrink(d);
 
         Drink d2 = new Drink();
         d2.setName("d2");
         d2.setVoteCount(2);
         d2.setIngredients(new ArrayList<>());
         d2.addIngredient(ing4);
+
         Drink d3 = new Drink();
         d3.setName("d3");
         d3.setVoteCount(3);
         d3.setIngredients(new ArrayList<>());
         d3.addIngredient(ing3);
+
         Drink d4 = new Drink();
         d4.setName("d4");
         d4.setVoteCount(4);
-        
+
         Drink d5 = new Drink(); //DIFFERENT DRINK, SAME NAME
         d5.setName("d4");
         d5.setVoteCount(5);
-        
+
         d2.setUser(usr);
-	usr.addDrink(d2);
-	d3.setUser(usr);
-	usr.addDrink(d3);
-	d4.setUser(usr);
-	usr.addDrink(d4);
+        usr.addDrink(d2);
+        d3.setUser(usr);
+        usr.addDrink(d3);
+        d4.setUser(usr);
+        usr.addDrink(d4);
         d5.setUser(usr);
-	usr.addDrink(d5);
-        
-	userDAO.create(usr);
+        usr.addDrink(d5);
+
+        userDAO.create(usr);
     }
-    
-    
+
     @Test
     public void testCreateIngredient() {
         Assert.assertTrue("Ingredient was not created, so that's bad", !ingredientDAO.findAll().isEmpty());
@@ -102,24 +101,25 @@ public class IngredientDAOTest {
 
     // True om det finns minst en ingrediens i drinken
     @Test
-    public void findIngredientsInDrink(){
-	Drink d = userDAO.findAll().get(0).getCreatedDrinks().get(0);
-	Assert.assertTrue(d.getIngredients().size()>0);
+    public void findIngredientsInDrink() {
+        Drink d = userDAO.findAll().get(0).getCreatedDrinks().get(0);
+        Assert.assertTrue(d.getIngredients().size() > 0);
     }
 
     @Test
     //True om det finns minst en drink med Coke 
-    public void checkThatFindDrinksFromIngredientWorks(){ 
-	List<Drink> drinkar = ingredientDAO.findDrinksFromIngredient("Coke");
-	Assert.assertTrue(drinkar.size() > 0);
+    public void checkThatFindDrinksFromIngredientWorks() {
+        List<Drink> drinkar = ingredientDAO.findDrinksFromIngredient("Coke");
+        Assert.assertTrue(drinkar.size() > 0);
     }
-    
+
     @Test
     //True if there is a ingredient with the name "Coke"
     public void checkThatFindIngredientsMatchingNameWorks() {
         List<Ingredient> ing = ingredientDAO.findIngredientsMatchingName("Coke");
         Assert.assertTrue(ing.get(0).getName().equals("Coke"));
     }
+
     @Test
     //True if it can find Coke from serach term "co"
     public void checkThatFindIngredientsStartingWithWorks() {
@@ -133,7 +133,6 @@ public class IngredientDAOTest {
         List<Drink> drinks = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset("Rum", 1, null, false).getResults();
         Assert.assertEquals("d2", drinks.get(0).getName());
     }
-
 
     @Test
     //True if drinks[0] is the newest drink that has the ingredient "Rum"
@@ -157,4 +156,3 @@ public class IngredientDAOTest {
         });
     }
 }
-
