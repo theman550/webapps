@@ -33,7 +33,7 @@ const validationSchema=Yup.object({
     .required('A name is required'),
     description: Yup.string()
     .required('Please describe how to make your drink'),
-    image: Yup.string().url(),
+    image: Yup.string().url('Invalid URL.'),
     ingredients: Yup.array().of(
       Yup.object().shape({
         name: Yup.string()
@@ -115,6 +115,11 @@ function AddDrink () {
             placeholder="URL to a picture"
             style={styles.input}
         />
+        <small>
+        <ErrorMessage name={`image`}>
+          {mess => <div style={{ color: 'red', textAlign: 'left' }}>{mess}</div> }
+        </ErrorMessage>
+        </small>
         <FieldArray name="ingredients">
           {({ remove, push }) => (
             <div>
@@ -128,11 +133,9 @@ function AddDrink () {
                       <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
                       <Field name={`ingredients[${index}].name`} />
                       <small> 
-                      <div style={{ color: 'red' }}>
                       <ErrorMessage name={`ingredients.${index}.name`}>
-                        {mess => <>{mess}</> }
+                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
                       </ErrorMessage>
-                      </div>
                       </small>
                     </div>
                   </div>
@@ -179,7 +182,7 @@ function AddDrink () {
                       &emsp;
                       <Button type="Button"
                       className="secondary"
-                      style={{height: '25px', paddingBottom: '9px'}} 
+                      style={{height: '20px', paddingBottom: '9px'}} 
                       onClick={() => remove(index)}>
                         Remove
                       </Button>
