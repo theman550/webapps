@@ -8,3 +8,8 @@ and open the template in the editor.
     Author     : ousam
 */
 
+
+.timestamp {
+    color:lightslategray;
+    font-size: 0.75rem;
+}

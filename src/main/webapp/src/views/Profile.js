@@ -3,6 +3,7 @@ import {TabPanel, TabView} from "primereact/tabview";
 import { Avatar } from "primereact/avatar";
 
 import DrinkList from "../components/DrinkList.js";
+import formatDate from '../util/formatDate.js';
 
 import "./Profile.css";
 
@@ -57,7 +58,7 @@ export default class Profile extends React.Component {
 						<div className="user-details">
 							<div className="p-d-flex p-ai-baseline">
 								<h3><i className="pi pi-calendar"></i> Member since</h3>
-								<p className="user-details p-ml-2">{this.state.user?.createdAt}</p>
+								<p className="user-details p-ml-2">{formatDate(this.state.user?.createdAt.substring(0,this.state.user?.createdAt.length-5))}</p>
 							</div>
 						</div>
 					</TabPanel>

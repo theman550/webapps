@@ -29,6 +29,10 @@
     text-align: left;
 }
 
+.product-grid-item-content .product-name {
+    word-break: break-all;
+}
+
 .product-grid-item-content .product-description {
     font-size: .9rem;
 }
