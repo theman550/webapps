@@ -72,6 +72,7 @@ public class UserDAO extends AbstractDAO<User> {
         List<User> users = queryFactory.selectFrom(user)
                 .where(user.accountName.eq(name))
                 .fetch();
+
         return users.get(0).getSalt();
     }
 

@@ -10,8 +10,6 @@ import javax.persistence.PersistenceContext;
 import lombok.Getter;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.QDrink;
-import net.adrianh.drink.model.entity.QVote;
-import net.adrianh.drink.model.entity.Vote;
 
 @Stateless
 public class DrinkDAO extends AbstractDAO<Drink> {
@@ -33,13 +31,13 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         return drinks;
     }
 
-    public Drink findDrinkByID(Long id){
-	JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-	QDrink drink = QDrink.drink;
-	List<Drink> drinks = queryFactory.selectFrom(drink)
-	    .where(drink.id.eq(id))
-	    .fetch();
-	return drinks.get(0);
+    public List<Drink> findDrinkByID(Long id) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QDrink drink = QDrink.drink;
+        List<Drink> drinks = queryFactory.selectFrom(drink)
+                .where(drink.id.eq(id))
+                .fetch();
+        return drinks;
     }
 
     public List<Drink> findDrinksStartMatchingName(String s) {
@@ -113,6 +111,5 @@ public class DrinkDAO extends AbstractDAO<Drink> {
         if (user != null && getUpvotedDrinks == true) {
             jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
         }
-
     }
 }
