@@ -1,6 +1,7 @@
 package net.adrianh.drink.model.dao;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -107,11 +108,13 @@ public class DrinkDAO extends AbstractDAO<Drink> {
     }
 
     public void checkUserAuthToFetchCreatedOrUpvotedDrinks(JPAQuery jpaQuery, QDrink drink, String user, boolean getUpvotedDrinks) {
+        QVote vote = QVote.vote;
         if (user != null && getUpvotedDrinks == false) {
             jpaQuery.where(drink.user.accountName.eq(user));
         }
         if (user != null && getUpvotedDrinks == true) {
-            jpaQuery.where(drink.user.votes.any().user_id.accountName.eq(user));
+            jpaQuery.select(vote.drink).from(vote).where(vote.val.eq(1).and(vote.user_id.accountName.eq(user).and(vote.drink.eq(drink))));
+            //jpaQuery.where(drink.votes.any().val.eq(1).and(drink.votes.any().user_id.accountName.eq(user)));
         }
 
     }
