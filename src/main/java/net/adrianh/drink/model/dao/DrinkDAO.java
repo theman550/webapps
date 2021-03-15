@@ -113,7 +113,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
             jpaQuery.where(drink.user.accountName.eq(user));
         }
         if (user != null && getUpvotedDrinks == true) {
-            jpaQuery.select(vote.drink).from(vote).where(vote.val.eq(1).and(vote.user_id.accountName.eq(user).and(vote.drink.eq(drink))));
+            jpaQuery.innerJoin(vote).on(drink.id.eq(vote.drink.id)).where(vote.val.eq(1).and(vote.user_id.accountName.eq(user).and(vote.drink.eq(drink))));
             //jpaQuery.where(drink.votes.any().val.eq(1).and(drink.votes.any().user_id.accountName.eq(user)));
         }
 
