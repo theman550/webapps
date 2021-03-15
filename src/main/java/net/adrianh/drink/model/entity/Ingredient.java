@@ -1,6 +1,6 @@
 package net.adrianh.drink.model.entity;
 
-import net.adrianh.drink.model.dao.keyPackage.IngredientPK;
+import net.adrianh.drink.model.dao.key.IngredientPK;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

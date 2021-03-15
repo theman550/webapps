@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import net.adrianh.drink.model.dao.keyPackage.votePK;
+import net.adrianh.drink.model.dao.key.votePK;
 
 @Data
 @Entity

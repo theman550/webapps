@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package net.adrianh.drink.model.dao.keyPackage;
+package net.adrianh.drink.model.dao.key;
 
 import java.io.Serializable;
 import javax.persistence.Embeddable;
