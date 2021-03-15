@@ -85,7 +85,7 @@ function AddDrink () {
             style={styles.input}
         />
         <small><ErrorMessage name={`name`}>
-          {mess => <div style={{ color: 'red' }}>{mess}</div> }
+          {mess => <div style={{ color: 'red', textAlign: 'left' }}>{mess}</div> }
         </ErrorMessage></small>
         <br/>
         <TextInput
@@ -101,7 +101,7 @@ function AddDrink () {
         />
         <small>
         <ErrorMessage name={`description`}>
-          {mess => <div style={{ color: 'red' }}>{mess}</div> }
+          {mess => <div style={{ color: 'red', textAlign: 'left' }}>{mess}</div> }
         </ErrorMessage>
         </small>
         <br/>
@@ -122,7 +122,7 @@ function AddDrink () {
               <div className="p-grid">
               {values.ingredients.length > 0 &&
                 values.ingredients.map((ingredient, index) => (
-                  <div className="p-row p-a-center" style={{display: 'flex', textAlign: "left"}} key={index}>
+                  <div className="p-row p-a-center" style={{display: 'flex', textAlign: "center"}} key={index}>
 
                     <div className="p-col">
                       <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
