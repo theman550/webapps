@@ -5,7 +5,6 @@
  */
 
 import React from "react";
-import { MDBInput } from "mdbreact";
 import { InputText } from "primereact/inputtext";
 
 const TextField = () => {

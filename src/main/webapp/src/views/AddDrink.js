@@ -1,9 +1,8 @@
 import React, { useRef } from 'react';
-import { Text, View, StyleSheet, TextInput, Alert } from 'react-native';
-import { Formik, Field, Form, ErrorMessage, yupToFormErrors, FieldArray } from 'formik';
+import { View, StyleSheet, TextInput } from 'react-native';
+import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'primereact/button';
-import { FileUpload } from 'primereact/fileupload';
 import { Messages } from 'primereact/messages';
 
 
