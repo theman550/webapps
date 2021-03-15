@@ -19,7 +19,7 @@ export default class Home extends React.Component {
         method: "GET"
       })
       .then(response => response.ok ? response.json() : Promise.reject(response.status))
-      .then(data => this.setState({selectedDrink: data[0]}))
+      .then(data => this.setState({selectedDrink: data}))
       .catch((error) => {
         console.error(error);
       })
