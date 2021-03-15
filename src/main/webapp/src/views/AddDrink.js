@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { Button } from 'primereact/button';
 import { Messages } from 'primereact/messages';
+import 'primeflex/primeflex.css';
 
 
 const ingredientItem = {
@@ -37,11 +38,11 @@ const validationSchema=Yup.object({
       Yup.object().shape({
         name: Yup.string()
         .required('A name is required'),
-        abv: Yup.number()
+        abv: Yup.number('Must be numeric')
         .required('Required')
         .min(0, "Must be at least 0%")
         .max(100, "Must be less than 100%"),
-        amount: Yup.number()
+        amount: Yup.number('Must be numeric')
         .required('Required'),
         unit: Yup.string()
         .required('Required'),
@@ -81,7 +82,9 @@ function AddDrink () {
             placeholder="Name of the drink"
             style={styles.input}
         />
-        <ErrorMessage name={`name`} />
+        <small><ErrorMessage name={`name`}>
+          {mess => <div style={{ color: 'red' }}>{mess}</div> }
+        </ErrorMessage></small>
         <br/>
         <TextInput
             type="text"
@@ -94,7 +97,11 @@ function AddDrink () {
             placeholder="Describe how to make your drink"
             style={styles.descriptionInput}
         />
-        <ErrorMessage name={`description`} />
+        <small>
+        <ErrorMessage name={`description`}>
+          {mess => <div style={{ color: 'red' }}>{mess}</div> }
+        </ErrorMessage>
+        </small>
         <br/>
         <TextInput
             type="text"
@@ -110,46 +117,76 @@ function AddDrink () {
           {({ remove, push }) => (
             <div>
               <h2>Ingredients</h2>
+              <div className="p-grid">
               {values.ingredients.length > 0 &&
                 values.ingredients.map((ingredient, index) => (
-                  <div className="row" key={index}>
-                  <div className="col">
-                    <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
-                    <Field name={`ingredients[${index}].name`}  />
-                    <ErrorMessage name={`ingredients.${index}.name`} />
-                  <label htmlFor={`ingredients.${index}.abv`}>&emsp;Alcohol:&ensp;</label>
-                    <Field name={`ingredients.${index}.abv`} style={{width: '20px'}}/> %              
-                    <ErrorMessage name={`ingredients.${index}.abv`} /> 
-                  <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
-                    <Field name={`ingredients.${index}.amount`}  style={{width: '40px'}} />
-                    <ErrorMessage name={`ingredients.${index}.amount`} />
-                  <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
-                    <Field as="select" name={`ingredients.${index}.unit`}>
-                      <option value="">Select</option>
-                      <option value="MILLILITRE">Ml</option>
-                      <option value="CENTILITRE">Cl</option>
-                      <option value="DECILITRE">Dl</option>
-                      <option value="LITRE">L</option>
-                      <option value="GRAMS">Grams</option>
-                      <option value="PIECES">Pieces</option>
-                    <ErrorMessage name={`ingredients.${index}.unit`} />
-                  </Field>
+                  <div className="p-row p-a-center" style={{display: 'flex', textAlign: "left"}} key={index}>
 
-                    &emsp;
-                    <Button type="Button"
-                    className="secondary"
-                    style={{height: '25px'}} 
-                    onClick={() => remove(index)}>
-                       Remove
-                    </Button>
-                  </div>
+                    <div className="p-col">
+                      <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
+                      <Field name={`ingredients[${index}].name`} style={{width: '60%'}} />
+                      <small> 
+                      <div style={{ color: 'red' }}>
+                      <ErrorMessage name={`ingredients.${index}.name`}>
+                        {mess => <>{mess}</> }
+                      </ErrorMessage>
+                      </div>
+                      </small>
+                    </div>
+                    
+                    <div className="p-col">
+                    <label htmlFor={`ingredients.${index}.abv`}>&emsp;Alcohol:&ensp;</label>
+                      <Field name={`ingredients.${index}.abv`} style={{width: '20px'}}/> %   
+                      <small>            
+                      <ErrorMessage name={`ingredients.${index}.abv`}>
+                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                      </ErrorMessage>
+                      </small>
+                    </div>
+                    
+                    <div className="p-col">
+                    <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
+                      <Field name={`ingredients.${index}.amount`}  style={{width: '40px'}} />
+                      <small> 
+                      <ErrorMessage name={`ingredients.${index}.amount`}>
+                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                      </ErrorMessage>
+                      </small>
+                    </div>
+                    
+                    <div className="p-col">
+                    <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
+                      <Field as="select" name={`ingredients.${index}.unit`}>
+                        <option value="">Select</option>
+                        <option value="MILLILITRE">Ml</option>
+                        <option value="CENTILITRE">Cl</option>
+                        <option value="DECILITRE">Dl</option>
+                        <option value="LITRE">L</option>
+                        <option value="GRAMS">Grams</option>
+                        <option value="PIECES">Pieces</option>
+                      </Field>
+                      <small> 
+                      <ErrorMessage name={`ingredients.${index}.unit`}>
+                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                      </ErrorMessage>
+                      </small>
+                    </div>
+
+                      &emsp;
+                      <Button type="Button"
+                      className="secondary"
+                      style={{height: '25px'}} 
+                      onClick={() => remove(index)}>
+                        Remove
+                      </Button>
                 </div>
-                ))}
+              ))}
+              </div>
                 <br/>
-               <Button
-                  type="Button"
-                  className="secondary"
-                  onClick={() => push(ingredientItem)}
+                <Button
+                type="Button"
+                className="secondary"
+                onClick={() => push(ingredientItem)}
                 >
                 Add another ingredient
                 </Button>
@@ -160,7 +197,6 @@ function AddDrink () {
             <right>
               <Button type="submit" style={{width: '130px'}}>Submit drink</Button>
             </right>
-
       </View>
       </div>
       </center>
