@@ -6,7 +6,6 @@ import Search from '../components/Search';
 import DrinkCard from '../components/DrinkCard';
 import DrinkListItem from '../components/DrinkListItem';
 import { Button } from 'primereact/button';
-import Dashboard from "../components/Dashboard";
 
 import './DrinkList.css';
 
