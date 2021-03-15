@@ -39,11 +39,13 @@ const validationSchema=Yup.object({
         name: Yup.string()
         .required('A name is required'),
         abv: Yup.number('Must be numeric')
+        .typeError('Must be numeric')
         .required('Required')
         .min(0, "Must be at least 0%")
         .max(100, "Must be less than 100%"),
-        amount: Yup.number('Must be numeric')
-        .required('Required'),
+        amount: Yup.number()
+        .required('Required')
+        .typeError('Must be numeric'),
         unit: Yup.string()
         .required('Required'),
       })
