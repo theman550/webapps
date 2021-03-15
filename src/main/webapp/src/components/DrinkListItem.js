@@ -41,7 +41,7 @@ export default class DrinkListItem extends Component {
         const data = this.props.data;
 
         const tags = data.ingredients.map((ingredient) =>
-            <span key={ingredient.id} onClick={() => this.props.handleIngredientTagClick(ingredient.name)}>
+            <span key={ingredient.name} onClick={() => this.props.handleIngredientTagClick(ingredient.name)}>
                 <Chip 
                     className={`ingredient-tag pmr-2 p-mb-2 ${this.props.queries.map((i) => i.name).includes(ingredient.name) ? "selected-ingredient" : ""}`} 
                     label={ingredient.name}>
