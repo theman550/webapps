@@ -13,7 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import net.adrianh.drink.Secured;
+import net.adrianh.drink.authorization.Secured;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.dao.VoteDAO;

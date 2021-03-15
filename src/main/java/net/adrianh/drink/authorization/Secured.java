@@ -1,4 +1,4 @@
-package net.adrianh.drink;
+package net.adrianh.drink.authorization;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

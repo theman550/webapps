@@ -1,4 +1,4 @@
-package net.adrianh.drink;
+package net.adrianh.drink.authorization;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

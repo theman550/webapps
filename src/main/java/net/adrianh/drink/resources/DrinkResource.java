@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.adrianh.drink.Secured;
+import net.adrianh.drink.authorization.Secured;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.IngredientDAO;
 import net.adrianh.drink.model.dao.UserDAO;

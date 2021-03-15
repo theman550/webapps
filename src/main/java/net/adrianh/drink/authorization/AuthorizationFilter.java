@@ -1,4 +1,4 @@
-package net.adrianh.drink;
+package net.adrianh.drink.authorization;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -15,7 +15,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
-import static net.adrianh.drink.TokenServices.validateToken;
+import static net.adrianh.drink.authorization.TokenServices.validateToken;
 
 @Secured
 @Provider
