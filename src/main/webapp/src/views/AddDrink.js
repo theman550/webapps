@@ -119,14 +119,14 @@ function AddDrink () {
           {({ remove, push }) => (
             <div>
               <h2>Ingredients</h2>
-              <div className="p-grid">
               {values.ingredients.length > 0 &&
                 values.ingredients.map((ingredient, index) => (
-                  <div className="p-row p-a-center" style={{display: 'flex', textAlign: "center"}} key={index}>
-
+                  
+                <div className="p-d-flex" style={{textAlign: "center", width: '60%', height:'50px'}} key={index}>
+                  <div className="p-mr-1 p-as-start">
                     <div className="p-col">
                       <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
-                      <Field name={`ingredients[${index}].name`} style={{width: '60%'}} />
+                      <Field name={`ingredients[${index}].name`} />
                       <small> 
                       <div style={{ color: 'red' }}>
                       <ErrorMessage name={`ingredients.${index}.name`}>
@@ -135,6 +135,7 @@ function AddDrink () {
                       </div>
                       </small>
                     </div>
+                  </div>
                     
                     <div className="p-col">
                     <label htmlFor={`ingredients.${index}.abv`}>&emsp;Alcohol:&ensp;</label>
@@ -174,16 +175,20 @@ function AddDrink () {
                       </small>
                     </div>
 
+                    <div className="p-mr-1 p-as-end">
                       &emsp;
                       <Button type="Button"
                       className="secondary"
-                      style={{height: '25px'}} 
+                      style={{height: '25px', paddingBottom: '9px'}} 
                       onClick={() => remove(index)}>
                         Remove
                       </Button>
+                      <br/>
+                      <br/>
+                    </div>
+
                 </div>
               ))}
-              </div>
                 <br/>
                 <Button
                 type="Button"
@@ -251,7 +256,7 @@ function AddDrink () {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#F',
+      backgroundColor: '#f8f9fa',
       width: '70%',
       padding: 8,
       borderStyle: 'line',
