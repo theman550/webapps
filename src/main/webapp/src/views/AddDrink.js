@@ -126,11 +126,9 @@ function AddDrink () {
               <h2>Ingredients</h2>
               {values.ingredients.length > 0 &&
                 values.ingredients.map((ingredient, index) => (
-                  
-                <div className="p-d-flex" style={{textAlign: "center", width: '60%', height:'50px'}} key={index}>
-                    <div className="p-col-fixed">
-                      <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
-                      <Field name={`ingredients[${index}].name`} />
+                <div className="p-grid p-justify-between" style={{width: '60%', height:'50px'}} key={index}>
+                    <div className="p-col-flex  p-as-start">
+                      <Field name={`ingredients[${index}].name`} placeholder="Name" />
                       <small> 
                       <ErrorMessage name={`ingredients.${index}.name`}>
                         {mess => <div style={{ color: 'red' }}>{mess}</div> }
@@ -139,9 +137,8 @@ function AddDrink () {
                     </div>
 
                     
-                    <div className="p-col-fixed">
-                    <label htmlFor={`ingredients.${index}.abv`}>&emsp;Alcohol:&ensp;</label>
-                      <Field name={`ingredients.${index}.abv`} style={{width: '20px'}}/> %   
+                    <div className="p-col-flex">
+                      <Field name={`ingredients.${index}.abv`}  style={{width: '80px'}} placeholder="Alcohol" />%   
                       <small>            
                       <ErrorMessage name={`ingredients.${index}.abv`}>
                         {mess => <div style={{ color: 'red' }}>{mess}</div> }
@@ -149,9 +146,8 @@ function AddDrink () {
                       </small>
                     </div>
                     
-                    <div className="p-col-fixed">
-                    <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
-                      <Field name={`ingredients.${index}.amount`}  style={{width: '40px'}} />
+                    <div className="p-col-flex">
+                      <Field name={`ingredients.${index}.amount`} style={{width: '80px'}} placeholder="Amount"  />
                       <small> 
                       <ErrorMessage name={`ingredients.${index}.amount`}>
                         {mess => <div style={{ color: 'red' }}>{mess}</div> }
@@ -159,10 +155,9 @@ function AddDrink () {
                       </small>
                     </div>
                     
-                    <div className="p-col-fixed">
-                    <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
+                    <div className="p-col-flex">
                       <Field as="select" name={`ingredients.${index}.unit`}>
-                        <option value="">Select</option>
+                        <option value="">Unit</option>
                         <option value="MILLILITRE">Ml</option>
                         <option value="CENTILITRE">Cl</option>
                         <option value="DECILITRE">Dl</option>
@@ -177,20 +172,21 @@ function AddDrink () {
                       </small>
                     </div>
 
-                    <div className="p-mr-1 p-as-end">
+                    <div className="p-col-flex p-as-end">
                       &emsp;
                       <Button type="Button"
-                      className="secondary"
-                      style={{height: '20px', paddingBottom: '9px'}} 
-                      onClick={() => remove(index)}>
-                        Remove
-                      </Button>
-                      <br/>
-                      <br/>
+                      icon="pi pi-trash"
+                      className="p-button-sm"
+                      style={{height: '20px'}} 
+                      onClick={() => remove(index)}/>
+                    <br/>
+                    <br/>
+                    <br/>
                     </div>
-
+                    <br/>
                 </div>
               ))}
+                
                 <br/>
                 <Button
                 type="Button"
