@@ -41,7 +41,7 @@ public class DrinkDAOTest {
     public void init() {
         User usr = new User(1L,"man","usr", "pw", "salt", null, null, null); 
         usr.setCreatedDrinks(new ArrayList<>());
-        usr.setUpvotedDrinks(new ArrayList<>());
+        usr.setVotes(new ArrayList<>());
         Drink d = new Drink();
         d.setName("Margarita");
         d.setVoteCount(1);
@@ -108,14 +108,14 @@ public class DrinkDAOTest {
     @Test
     //True if drinks[0] is the 3rd most popular drink from all added drinks (drink name "d3")
     public void checkThatMostPopularFromOffsetWorks() {
-        List<Drink> drinks = drinkDAO.findMostPopularFromOffset(2, null, false).getResults();
+        List<Drink> drinks = drinkDAO.findMostPopularFromOffset(2, null, false,false).getResults();
         Assert.assertTrue(drinks.get(0).getName().equals("d3"));
     }
 
     @Test
     //True if drinks[0] is the 2nd most popular drink from all added drinks that start with "d" (drink name "d4" with 4 votes)
     public void checkThatFindDrinksMatchingNameFromOffsetWorks() {
-        List<Drink> drinks = drinkDAO.findDrinksMatchingNameFromOffset("d4", 1, null, false).getResults();
+        List<Drink> drinks = drinkDAO.findDrinksMatchingNameFromOffset("d4", 1, null, false,false).getResults();
         Assert.assertTrue(drinks.get(0).getName().equals("d4"));
         Assert.assertEquals(4, drinks.get(0).getVoteCount());
     }
@@ -132,7 +132,7 @@ public class DrinkDAOTest {
                 return d2.getCreatedAt().compareTo(d1.getCreatedAt());
             }
         });
-        Assert.assertEquals(drinks.get(2).getId(), drinkDAO.findNewestFromOffset(2, null, false).getResults().get(0).getId()); //comapre by id, since name is the same
+        Assert.assertEquals(drinks.get(2).getId(), drinkDAO.findNewestFromOffset(2, null, false,false).getResults().get(0).getId()); //comapre by id, since name is the same
     }
 
 
@@ -148,7 +148,7 @@ public class DrinkDAOTest {
                     return d2.getCreatedAt().compareTo(d1.getCreatedAt());
                 }
         });
-        Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1,null,false).getResults().get(0).getId()); //compare by Id, since name is the same
+        Assert.assertEquals(drinks.get(1).getId(), drinkDAO.findDrinksMatchingNameFromOffsetByNewest("d4",1,null,false,false).getResults().get(0).getId()); //compare by Id, since name is the same
     }
  
     @After

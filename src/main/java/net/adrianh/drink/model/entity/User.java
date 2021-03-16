@@ -57,10 +57,10 @@ public class User implements Serializable {
     //a user has many votes
     @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonbTransient
-    private List<Vote> upvotedDrinks = new ArrayList<>();
+    private List<Vote> votes = new ArrayList<>();
 
     public void addVote(Vote vote) {
-        upvotedDrinks.add(vote);
+        votes.add(vote);
         vote.setUser_id(this);
     }
 

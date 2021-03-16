@@ -54,7 +54,7 @@ public class DrinkDAO extends AbstractDAO<Drink> {
     }
 
     //find matching name from offset ordered by popularity
-    public QueryResults<Drink> findDrinksMatchingNameFromOffset(String s, int offset, String user, boolean getUpvotedDrinks) {
+    public QueryResults<Drink> findDrinksMatchingNameFromOffset(String s, int offset, String user, boolean getUpvotedDrinks, boolean getCreatedDrinks) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         JPAQuery jpaQuery = queryFactory.selectFrom(drink)
@@ -62,13 +62,13 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .limit(20)
                 .offset(offset)
                 .orderBy(drink.voteCount.desc());
-        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks, getCreatedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
 
     //find matching name from offset ordered by newest
-    public QueryResults<Drink> findDrinksMatchingNameFromOffsetByNewest(String s, int offset, String user, boolean getUpvotedDrinks) {
+    public QueryResults<Drink> findDrinksMatchingNameFromOffsetByNewest(String s, int offset, String user, boolean getUpvotedDrinks, boolean getCreatedDrinks) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         JPAQuery jpaQuery = queryFactory.selectFrom(drink)
@@ -76,12 +76,12 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .limit(20)
                 .offset(offset)
                 .orderBy(drink.createdAt.desc());
-        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks, getCreatedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
 
-    public QueryResults<Drink> findMostPopularFromOffset(int offset, String user, boolean getUpvotedDrinks) {
+    public QueryResults<Drink> findMostPopularFromOffset(int offset, String user, boolean getUpvotedDrinks, boolean getCreatedDrinks) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         JPAQuery jpaQuery = queryFactory.selectFrom(drink)
@@ -89,26 +89,26 @@ public class DrinkDAO extends AbstractDAO<Drink> {
                 .limit(20)
                 .orderBy(drink.voteCount.desc());
         // Add where clause if fetching a specific user's drinks
-        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks, getCreatedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
 
-    public QueryResults<Drink> findNewestFromOffset(int offset, String user, boolean getUpvotedDrinks) {
+    public QueryResults<Drink> findNewestFromOffset(int offset, String user, boolean getUpvotedDrinks, boolean getCreatedDrinks) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
         QDrink drink = QDrink.drink;
         JPAQuery jpaQuery = queryFactory.selectFrom(drink)
                 .offset(offset)
                 .limit(20)
                 .orderBy(drink.createdAt.desc());
-        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks);
+        checkUserAuthToFetchCreatedOrUpvotedDrinks(jpaQuery, drink, user, getUpvotedDrinks, getCreatedDrinks);
         QueryResults<Drink> drinks = (QueryResults<Drink>) jpaQuery.fetchResults();
         return drinks;
     }
 
-    public void checkUserAuthToFetchCreatedOrUpvotedDrinks(JPAQuery jpaQuery, QDrink drink, String user, boolean getUpvotedDrinks) {
+    public void checkUserAuthToFetchCreatedOrUpvotedDrinks(JPAQuery jpaQuery, QDrink drink, String user, boolean getUpvotedDrinks, boolean getCreatedDrinks) {
         QVote vote = QVote.vote;
-        if (user != null && getUpvotedDrinks == false) {
+        if (user != null && getCreatedDrinks == true) {
             jpaQuery.where(drink.user.accountName.eq(user));
         }
         if (user != null && getUpvotedDrinks == true) {
