@@ -126,7 +126,7 @@ function AddDrink () {
               <h2>Ingredients</h2>
               {values.ingredients.length > 0 &&
                 values.ingredients.map((ingredient, index) => (
-                <div className="p-grid p-justify-between" style={{width: '60%', height:'50px'}} key={index}>
+                  <div className="p-grid p-justify-between" style={{width: '60%', height:'70px', borderTop:'1px dotted black', paddingBottom: '3px', paddingTop: '10px'}} key={index}>
                     <div className="p-col-flex  p-as-start">
                       <Field name={`ingredients[${index}].name`} placeholder="Name" />
                       <small> 
