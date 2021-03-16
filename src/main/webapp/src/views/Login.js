@@ -89,7 +89,6 @@ class Login extends Component {
         }) 
         .then(UserAsJson => {
             if (UserAsJson) {
-                console.log(UserAsJson);
                 this.props.onLogin(UserAsJson);
                 localStorage.setItem('currentUser', JSON.stringify(UserAsJson));
                 this.props.history.push('/');
