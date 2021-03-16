@@ -84,9 +84,9 @@ function AddDrink () {
             placeholder="Name of the drink"
             style={styles.input}
         />
-        <small><ErrorMessage name={`name`}>
-          {mess => <div style={{ color: 'red', textAlign: 'left' }}>{mess}</div> }
-        </ErrorMessage></small>
+          <ErrorMessage name={`name`}>
+            {mess => <div style={{fontSize: 'small', color: 'red', textAlign: 'left' }}>{mess}</div> }
+          </ErrorMessage>
         <br/>
         <TextInput
             type="text"
@@ -99,11 +99,9 @@ function AddDrink () {
             placeholder="Describe how to make your drink"
             style={styles.descriptionInput}
         />
-        <small>
-        <ErrorMessage name={`description`}>
-          {mess => <div style={{ color: 'red', textAlign: 'left' }}>{mess}</div> }
-        </ErrorMessage>
-        </small>
+          <ErrorMessage name={`description`}>
+            {mess => <div style={{fontSize: 'small', color: 'red', textAlign: 'left' }}>{mess}</div> }
+          </ErrorMessage>
         <br/>
         <TextInput
             type="text"
@@ -115,11 +113,9 @@ function AddDrink () {
             placeholder="URL to a picture"
             style={styles.input}
         />
-        <small>
         <ErrorMessage name={`image`}>
-          {mess => <div style={{ color: 'red', textAlign: 'left' }}>{mess}</div> }
+          {mess => <div style={{fontSize: 'small', color: 'red', textAlign: 'left' }}>{mess}</div> }
         </ErrorMessage>
-        </small>
         <FieldArray name="ingredients">
           {({ remove, push }) => (
             <div>
@@ -129,32 +125,22 @@ function AddDrink () {
                   <div className="p-grid p-justify-between" style={{width: '60%', height:'70px', borderTop:'1px dotted black', paddingBottom: '3px', paddingTop: '10px'}} key={index}>
                     <div className="p-col-flex  p-as-start">
                       <Field name={`ingredients[${index}].name`} placeholder="Name" />
-                      <small> 
                       <ErrorMessage name={`ingredients.${index}.name`}>
-                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                        {mess => <div style={{fontSize: 'small', color: 'red' }}>{mess}</div> }
                       </ErrorMessage>
-                      </small>
-                    </div>
-
-                    
+                    </div>                    
                     <div className="p-col-flex">
                       <Field name={`ingredients.${index}.abv`}  style={{width: '80px'}} placeholder="Alcohol" />%   
-                      <small>            
                       <ErrorMessage name={`ingredients.${index}.abv`}>
-                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                        {mess => <div style={{fontSize: 'small', color: 'red' }}>{mess}</div> }
                       </ErrorMessage>
-                      </small>
                     </div>
-                    
                     <div className="p-col-flex">
                       <Field name={`ingredients.${index}.amount`} style={{width: '80px'}} placeholder="Amount"  />
-                      <small> 
                       <ErrorMessage name={`ingredients.${index}.amount`}>
-                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                        {mess => <div style={{fontSize: 'small', color: 'red' }}>{mess}</div> }
                       </ErrorMessage>
-                      </small>
                     </div>
-                    
                     <div className="p-col-flex">
                       <Field as="select" name={`ingredients.${index}.unit`}>
                         <option value="">Unit</option>
@@ -165,11 +151,9 @@ function AddDrink () {
                         <option value="GRAMS">Grams</option>
                         <option value="PIECES">Pieces</option>
                       </Field>
-                      <small> 
                       <ErrorMessage name={`ingredients.${index}.unit`}>
-                        {mess => <div style={{ color: 'red' }}>{mess}</div> }
+                        {mess => <div style={{fontSize: 'small', color: 'red' }}>{mess}</div> }
                       </ErrorMessage>
-                      </small>
                     </div>
 
                     <div className="p-col-flex p-as-end">
@@ -199,9 +183,9 @@ function AddDrink () {
             )}
             </FieldArray>
             <br/>
-            <right>
+            <div style={{paddingHorizontal: 'auto'}}>
               <Button type="submit" style={{width: '130px'}}>Submit drink</Button>
-            </right>
+            </div>
       </View>
       </div>
       </center>
@@ -260,19 +244,6 @@ const styles = StyleSheet.create({
       borderStyle: 'line',
       borderWidth: '1px',
       borderColor: '#0',
-    },
-    title: {
-      margin: 24,
-      fontSize: 24,
-      fontWeight: 'bold',
-      textAlign: 'center',
-    },
-    error: {
-      margin: 8,
-      fontSize: 14,
-      color: 'red',
-      fontWeight: 'bold',
-      textAlign: 'left',
     },
     input: {
       height: 50,
