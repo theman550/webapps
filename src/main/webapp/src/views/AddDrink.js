@@ -128,8 +128,7 @@ function AddDrink () {
                 values.ingredients.map((ingredient, index) => (
                   
                 <div className="p-d-flex" style={{textAlign: "center", width: '60%', height:'50px'}} key={index}>
-                  <div className="p-mr-1 p-as-start">
-                    <div className="p-col">
+                    <div className="p-col-fixed">
                       <label htmlFor={`ingredients.${index}.name`}>Name:&ensp;</label>
                       <Field name={`ingredients[${index}].name`} />
                       <small> 
@@ -138,9 +137,9 @@ function AddDrink () {
                       </ErrorMessage>
                       </small>
                     </div>
-                  </div>
+
                     
-                    <div className="p-col">
+                    <div className="p-col-fixed">
                     <label htmlFor={`ingredients.${index}.abv`}>&emsp;Alcohol:&ensp;</label>
                       <Field name={`ingredients.${index}.abv`} style={{width: '20px'}}/> %   
                       <small>            
@@ -150,7 +149,7 @@ function AddDrink () {
                       </small>
                     </div>
                     
-                    <div className="p-col">
+                    <div className="p-col-fixed">
                     <label htmlFor={`ingredients.${index}.amount`}>&emsp;Amount:&ensp;</label>
                       <Field name={`ingredients.${index}.amount`}  style={{width: '40px'}} />
                       <small> 
@@ -160,7 +159,7 @@ function AddDrink () {
                       </small>
                     </div>
                     
-                    <div className="p-col">
+                    <div className="p-col-fixed">
                     <label htmlFor={`ingredients.${index}.unit`}>&emsp;Unit:&ensp;</label>
                       <Field as="select" name={`ingredients.${index}.unit`}>
                         <option value="">Select</option>
