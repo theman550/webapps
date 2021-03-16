@@ -42,15 +42,12 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-                            
-        this.state = {
-            showRegFields: false,
-        };
 
         this.state = {
             input: [],
             regMessages: [],
-            loginMessage: ''
+            loginMessage: '',
+            showRegFields: false,
         };
         
         this.handleChange = this.handleChange.bind(this);
@@ -85,9 +82,9 @@ class Login extends Component {
                 this.setState({loginMessage: ["Login worked!"]});
                 return response.json(); 
             } else if(response.status === 401){
-                this.setState({loginMessage: ["No such account!"]});
+                this.setState({loginMessage: ["Wrong password"]});
             } else{
-                this.setState({loginMessage: ["Error"]});
+                this.setState({loginMessage: ["Something went wrong"]});
             }
         }) 
         .then(UserAsJson => {
@@ -97,6 +94,8 @@ class Login extends Component {
                 localStorage.setItem('currentUser', JSON.stringify(UserAsJson));
                 this.props.history.push('/');
             }
+        }).catch((e) => {
+            this.setState({loginMessage: ["Something went wrong"]});
         })
     }
 
@@ -186,7 +185,7 @@ class Login extends Component {
                     <div  className="split right">
                         <div className="card" class="card" >
                             <div class="logo">
-                                <h2 class = "login-logo">Login</h2>
+                                <h2 className = "login-logo">Login</h2>
                             </div>
                 
                             <div className="text-input">
@@ -220,7 +219,6 @@ class Login extends Component {
                             {/* <div><TextInput/></div>*/}
 
                             <div className="p-logButton">
-                                <a href="/resetPassword/new">Forgot password?</a>
                                 <div className="Login">
                                     <h4>{this.state.loginMessage} </h4>
                                     <div className="btnLogIn">{loginButton}</div>

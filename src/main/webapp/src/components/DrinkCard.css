@@ -40,4 +40,13 @@
 .ingredient-tag {
     font-size: .8rem !important;
     margin: 0 .15rem;
+    max-width:100%;
+
+}
+
+.ingredient-tag .p-chip-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width:10rem;
 }

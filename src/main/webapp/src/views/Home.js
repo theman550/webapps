@@ -33,7 +33,8 @@ export default class Home extends React.Component {
   render() {
     return (
       <div>
-        <h1>Home</h1>
+        <h1>Welcome!</h1>
+        <p>Find your new favourite drink below or sign up and contribute with your own</p>
 				<DrinkList fetchType="/drinks/"></DrinkList>
                 {this.state.selectedDrink
                 ? <Details

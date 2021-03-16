@@ -96,7 +96,7 @@ class Details extends React.Component {
         const isCreator = JSON.parse(localStorage.getItem("currentUser"))?.username == this.props.drink.user.accountName
         const header = (
             <div>
-                {this.props.drink.user.displayName}
+                Submitted by {this.props.drink.user.displayName}
             </div>
         );
         const ingredients = this.props.drink.ingredients.map((ingredient) => 

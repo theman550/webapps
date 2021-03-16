@@ -74,6 +74,7 @@
     flex: 1 1 0;
     text-align: left;
     padding-left: 1rem;
+    overflow-y: auto;
 }
 
 .header h3{

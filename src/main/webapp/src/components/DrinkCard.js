@@ -48,7 +48,7 @@ class DrinkCard extends Component {
 
         const data = this.props.data;
 
-        const tags = data.ingredients.map((ingredient) =>
+        const tags = data.ingredients.slice(0,5).map((ingredient) =>
             <span key={ingredient.name} onClick={() => this.props.handleIngredientTagClick(ingredient.name)}>
                 <Chip 
                     className={`ingredient-tag pmr-2 p-mb-2 ${this.props.queries.map((i) => i.name).includes(ingredient.name) ? "selected-ingredient" : ""}`} 
@@ -65,7 +65,7 @@ class DrinkCard extends Component {
                                 <i className="pi pi-tag product-category-icon"></i>
                                 {tags}
                             </div>
-                            <Avatar icon="pi pi-user" shape="circle"></Avatar>
+                            <span title={data.user.displayName}><Avatar title={data.user.displayName} icon="pi pi-user" shape="circle"></Avatar></span>
                         </div>
                         <div className="product-grid-item-content">
                             <Voter data={data} sendVote={this.props.sendVote}></Voter>
