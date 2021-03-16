@@ -113,12 +113,10 @@ export default class DrinkList extends React.Component {
     // When the user clicks on an ingredient name in the search results
     handleIngredientTagClick = (ingredient) => {
         if (this.state.searchQueries.map((i) => i.name).includes(ingredient)) {
-            const splicedQuery = this.state.searchQueries;
-            splicedQuery.splice({name: ingredient, type: "ingredient"},1);
-            console.log(splicedQuery);
-            this.setURLParam('query',splicedQuery);
+            const newQueries = this.state.searchQueries.filter((i) => i.name !== ingredient);
+            this.setURLParam('query',newQueries);
             // Remove ingredient from query list
-            this.setState((state) => ({searchQueries: state.searchQueries.filter((i) => i.name !== ingredient)}), this.fetchDrinks);
+            this.setState((state) => ({searchQueries: newQueries}), this.fetchDrinks);
         } else {
             // Add ingredient to query list
             this.setURLParam('query',this.state.searchQueries.concat({name: ingredient, type: "ingredient"}));
