@@ -44,13 +44,13 @@ export default function Voter(props) {
         <Button
           onClick={() => {upvote(props.data)}}
           icon="pi pi-angle-up"
-          className="p-button-text p-button-plain"
+          className={`vote-button p-button-text p-button-plain ${props.data.voteStatus == 1 ? 'is-active-vote' : ''}`}
         ></Button>
         <span className="voteCount">{props.data.voteCount}</span>
         <Button
           onClick={() => {downvote(props.data)}}
           icon="pi pi-angle-down"
-          className="p-button-text p-button-plain"
+          className={`vote-button p-button-text p-button-plain ${props.data.voteStatus == -1 ? 'is-active-vote' : ''}`}
         ></Button>
       </div>
     );

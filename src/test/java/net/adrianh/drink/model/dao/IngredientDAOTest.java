@@ -130,7 +130,7 @@ public class IngredientDAOTest {
     @Test
     //True if drinks[0] contains "d2", as it has a lower votecount than "d3" but same ingredient
     public void checkThatFindDrinksFromIngredientsMatchingNameFromOffsetWorks() {
-        List<Drink> drinks = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset("Rum", 1, null, false).getResults();
+        List<Drink> drinks = ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffset("Rum", 1, null, false,false).getResults();
         Assert.assertEquals("d2", drinks.get(0).getName());
     }
 
@@ -146,7 +146,7 @@ public class IngredientDAOTest {
                 return d2.getCreatedAt().compareTo(d1.getCreatedAt());
             }
         });
-        Assert.assertEquals(drinks.get(1).getName(), ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest("Rum", 1, null, false).getResults().get(0).getName());
+        Assert.assertEquals(drinks.get(1).getName(), ingredientDAO.findDrinksFromIngredientsMatchingNameFromOffsetByNewest("Rum", 1, null, false,false).getResults().get(0).getName());
     }
 
     @After
