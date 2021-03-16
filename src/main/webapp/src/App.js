@@ -65,6 +65,7 @@ class App extends React.Component {
         const logOut = () => {
             localStorage.removeItem("currentUser");
             window.location.reload();
+            window.location = './drink/'
         }
 
         const navbrand = <img alt="logo" src="./reddrink512.png" height="40" className="pmr"></img>
