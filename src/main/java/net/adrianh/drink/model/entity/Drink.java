@@ -59,6 +59,11 @@ public class Drink implements Serializable {
         createdAt = new Date();
     }
     
+    // Indicates the vote value (1,0,-1) a drink has received by the current user
+    // Not stored in database but insstead set by DrinkResource on each request (if the request is authenticated)
+    @Transient
+    private int voteStatus;
+    
     /*@PostLoad
     private void voteCount() { //TODO change to a query that fixes the counts of the votes
         for (Vote v : this.votes) {
