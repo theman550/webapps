@@ -6,8 +6,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.Getter;
-import net.adrianh.drink.model.entity.Ingredient;
-import net.adrianh.drink.model.entity.QIngredient;
 import net.adrianh.drink.model.entity.QVote;
 import net.adrianh.drink.model.entity.Vote;
 

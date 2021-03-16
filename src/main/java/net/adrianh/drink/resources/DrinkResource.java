@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,10 +20,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import javax.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import net.adrianh.drink.authorization.Secured;
 import net.adrianh.drink.model.dao.DrinkDAO;
 import net.adrianh.drink.model.dao.IngredientDAO;
@@ -33,31 +27,11 @@ import net.adrianh.drink.model.dao.UserDAO;
 import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.Ingredient;
 import net.adrianh.drink.model.entity.User;
-import net.adrianh.drink.model.entity.Vote;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 @Path("drinks")
 public class DrinkResource {
-
-    @Data
-    @XmlRootElement
-    public class AutoCompleteResponse {
-
-        private String type;
-        private String name;
-        private int offset;
-    }
-
-    @Data
-    @XmlRootElement
-    @AllArgsConstructor
-    public class DrinkResponse {
-
-        private int total;
-        private List<Drink> drinks;
-    }
 
     @EJB
     DrinkDAO drinkDAO;
@@ -81,30 +55,7 @@ public class DrinkResource {
         return Response.status(Response.Status.OK).build();
     }
 
-
-    /*
-    @POST
-    @Secured
-    @Path("/mydrinks") 
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserCreatedDrinks(@Context SecurityContext securityContext) {
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        List<Drink> userDrinks = drinkDAO.findCreatedDrinksByUser(authorizedUser.getAccountName());
-        return Response.status(Response.Status.OK).entity(userDrinks).build();
-    }
-
- 
-    @POST
-    @Secured
-    @Path("/upvoted")    
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserUpvotedDrinks(@Context SecurityContext securityContext) {
-        User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        List<Vote> userUpvotes = drinkDAO.findUpvotedDrinksByUser(authorizedUser.getAccountName());
-        return Response.status(Response.Status.OK).entity(userUpvotes).build();
-    }
-     */
-
+  
     @POST
     @Path("popular")
     @Secured // NOTE: The filter will still allow access to this particular endpoint even without proper auth header since auth is optional here
@@ -249,14 +200,13 @@ public class DrinkResource {
         }
     }
 
-    
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response drinkFromId(@PathParam("id") Long Id) throws JSONException {
         return Response.status(Response.Status.OK).entity(drinkDAO.findDrinkByID(Id)).build();
     }
-    
+
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -264,21 +214,21 @@ public class DrinkResource {
     public Response removeDrink(@PathParam("id") Long Id, @Context SecurityContext securityContext) {
         // Get the name of the authorized user (derived from a valid token)
         User authorizedUser = userDAO.findUserByName(securityContext.getUserPrincipal().getName()).get(0);
-        if(drinkDAO.findDrinkByID(Id).getUser().getId().equals(authorizedUser.getId())){
+        if (drinkDAO.findDrinkByID(Id).getUser().getId().equals(authorizedUser.getId())) {
             drinkDAO.remove(drinkDAO.findDrinkByID(Id));
             return Response.status(Response.Status.OK).entity("Succesfully deleted!").build();
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("Not your drink!").build(); 
+            return Response.status(Response.Status.FORBIDDEN).entity("Not your drink!").build();
         }
     }
-    
+
     @GET
     @Path("brave")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response iAmFeelingBrave(){
-        double total = drinkDAO.findMostPopularFromOffset(0,null,false).getTotal();
+    public Response iAmFeelingBrave() {
+        double total = drinkDAO.findMostPopularFromOffset(0, null, false).getTotal();
         total = Math.floor(Math.random() * total);
-        Drink drink = drinkDAO.findMostPopularFromOffset((int) total,null,false).getResults().get(0);
+        Drink drink = drinkDAO.findMostPopularFromOffset((int) total, null, false).getResults().get(0);
         return Response.status(Response.Status.OK).entity(drink).build();
     }
 }

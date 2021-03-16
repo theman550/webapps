@@ -10,7 +10,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +19,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.json.Json;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
@@ -30,9 +28,7 @@ import javax.ws.rs.core.SecurityContext;
 import net.adrianh.drink.authorization.Secured;
 import static net.adrianh.drink.authorization.TokenServices.createToken;
 import net.adrianh.drink.model.dao.UserDAO;
-import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.User;
-import net.adrianh.drink.model.entity.Vote;
 
 @Path("user")
 public class UserResource {
