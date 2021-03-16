@@ -1,0 +1,14 @@
+.votes {
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+}
+
+.votes .is-active-vote {
+    background-color: rgb(219, 241, 255) !important;
+    color:rgb(55, 178, 255) !important;
+}
+
+.votes .vote-button:hover {
+    background-color: rgb(219, 241, 255) !important;
+}

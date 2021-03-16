@@ -1,0 +1,30 @@
+.product-list-item {
+    display: flex;
+    align-items:center;
+    padding: .25rem 1.5rem;
+    width: 100%;
+}
+
+.product-list-item img {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: .1rem;
+    box-shadow: 0 0 .1rem;
+    margin: .5rem .75rem;
+}
+
+.product-list-item .product-list-detail {
+    text-align: left;
+    flex: 1;
+}
+
+.product-list-item .product-list-end {
+    align-self: flex-start;
+}
+
+.list-footer {
+    display:flex;
+    text-align: right;
+    justify-content: flex-end;
+}

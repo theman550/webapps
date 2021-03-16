@@ -1,0 +1,34 @@
+.drink-view .p-dropdown {
+    font-weight: normal;
+}
+
+.drink-view .product-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.drink-view .product-description {
+    margin: 0 0 1rem 0;
+}
+
+.drink-view .product-category-icon {
+    vertical-align: middle;
+    margin-right: .5rem;
+}
+
+.drink-view .product-category {
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.drink-view .p-chip {
+    cursor: pointer;
+}
+
+.drink-view .p-chip.selected-ingredient {
+    background: rgb(149, 177, 255);
+}
+
+.brave-button {
+    margin-left: 1rem;
+}

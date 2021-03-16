@@ -1,0 +1,183 @@
+.login-page .login-logo{
+    position: relative;
+    left: 0px;
+}
+
+.login-page .username-input{
+    margin-top: 20px;
+
+    margin-bottom: 20px;
+}
+.login-page .password-input{
+    margin-bottom: 20px;
+}
+
+
+
+.login-page .split {
+    position: fixed;
+}
+
+.login-page .split {
+    height: auto;
+    position: fixed;
+}
+/* Control the left side */
+.login-page .left {
+
+    border: 3px solid black;
+    height: auto;
+}
+
+/* Control the right side */
+
+.login-page .right  {
+    height: 100%;
+    right: 0;
+    display: flex;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin: 0;
+    padding: 0;
+}
+
+
+.login-page .googleSignin {
+    margin: 0 0 40px;
+    display: -ms-flexbox;
+    display: flex;
+}
+.login-page .logo{
+    font: bold 24px/29px "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-bottom: 26px;
+}
+.login-page a {
+    color: #4f3cc9;
+    font-weight: normal;
+    float: right;
+    position: relative;
+    top: 6px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.login-page a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.login-page .card {
+    margin: 0;
+    max-width: 500px;
+    padding: 20px 20px 20px 20px;
+    height: auto;
+    /* position: absolute; */
+    /* top: 50%; */
+    width: auto;
+    /* left: 50%; */
+    /* transform: translate(-50%, -50%); */
+    text-align: left;
+    /* margin-left: 5px; */
+}
+
+
+.login-page .inline-block-child{
+    padding: 5px;
+    display: inline-block;
+}
+
+
+.login-page .left-background {
+
+    height: auto;
+}
+/* Style the image inside the centered container, if needed */
+.login-page .centered img {
+    height: auto;
+}
+
+.login-page .container {
+    filter: brightness(80%);
+    height: auto;
+}
+
+
+.login-page container img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    height: auto;
+}
+
+@keyframes imgFade {
+    0% {
+        opacity:1;
+    }
+    17% {
+        opacity:1;
+    }
+    25% {
+        opacity:0;
+    }
+    92% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@-webkit-keyframes imgFade {
+    0% {
+        opacity:1;
+    }
+    17% {
+        opacity:1;
+    }
+    25% {
+        opacity:0;
+    }
+    92% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+
+/*
+
+.login-page .container img {
+
+    -webkit-animation-name: imgFade;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 8s;
+
+    animation-name: imgFade;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-duration: 8s;
+}
+
+*/
+
+
+.login-page .container img:nth-of-type(1) {
+
+    -webkit-animation-delay: 6s;
+    animation-delay: 6s;
+}
+.login-page .container img:nth-of-type(2) {
+    -webkit-animation-delay: 4s;
+    animation-delay: 4s;
+}
+.login-page .container img:nth-of-type(3) {
+    -webkit-animation-delay: 2s;
+    animation-delay: 2s;
+}
+.login-page .container img:nth-of-type(4) {
+    -webkit-animation-delay: 0;
+    animation-delay: 0;
+}

@@ -1,0 +1,31 @@
+.p-dropdown {
+    width: 14rem;
+    font-weight: normal;
+}
+
+.product-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.product-description {
+    margin: 0 0 1rem 0;
+}
+
+.product-category-icon {
+    vertical-align: middle;
+    margin-right: .5rem;
+}
+
+.product-category {
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.p-chip {
+    cursor: pointer;
+}
+
+.p-chip.selected-ingredient {
+    background: rgb(149, 177, 255);
+}

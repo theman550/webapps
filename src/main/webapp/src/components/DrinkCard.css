@@ -1,0 +1,52 @@
+
+.product-grid-item {
+    margin: .5em;
+    padding: .5rem;
+    border-radius: .5rem;
+}
+
+.product-grid-item .product-grid-item-top,
+   .product-grid-item .product-grid-item-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.product-grid-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: .1rem;
+    box-shadow: 0 0 .1rem;
+    margin: .5rem .75rem;
+}
+
+.product-grid-item-content {
+    display: flex;
+    align-items: center;
+}
+
+.product-grid-item .product-grid-item-content {
+    text-align: left;
+}
+
+.product-grid-item-content .product-name {
+    word-break: break-all;
+}
+
+.product-grid-item-content .product-description {
+    font-size: .9rem;
+}
+
+.ingredient-tag {
+    font-size: .8rem !important;
+    margin: 0 .15rem;
+    max-width:100%;
+
+}
+
+.ingredient-tag .p-chip-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width:10rem;
+}
