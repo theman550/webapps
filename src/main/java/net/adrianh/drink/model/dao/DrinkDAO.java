@@ -1,7 +1,6 @@
 package net.adrianh.drink.model.dao;
 
 import com.querydsl.core.QueryResults;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

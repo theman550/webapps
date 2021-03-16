@@ -21,11 +21,11 @@ import static net.adrianh.drink.authorization.TokenServices.validateToken;
 @Provider
 @Priority(Priorities.AUTHORIZATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
-    
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        
+
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             // Allow requests to query popular and newest drinks even without auth header
             if (requestContext.getUriInfo().getPath().contains("drinks/popular") || requestContext.getUriInfo().getPath().contains("drinks/newest")) {
@@ -35,10 +35,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
         }
 
         String token = authorizationHeader.substring("Bearer".length()).trim();
-        
+
         try {
-            String user= validateToken(token);
-            
+            String user = validateToken(token);
+
             // Create a SecurityContext 
             if (user != null) {
                 final SecurityContext currentSecurityContext = requestContext.getSecurityContext();
@@ -65,9 +65,9 @@ public class AuthorizationFilter implements ContainerRequestFilter {
                     }
                 });
             }
-        } catch (ExpiredJwtException |UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException e) {
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException e) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
         }
     }
-    
+
 }

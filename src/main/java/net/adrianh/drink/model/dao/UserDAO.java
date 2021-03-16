@@ -1,19 +1,11 @@
 package net.adrianh.drink.model.dao;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import lombok.Getter;
-import net.adrianh.drink.model.entity.Drink;
 import net.adrianh.drink.model.entity.QUser;
 import net.adrianh.drink.model.entity.User;
 
@@ -83,25 +75,5 @@ public class UserDAO extends AbstractDAO<User> {
                 .fetch();
         return users;
     }
-    /*
-    public List<Drink> getUserDrinks(String name) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QUser user = QUser.user;
-        List<User> users = queryFactory.selectFrom(user)
-                .where(user.accountName.eq(name))
-                .fetch();
 
-        return users.get(0).getDrinks();
-    }
-     */
- /*
-     public QueryResults<User> queryFindUserByID(String name) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QUser user = QUser.user;
-        QueryResults<User> users = queryFactory.selectFrom(user)
-                .where(user.accountName.eq(name))
-                .fetchResults();
-        return users;
-    }
-     */
 }
